@@ -4,14 +4,16 @@ import { useTheme } from "@/theme";
 import logo from "../../theme/assets/images/logo.png";
 
 import { ImageVariant } from "../atoms";
+import React from "react";
 export default function HeaderLogo() {
-  const { layout, backgrounds, colors } = useTheme();
+  const { layout, backgrounds, gutters, colors } = useTheme();
   return (
     <View
       style={[
         layout.row,
         layout.justifyAround,
-
+        gutters.marginLeft_80,
+        layout.itemsCenter,
         { height: 80 },
         layout.itemsCenter,
       ]}

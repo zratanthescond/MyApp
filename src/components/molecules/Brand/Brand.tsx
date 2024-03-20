@@ -6,6 +6,7 @@ import LogoDark from "@/theme/assets/images/tom_dark.png";
 import { ImageVariant } from "@/components/atoms";
 import { useTheme } from "@/theme";
 import { isImageSourcePropType } from "@/types/guards/image";
+import React from "react";
 
 type Props = {
   height?: DimensionValue;

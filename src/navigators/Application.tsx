@@ -26,6 +26,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import HeaderLogo from "@/components/header/HeaderLogo";
 import LinearGradient from "react-native-linear-gradient";
 import { Colors } from "@/types/theme/colors";
+import React from "react";
 
 const Stack = createStackNavigator<ApplicationStackParamList>();
 const BottomTab = ({ type, color, size = 24, isFocused, index, name }) => {
@@ -52,9 +53,10 @@ const BottomTab = ({ type, color, size = 24, isFocused, index, name }) => {
     <View>
       {gradient ? (
         <LinearGradient
-          colors={["blue", "white"]}
-          start={{ x: isFocused ? 0 : 1, y: 0 }}
-          end={{ x: isFocused ? 1 : 0, y: 0 }}
+          colors={['#1C5585', '#4980A1', '#5D8FAD']}
+
+          end={{ x: 0.6, y: 0.8 }}
+          start={{ x: 1, y: 0.8 }}
           style={styles.middleIcon}
         >
           <AppIcon name={"plus"} type={type} size={30} color={"white"} />
