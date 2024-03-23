@@ -4,21 +4,23 @@ import CarouselItem from "@/components/molecules/CarouselItem";
 import Contract from "@/services/Contrats/ContratModel";
 import React, { useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
-import { useTheme } from '@/theme';
+import { useTheme } from "@/theme";
 
 export default function Cartes() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const { gutters,borders, layout } = useTheme();
+  const { gutters, borders, layout } = useTheme();
   return (
-
-    <SafeAreaView>
-      <View  >
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <BackgroundDispoCard />
 
-        <CarouselItem data={contracts} currentIndex={currentIndex} onIndexChanged={setCurrentIndex} />
+        <CarouselItem
+          data={contracts}
+          currentIndex={currentIndex}
+          onIndexChanged={setCurrentIndex}
+        />
 
         <CardInformation />
-       
       </View>
     </SafeAreaView>
   );
