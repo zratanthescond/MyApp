@@ -1,5 +1,11 @@
 import React, { useRef } from "react";
-import { View, TouchableOpacity, StyleSheet, Animated, Dimensions } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Animated,
+  Dimensions,
+} from "react-native";
 import BottomTab from "./BottomTab";
 import { Icons } from "@/components/icons/AppIcons";
 
@@ -38,7 +44,9 @@ export default function MyTabBar({ state, descriptors, navigation }) {
             accessibilityRole="button"
           >
             <BottomTab
-              type={index !== 2 ? Icons.MaterialCommunityIcons : Icons.FontAwesome5}
+              type={
+                index !== 2 ? Icons.MaterialCommunityIcons : Icons.FontAwesome5
+              }
               index={index}
               isFocused={isFocused}
               size={30}
@@ -49,13 +57,13 @@ export default function MyTabBar({ state, descriptors, navigation }) {
         );
       })}
       <Animated.View
-          style={[
-            styles.indicator,
-            {
-              transform: [{ translateX }],
-            },
-          ]}
-        />
+        style={[
+          styles.indicator,
+          {
+            transform: [{ translateX }],
+          },
+        ]}
+      />
     </View>
   );
 }
@@ -78,7 +86,6 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: "red",
     borderRadius: 2,
-    
   },
 });
 
