@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, View, StyleSheet, Button, Text, Dimensions } from 'react-native';
+import { TextInput, View, StyleSheet, Button, Text, Dimensions, TouchableOpacity } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import DatePicker from 'react-native-neat-date-picker';
 import useTheme from "@/theme/hooks/useTheme";
@@ -42,55 +42,67 @@ const Formulaire: React.FC = () => {
 
   return (
    <View style={[ layout.flex_1]}>
-    
-    <View style={[
-        layout.justifyCenter,
-        layout.itemsCenter,
-        backgrounds.white ,
-        {borderRadius: 10,  marginTop:30,height:50, marginBottom:30}]}>
-      
-    </View>
-      
-    <View style={[
-        layout.justifyCenter,
-        layout.itemsCenter,
-        backgrounds.white ,
-      
-        {borderRadius: 10,  height:50, marginBottom:30}]}>
+       <Text style={{marginLeft:25}}>Montant Totale</Text>
+  
+       <TextInput
+        style={styles.input}
+        value={data.montant.toString()}
+        onChangeText={handleChangeMontant}
+        placeholder="Montant"
+        keyboardType="numeric"
 
-    </View>
-      
-    <View style={[
-        layout.justifyCenter,
-        layout.itemsCenter,
-        backgrounds.white ,
-      
-        {borderRadius: 10,  height:50, marginBottom:30}]}>
+      />
+   
+      <Text>Année Bordureau</Text>
+    <TextInput
+        style={styles.input}
+        value={data.montant.toString()}
+        onChangeText={handleChangeMontant}
+        placeholder="Montant"
+        keyboardType="numeric"
 
-    </View>
-      
-    <View style={[
-        layout.justifyCenter,
-        layout.itemsCenter,
-        backgrounds.white ,
-      
-        {borderRadius: 10,  height:50, marginBottom:30}]}>
+      />
+        <Text>Date Bordureau</Text>
+    <TextInput
+        style={styles.input}
+        value={data.montant.toString()}
+        onChangeText={handleChangeMontant}
+        placeholder="Montant"
+        keyboardType="numeric"
 
-    </View>
+      />
+        <Text>Date Bordureau</Text>
+    <TextInput
+        style={styles.input}
+        value={data.montant.toString()}
+        onChangeText={handleChangeMontant}
+        placeholder="Montant"
+        keyboardType="numeric"
+
+      />
       
       <View style={styles.datePickerContainer}>
 
-      <Button title={'single'} onPress={openDatePickerSingle} />
+     { /*<Button title={'single'} onPress={openDatePickerSingle} />
+      
       <DatePicker
         isVisible={showDatePickerSingle}
         mode={'single'}
         onCancel={onCancelSingle}
         onConfirm={onConfirmSingle}
       />
-      <Text>{date}</Text>
+      
 
-   
+   */}
     </View>
+     <View style={[layout.row,gutters.marginTop_24]}>
+  <TouchableOpacity style={styles.outlineButton} >
+      <Text style={styles.TextAnnuler}>Annuler</Text>
+    </TouchableOpacity>
+<TouchableOpacity style={styles.ValideButton} >
+      <Text style={styles.TextSuivant}>Suivant</Text>
+    </TouchableOpacity>
+ </View>
   </View>
 
   );
@@ -99,11 +111,49 @@ const Formulaire: React.FC = () => {
 const styles = StyleSheet.create({
  
  datePickerContainer: {
-    width: 300, // Adjust width as needed
-    height: 50, // Adjust height as needed
-    backgroundColor: 'white', // Or any desired background color
+    width: 300, 
+    height: 50, 
+    backgroundColor: 'white', 
     borderRadius: 10,
- }
+ },
+   input: {
+    height: 50,
+    backgroundColor:'white',
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingHorizontal: 120,
+    borderRadius: 10,
+    width: '100%',
+    alignSelf:'center',
+    marginTop:10
+  },
+
+  outlineButton: {
+    backgroundColor: 'white',
+    borderColor: '#013467', 
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 12,
+    width:150,
+    marginRight:30
+  },
+   ValideButton: {
+    backgroundColor: '#013467',
+    borderColor: '#013467', 
+  
+    borderRadius: 5,
+    padding: 12,
+    width:150
+  },
+   TextAnnuler: {
+    color: '#013467', 
+    fontSize: 16,
+alignSelf:'center'  },
+ TextSuivant: {
+    color: 'white', 
+    fontSize: 16,
+alignSelf:'center'  },
 });
+
 
 export default Formulaire;
