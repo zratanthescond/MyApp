@@ -27,6 +27,7 @@ import HeaderLogo from "@/components/header/HeaderLogo";
 import LinearGradient from "react-native-linear-gradient";
 import { Colors } from "@/types/theme/colors";
 import React from "react";
+import MyTabBar from "./components/MyTabBar";
 
 const Stack = createStackNavigator<ApplicationStackParamList>();
 

@@ -1,5 +1,17 @@
-import { View, TouchableOpacity } from "react-native";
+import React, { useRef } from "react";
+import { View, TouchableOpacity, StyleSheet, Animated, Dimensions } from "react-native";
+import BottomTab from "./BottomTab";
+import { Icons } from "@/components/icons/AppIcons";
+
 export default function MyTabBar({ state, descriptors, navigation }) {
+  const tabOffsetValue = useRef(new Animated.Value(0)).current;
+  const tabWidth = getWidth();
+
+  const translateX = tabOffsetValue.interpolate({
+    inputRange: [0, state.routes.length - 1],
+    outputRange: [0, tabWidth * (state.routes.length - 1)],
+  });
+
   return (
     <View style={styles.bottomBar}>
       {state.routes.map((route, index) => {
@@ -16,7 +28,7 @@ export default function MyTabBar({ state, descriptors, navigation }) {
           }
         };
 
-        const color = isFocused ? "red" : "gray";
+        const color = isFocused ? "#062340" : "gray";
 
         return (
           <TouchableOpacity
@@ -26,18 +38,52 @@ export default function MyTabBar({ state, descriptors, navigation }) {
             accessibilityRole="button"
           >
             <BottomTab
-              type={
-                index !== 2 ? Icons.MaterialCommunityIcons : Icons.FontAwesome5
-              }
+              type={index !== 2 ? Icons.MaterialCommunityIcons : Icons.FontAwesome5}
               index={index}
               isFocused={isFocused}
-              size={24}
+              size={30}
               color={color}
               name={route.name}
             />
           </TouchableOpacity>
         );
       })}
+      <Animated.View
+          style={[
+            styles.indicator,
+            {
+              transform: [{ translateX }],
+            },
+          ]}
+        />
     </View>
   );
+}
+
+const styles = StyleSheet.create({
+  bottomBar: {
+    height: 60,
+    backgroundColor: "white",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "95%",
+    alignSelf: "center",
+    bottom: 10,
+    borderRadius: 5,
+  },
+  indicator: {
+    position: "absolute",
+    bottom: 0,
+    height: 2,
+    backgroundColor: "red",
+    borderRadius: 2,
+    
+  },
+});
+
+function getWidth() {
+  let width = Dimensions.get("window").width;
+  width = width - 80;
+  return width / 5;
 }

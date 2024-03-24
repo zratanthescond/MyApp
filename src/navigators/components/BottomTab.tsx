@@ -1,14 +1,15 @@
 import AppIcon from "@/components/icons/AppIcons";
-import { View, Text } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 LinearGradient;
 export default function BottomTab({
   type,
   color,
   size = 24,
-  isFocused,
   index,
   name,
+  
 }) {
   let icon = "home";
   switch (index) {
@@ -27,10 +28,10 @@ export default function BottomTab({
     default:
       break;
   }
-  //const icon = index == 0 ? "home" : "heart";
   const gradient = index == 2;
+  
   return (
-    <View>
+    <View >
       {gradient ? (
         <LinearGradient
           colors={["#1C5585", "#4980A1", "#5D8FAD"]}
@@ -38,7 +39,7 @@ export default function BottomTab({
           start={{ x: 1, y: 0.8 }}
           style={styles.middleIcon}
         >
-          <AppIcon name={"plus"} type={type} size={30} color={"white"} />
+          <AppIcon name={"plus"} type={type} size={20} color={"white"}  />
         </LinearGradient>
       ) : (
         <View
@@ -55,9 +56,23 @@ export default function BottomTab({
             size={size}
             color={color}
           />
-          <Text style={{ color: "blue", textAlign: "center" }}>{name}</Text>
+          <Text style={{ color: "#062340", textAlign: "center" ,fontFamily:"lato",fontSize:11}}>{name}</Text>
         </View>
       )}
     </View>
   );
 }
+const styles = StyleSheet.create({
+
+  middleIcon: {
+    bottom: 18,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.6,
+    elevation: 2,
+  },
+});

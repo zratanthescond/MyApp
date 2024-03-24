@@ -15,6 +15,7 @@ const CardInformation = () => {
         layout.itemsCenter,
         borders.rounded_16,
         gutters.margin_12,
+        gutters.marginBottom_32,
         layout.justifyAround,
         layout.col,
         { width: width - 24, height: height - (315 + height / 6) },
@@ -38,6 +39,22 @@ const CardInformation = () => {
           accumulated={"268,130 "}
         />
         <ProgressBar
+          title={"Fonds de garantie"}
+          progress={25}
+          color={"purple100"}
+          progressColor={"red500"}
+          part={20}
+          accumulated={"1268,130 "}
+        />
+         <ProgressBar
+          title={"Fonds de garantie"}
+          progress={25}
+          color={"purple100"}
+          progressColor={"red500"}
+          part={20}
+          accumulated={"1268,130 "}
+        />
+         <ProgressBar
           title={"Fonds de garantie"}
           progress={25}
           color={"purple100"}
