@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextInput,
   View,
@@ -7,13 +7,16 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DatePicker from "react-native-neat-date-picker";
 import useTheme from "@/theme/hooks/useTheme";
-import { Layout } from "react-native-reanimated";
+
 import WhiteCard from "@/components/atoms/form/WhiteCard";
 import { InputWithTag } from "@/components/atoms";
+import { YearPicker } from "@/components/atoms";
+
 interface FormulaireData {
   montant: number;
 }
@@ -25,29 +28,15 @@ const Formulaire: React.FC = () => {
     montant: 0,
   });
 
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const handleChangeMontant = (montant: string) => {
     setData({ ...data, montant: parseFloat(montant) });
   };
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const [showDatePickerSingle, setShowDatePickerSingle] = useState(false);
-  const [showDatePickerRange, setShowDatePickerRange] = useState(false);
-
-  const [date, setDate] = useState("");
-
-  const openDatePickerSingle = () => setShowDatePickerSingle(true);
-  const openDatePickerRange = () => setShowDatePickerRange(true);
-
-  const onCancelSingle = () => {
-    // You should close the modal in here
-    setShowDatePickerSingle(false);
-  };
-
-  const onConfirmSingle = (output) => {
-    // You should close the modal in here
-    setShowDatePickerSingle(false);
-    console.log(output);
-    setDate(output.dateString);
-  };
+  useEffect(() => {
+    //  alert(modalVisible);
+  }, [modalVisible]);
 
   return (
     <>
@@ -80,8 +69,11 @@ const Formulaire: React.FC = () => {
               iconType: "MaterialIcons",
             }}
             titleWidth={width / 3.5}
-            onChange={() => handleChangeMontant}
-            textInputPlaceholder={"2024"}
+            onChange={() => setModalVisible(true)}
+            textInputPlaceholder={selectedYear.toString()}
+            onIconPress={() => setModalVisible(true)}
+            inputDisabled={true}
+            value={selectedYear}
           />
         </WhiteCard>
         <WhiteCard height={height / 10}>
@@ -114,6 +106,12 @@ const Formulaire: React.FC = () => {
           <Text style={styles.TextSuivant}>Suivant</Text>
         </TouchableOpacity>
       </View>
+      <YearPicker
+        selectedYear={selectedYear}
+        setSelectedYear={setSelectedYear}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </>
   );
 };

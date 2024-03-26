@@ -14,7 +14,12 @@ export default function Bordureau() {
   const { gutters, borders, layout, backgrounds, fonts } = useTheme();
   const { height, width } = Dimensions.get("window");
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView
+      forceInset={{
+        vertical: "always",
+      }}
+      style={{ flex: 1 }}
+    >
       <ScrollView keyboardShouldPersistTaps="handled">
         <View
           style={[

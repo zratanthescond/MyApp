@@ -8,6 +8,8 @@ export default function InputWithTag({
   tag,
   onChange,
   textInputPlaceholder,
+  onIconPress,
+  inputDisabled,
 }) {
   const { layout, fonts, colors, backgrounds } = useTheme();
   return (
@@ -58,6 +60,10 @@ export default function InputWithTag({
           placeholder={textInputPlaceholder}
           keyboardType="numeric"
           maxLength={11}
+          {...(inputDisabled == true && {
+            editable: false,
+            selectTextOnFocus: false,
+          })}
         />
         {tag && tag.type === "text" && (
           <Text
@@ -85,6 +91,7 @@ export default function InputWithTag({
         )}
         {tag && tag.type == "icon" && (
           <TouchableOpacity
+            onPress={() => onIconPress(true)}
             style={{
               position: "absolute",
               right: 0,
