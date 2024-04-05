@@ -12,25 +12,6 @@ const ProgressBar = ({
 }) => {
   const { borders, backgrounds, layout, fonts, gutters } = useTheme();
 
-  const renderLastTexts = () => {
-    if (typeof accumulated !== 'undefined' && typeof part !== 'undefined') {
-      return (
-        <View
-          style={[
-            layout.row,
-            layout.itemsCenter,
-            layout.justifyBetween,
-            gutters.padding_12,
-          ]}
-        >
-          <Text style={[]}> {accumulated}DT/Mois</Text>
-          <Text style={[]}> {part}DT</Text>
-        </View>
-      );
-    }
-    return null;
-  };
-
   return (
     <View
       style={[
@@ -66,7 +47,18 @@ const ProgressBar = ({
           ]}
         ></View>
       </View>
-      {renderLastTexts()}
+      {typeof accumulated !== 'undefined' && typeof part !== 'undefined' && (<View
+          style={[
+            layout.row,
+            layout.itemsCenter,
+            layout.justifyBetween,
+            gutters.padding_12,
+          ]}
+        >
+          <Text style={[]}> {accumulated}DT/Mois</Text>
+          <Text style={[]}> {part}DT</Text>
+        </View>)} 
+       
     </View>
   );
 };

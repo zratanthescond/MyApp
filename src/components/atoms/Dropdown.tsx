@@ -1,33 +1,22 @@
-import React, { useState } from 'react';
-import RNPickerSelect from 'react-native-picker-select';
-import { View, Text } from 'react-native';
+import React from 'react';
+import { SelectList } from 'react-native-dropdown-select-list'
+import{useTheme} from '@/theme'
+const Dropdown = ({data}) => {
 
-const Dropdown = () => {
-  const [selectedValue, setSelectedValue] = useState(null);
+  const [selected, setSelected] = React.useState("");
+  const { gutters, borders, layout, backgrounds, fonts, colors } = useTheme(); 
+  return(
+    <SelectList 
+        setSelected={(val) => setSelected(val)} 
+        data={data} 
+        save="value"
+        search={false}
+        defaultOption={data[0]}
+        boxStyles={[backgrounds.white,{height:'100%'}]}
+        dropdownStyles={[backgrounds.white,{position:'absolute',top:'100%'}]}
+    />
+    
+  )
 
-  const placeholder = {
-    label: 'Select an option...',
-    value: null,
-  };
-
-  const options = [
-    { label: 'Option 1', value: 'option1' },
-    { label: 'Option 2', value: 'option2' },
-    { label: 'Option 3', value: 'option3' },
-  ];
-
-  return (
-    <View>
-      <Text>Select an option:</Text>
-      <RNPickerSelect
-        placeholder={placeholder}
-        items={options}
-        onValueChange={(value) => setSelectedValue(value)}
-        value={selectedValue}
-      />
-      {selectedValue && <Text>Selected: {selectedValue}</Text>}
-    </View>
-  );
 };
-
 export default Dropdown;

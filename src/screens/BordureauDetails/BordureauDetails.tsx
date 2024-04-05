@@ -11,7 +11,19 @@ import Dropdown from "@/components/atoms/Dropdown";
 export default function BordureauDetails() {
     const { height, width } = Dimensions.get("window");
      const { gutters, borders, layout, backgrounds, fonts, colors } = useTheme();
-   
+    const dataReglement = [
+      {key:'1', value:'Traite'},
+      {key:'2', value:'Chèque'},
+      {key:'3', value:'Virement'},
+     
+  ]
+  
+  const dataDocument = [
+      {key:'1', value:'Facture'},
+      {key:'2', value:'B.Commande'},
+      {key:'3', value:'Marche'},
+     
+  ]
  
   return (
     <SafeAreaView style={{ flex: 1 ,marginVertical: 2}}>
@@ -29,13 +41,20 @@ export default function BordureauDetails() {
     </View>
       <View style={{ justifyContent: 'center' ,marginVertical: 2}}>
     <GrayCard height={height/2}  >
-       <View style={[layout.row,{ marginVertical: 2 }]}>
-         <View style={[layout.col,{ marginVertical: 2}]}>
-         <Dropdown/>
+       <View style={{height:'15%',flexDirection:'row',justifyContent:'space-around',width:'100%'}}>
+        
+        <Dropdown
+         data={dataReglement}
+         />
           
-         </View>
+      <Dropdown
+         data={dataDocument}
+         />
+        
+        </View>
+          
   
-       </View>
+     
     </GrayCard>
     </View>
      <View style={{ alignSelf:'center',height:height/10}}>
