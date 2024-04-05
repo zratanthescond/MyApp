@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-import { Startup } from "@/screens";
+import { Startup, Virements } from "@/screens";
 import { useTheme } from "@/theme";
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import type {
@@ -19,6 +19,7 @@ import { Colors } from "@/types/theme/colors";
 import React from "react";
 import MyTabBar from "./components/MyTabBar";
 import HomeTab from "./components/HomeTab";
+import BordureauDetails from "@/screens/BordureauDetails/BordureauDetails";
 const Stack = createStackNavigator<ApplicationStackParamList>();
 
 function ApplicationNavigator() {
@@ -36,6 +37,8 @@ function ApplicationNavigator() {
       >
         <Stack.Screen name="Startup" component={Startup} />
         <Stack.Screen name="Example" component={HomeTab} />
+        <Stack.Screen name="BordureauDetails" component={BordureauDetails} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

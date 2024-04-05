@@ -8,11 +8,13 @@ import {
   Text,
   View,
 } from "react-native";
-import Formulaire from "./form";
+import Form from "./form";
 
 export default function Bordureau() {
   const { gutters, borders, layout, backgrounds, fonts } = useTheme();
   const { height, width } = Dimensions.get("window");
+
+   
   return (
     <SafeAreaView
       forceInset={{
@@ -46,7 +48,7 @@ export default function Bordureau() {
             Nouvelle Bordureau
           </Text>
 
-          <Formulaire />
+          <Form />
         </View>
       </ScrollView>
     </SafeAreaView>

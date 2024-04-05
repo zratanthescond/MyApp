@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from "react";
-import {
-  TextInput,
-  View,
-  StyleSheet,
-  Button,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
-import { Picker } from "@react-native-picker/picker";
-import DatePicker from "react-native-neat-date-picker";
+import { View,StyleSheet,Dimensions} 
+from "react-native";
 import useTheme from "@/theme/hooks/useTheme";
-
+import { useNavigation } from "@react-navigation/native";
 import WhiteCard from "@/components/atoms/form/WhiteCard";
 import { InputWithTag } from "@/components/atoms";
 import { YearPicker } from "@/components/atoms";
-
+import Button from "@/components/atoms/form/Button";
 interface FormulaireData {
   montant: number;
 }
 
-const Formulaire: React.FC = () => {
+const Form: React.FC = () => {
   const { gutters, borders, layout, backgrounds, fonts, colors } = useTheme();
   const { height, width } = Dimensions.get("window");
   const [data, setData] = useState<FormulaireData>({
@@ -35,7 +25,6 @@ const Formulaire: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    //  alert(modalVisible);
   }, [modalVisible]);
 
   return (
@@ -98,14 +87,8 @@ const Formulaire: React.FC = () => {
           />
         </WhiteCard>
       </View>
-      <View style={[layout.row, gutters.marginTop_12]}>
-        <TouchableOpacity style={styles.outlineButton}>
-          <Text style={styles.TextAnnuler}>Annuler</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.ValideButton}>
-          <Text style={styles.TextSuivant}>Suivant</Text>
-        </TouchableOpacity>
-      </View>
+      <Button/>
+        
       <YearPicker
         selectedYear={selectedYear}
         setSelectedYear={setSelectedYear}
@@ -164,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Formulaire;
+export default Form;

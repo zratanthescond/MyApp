@@ -1,6 +1,13 @@
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, ViewStyle } from "react-native";
 import { useTheme } from "@/theme";
-export default function WhiteCard({ children, height, flex }) {
+import React, { ReactNode } from "react";
+
+interface WhiteCardProps {
+  children: ReactNode;
+  height?: number;
+  flex?:boolean;
+}
+export default function WhiteCard({ children, height, flex }: WhiteCardProps) {
   const { gutters, borders, layout, backgrounds, fonts, colors } = useTheme();
   const flexDirection = flex == null ? layout.row : layout.col;
   return (
