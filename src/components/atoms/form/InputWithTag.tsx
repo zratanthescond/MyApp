@@ -13,14 +13,18 @@ export default function InputWithTag({
 }) {
   const { layout, fonts, colors, backgrounds } = useTheme();
   return (
-    <>
+    <View style={{ flexDirection: "row", flex: 1 }}>
       <Text
         style={[
           layout.flex_1,
           fonts.bold,
           fonts.size_16,
           fonts.gray800,
-          { fontFamily: "Lato", maxWidth: titleWidth },
+          {
+            fontFamily: "Lato",
+            maxWidth: titleWidth,
+            textAlignVertical: "center",
+          },
         ]}
       >
         {title}
@@ -110,6 +114,6 @@ export default function InputWithTag({
           </TouchableOpacity>
         )}
       </View>
-    </>
+    </View>
   );
 }
