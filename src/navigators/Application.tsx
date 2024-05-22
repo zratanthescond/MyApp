@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-import { Startup, Virements } from "@/screens";
+import { Startup, Financement } from "@/screens";
 import { useTheme } from "@/theme";
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import type {

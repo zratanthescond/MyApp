@@ -11,12 +11,13 @@ const Dropdown = ({ data }) => {
       save="value"
       search={false}
       defaultOption={data[0]}
-      boxStyles={[backgrounds.white, { height: 40, borderWidth: 0 }]}
+      boxStyles={[backgrounds.white, { height: 40, borderWidth: 0 ,elevation: 20, shadowColor: colors.gray400,borderBottomColor:colors.gray100}]}
       dropdownStyles={[
         backgrounds.white,
-        { position: "absolute", top: 40, width: "100%", zIndex: 10000000000 },
+        { position: "absolute", top: 40, width: "100%", zIndex: 10000000000,borderWidth: 0 },
       ]}
     />
   );
 };
 export default Dropdown;
+               

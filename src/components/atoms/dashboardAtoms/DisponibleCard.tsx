@@ -39,7 +39,7 @@ const { height, width } = Dimensions.get('window');
           alignItems: 'center', 
         }}
       >
-        <Text style={{ textAlign: 'center', fontSize: 12 }}>{text}</Text>
+        <Text style={{ textAlign: 'center', fontSize: 14 }}>{text}</Text>
       </View>
     </TouchableOpacity>
   );

@@ -20,6 +20,7 @@ export default function GrayCard({ children, height, width }: GrayCard) {
         gutters.margin_12,
         layout.justifyAround,
         layout.col,
+        gutters.paddingVertical_12,
       { width:width,
        height:height}
       ]}

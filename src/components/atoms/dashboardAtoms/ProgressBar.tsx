@@ -2,10 +2,20 @@ import React from "react";
 import { Text, View } from "react-native";
 import { useTheme } from "@/theme";
 
-const ProgressBar = ({
+// Interface pour les props du composant ProgressBar
+interface ProgressBarProps {
+  progress: number;
+  title: string;
+  color: string;
+  progressColor: string;
+  accumulated?: number;
+  part?: number;
+}
+
+const ProgressBar: React.FC<ProgressBarProps> = ({
   progress,
   title,
-  color ,
+  color,
   progressColor,
   accumulated,
   part,
@@ -47,7 +57,8 @@ const ProgressBar = ({
           ]}
         ></View>
       </View>
-      {typeof accumulated !== 'undefined' && typeof part !== 'undefined' && (<View
+      {typeof accumulated !== 'undefined' && typeof part !== 'undefined' && (
+        <View
           style={[
             layout.row,
             layout.itemsCenter,
@@ -57,8 +68,8 @@ const ProgressBar = ({
         >
           <Text style={[]}> {accumulated}DT/Mois</Text>
           <Text style={[]}> {part}DT</Text>
-        </View>)} 
-       
+        </View>
+      )}
     </View>
   );
 };

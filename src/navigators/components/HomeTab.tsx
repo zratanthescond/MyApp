@@ -3,7 +3,7 @@ import {
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
 import { HomeTabParamList } from "@/types/navigation";
-import { Example, Bordureau, Cartes, Virements, Dashboard } from "@/screens";
+import { Example, Bordureau, Cartes, Financement, Dashboard } from "@/screens";
 import MyTabBar from "./MyTabBar";
 import React from "react";
 import BordureauDetails from "@/screens/BordureauDetails/BordureauDetails";
@@ -27,7 +27,7 @@ const HomeTab = (): JSX.Element => {
       <Screen name="home" component={Example} />
       <Screen name="bordureau" component={Bordureau} />
       <Screen name="Cartes" component={Cartes} />
-      <Screen name="Virements" component={Virements} />
+      <Screen name="Financement" component={Financement} />
       <Screen name="Dashboard" component={Dashboard} />
 
     </Navigator>

@@ -12,7 +12,10 @@ export default function Cartes() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
-        <BackgroundDispoCard />
+        <BackgroundDispoCard 
+        text1={"Disponible 1"}
+        text2={"Disponible 2"}
+        />
 
         <CarouselItem
           data={contracts}
