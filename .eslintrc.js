@@ -67,7 +67,7 @@ module.exports = {
     "prettier/prettier": [
       "error",
       {
-        endOfLine: "lf",
+        endOfLine: "auto",
         tabWidth: 2,
         indentStyle: "space",
         useTabs: false,

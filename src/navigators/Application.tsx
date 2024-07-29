@@ -20,12 +20,16 @@ import React from "react";
 import MyTabBar from "./components/MyTabBar";
 import HomeTab from "./components/HomeTab";
 import BordureauDetails from "@/screens/BordureauDetails/BordureauDetails";
+import useAuth from "@/contexts/auth/useAuth";
+import AuthStack from "./components/AthStack";
 const Stack = createStackNavigator<ApplicationStackParamList>();
 
 function ApplicationNavigator() {
   const { variant, navigationTheme, colors } = useTheme();
-
-  return (
+  const { isLogged } = useAuth();
+  return isLogged === false ? (
+    <AuthStack />
+  ) : (
     <NavigationContainer theme={navigationTheme}>
       <Stack.Navigator
         key={variant}
@@ -38,7 +42,6 @@ function ApplicationNavigator() {
         <Stack.Screen name="Startup" component={Startup} />
         <Stack.Screen name="Example" component={HomeTab} />
         <Stack.Screen name="BordureauDetails" component={BordureauDetails} />
-
       </Stack.Navigator>
     </NavigationContainer>
   );

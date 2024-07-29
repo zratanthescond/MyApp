@@ -2,15 +2,8 @@ import AppIcon from "@/components/icons/AppIcons";
 import React, { useEffect, useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-LinearGradient;
-export default function BottomTab({
-  type,
-  color,
-  size = 24,
-  index,
-  name,
-  
-}) {
+
+export default function BottomTab({ type, color, size = 24, index, name }) {
   let icon = "home";
   switch (index) {
     case 0:
@@ -26,12 +19,13 @@ export default function BottomTab({
     case 4:
       icon = "bank-transfer";
     default:
+      icon = "folder";
       break;
   }
-  const gradient = index == 2;
-  
+  const gradient = index === 2;
+
   return (
-    <View >
+    <View>
       {gradient ? (
         <LinearGradient
           colors={["#1C5585", "#4980A1", "#5D8FAD"]}
@@ -39,7 +33,7 @@ export default function BottomTab({
           start={{ x: 1, y: 0.8 }}
           style={styles.middleIcon}
         >
-          <AppIcon name={"plus"} type={type} size={20} color={"white"}  />
+          <AppIcon name={"plus"} type={type} size={20} color={"white"} />
         </LinearGradient>
       ) : (
         <View
@@ -56,14 +50,22 @@ export default function BottomTab({
             size={size}
             color={color}
           />
-          <Text style={{ color: "#062340", textAlign: "center" ,fontFamily:"lato",fontSize:11}}>{name}</Text>
+          <Text
+            style={{
+              color: "#062340",
+              textAlign: "center",
+              fontFamily: "lato",
+              fontSize: 11,
+            }}
+          >
+            {name}
+          </Text>
         </View>
       )}
     </View>
   );
 }
 const styles = StyleSheet.create({
-
   middleIcon: {
     bottom: 18,
     width: 60,
