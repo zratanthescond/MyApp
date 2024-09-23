@@ -9,17 +9,31 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
+import React from "react";
 import { Icons } from "@/components/icons/AppIcons";
 import AppIcon from "@/components/icons/AppIcons";
 import loginLogo from "../../theme/assets/images/loginLogo.png";
 import { useNavigation } from "@react-navigation/native";
 import useAuth from "@/contexts/auth/useAuth";
-
+import Login from "@/services/users/login";
+import { useMutation, useQuery } from "@tanstack/react-query";
 const { height, width } = Dimensions.get("window");
 export default function LoginScreen() {
+  const [email, setEmail] = React.useState("anwar@gmail.com");
+  const [password, setPassword] = React.useState("anwar456");
   const { colors, layout, backgrounds, gutters, fonts, borders } = useTheme();
   const navigation = useNavigation();
   const { setIsLogged } = useAuth();
+
+  const mutate = useMutation({
+    mutationFn: Login,
+    onSuccess: (data) => {
+      setIsLogged(true);
+    },
+    onError: (error) => {
+      console.log(error.responce.data);
+    },
+  });
   const styles = StyleSheet.create({
     loginLogo: {
       height: height / 3,
@@ -82,8 +96,15 @@ export default function LoginScreen() {
             style={styles.loginLogo}
             resizeMode="stretch"
           />
-          <TextInput style={styles.textInput} placeholder="E-mail" />
           <TextInput
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            style={styles.textInput}
+            placeholder="E-mail"
+          />
+          <TextInput
+            value={password}
+            onChangeText={(text) => setPassword(text)}
             style={styles.textInput}
             secureTextEntry={true}
             placeholder="password"
@@ -99,7 +120,7 @@ export default function LoginScreen() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setIsLogged(true)}
+            onPress={() => mutate.mutate({ email: email, password: password })}
             style={[
               backgrounds.blue100,
               layout.itemsCenter,

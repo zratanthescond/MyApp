@@ -4,7 +4,8 @@ import { NavigatorScreenParams, RouteProp } from "@react-navigation/native";
 export type ApplicationStackParamList = {
   Startup: undefined;
   Example: undefined;
-  BordureauDetails:undefined;
+  BordureauDetails: undefined;
+  Individu: undefined;
 };
 
 export type ApplicationScreenProps =

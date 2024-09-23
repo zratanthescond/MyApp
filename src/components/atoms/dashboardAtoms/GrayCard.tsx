@@ -2,7 +2,6 @@ import { useTheme } from "@/theme";
 import React, { Children, ReactNode } from "react";
 import { View } from "react-native";
 
-
 interface GrayCard {
   children: ReactNode;
   height?: number;
@@ -21,12 +20,10 @@ export default function GrayCard({ children, height, width }: GrayCard) {
         layout.justifyAround,
         layout.col,
         gutters.paddingVertical_12,
-      { width:width,
-       height:height}
+        { height: height },
       ]}
     >
       {children}
     </View>
   );
-};
-
+}

@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { Dimensions, View } from 'react-native';
+import React, { useState } from "react";
+import { Dimensions, View } from "react-native";
 import { useTheme } from "@/theme";
 import Card from "@/components/atoms/dashboardAtoms/DisponibleCard";
 
-const { height, width } = Dimensions.get('window');
-
+const { height, width } = Dimensions.get("window");
 
 interface CardProps {
   isActive: boolean;
@@ -12,33 +11,39 @@ interface CardProps {
   text: string;
 }
 
-
 interface BackgroundDispoCardProps {
   text1: string;
   text2: string;
+  setActiveCard: React.Dispatch<React.SetStateAction<number>>;
+  activeCard: number;
 }
 
-const BackgroundDispoCard: React.FC<BackgroundDispoCardProps> = ({ text1, text2 }) => {
-  const [activeCard, setActiveCard] = useState<number>(1); // Type number pour activeCard
+function BackgroundDispoCard({
+  text1,
+  text2,
+  setActiveCard,
+  activeCard,
+}: BackgroundDispoCardProps): JSX.Element {
+  // Type number pour activeCard
 
   const handleCardPress = (card: number) => {
     setActiveCard(card);
   };
-  
+
   const { layout, backgrounds, gutters, colors } = useTheme();
 
   return (
     <View
       style={[
         layout.row,
-        { 
-          width: '90%',
-          alignSelf: 'center',
-          backgroundColor: '#E4EAF0',
+        {
+          width: "90%",
+          alignSelf: "center",
+          backgroundColor: "#E4EAF0",
           padding: 10,
           borderTopLeftRadius: 100,
-          borderBottomRightRadius: 100
-        }
+          borderBottomRightRadius: 100,
+        },
       ]}
     >
       <Card
@@ -53,6 +58,6 @@ const BackgroundDispoCard: React.FC<BackgroundDispoCardProps> = ({ text1, text2 
       />
     </View>
   );
-};
+}
 
 export default BackgroundDispoCard;

@@ -22,6 +22,7 @@ import HomeTab from "./components/HomeTab";
 import BordureauDetails from "@/screens/BordureauDetails/BordureauDetails";
 import useAuth from "@/contexts/auth/useAuth";
 import AuthStack from "./components/AthStack";
+import Individu from "@/screens/Individu/Individu";
 const Stack = createStackNavigator<ApplicationStackParamList>();
 
 function ApplicationNavigator() {
@@ -42,6 +43,7 @@ function ApplicationNavigator() {
         <Stack.Screen name="Startup" component={Startup} />
         <Stack.Screen name="Example" component={HomeTab} />
         <Stack.Screen name="BordureauDetails" component={BordureauDetails} />
+        <Stack.Screen name="Individu" component={Individu} />
       </Stack.Navigator>
     </NavigationContainer>
   );

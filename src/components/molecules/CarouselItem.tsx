@@ -53,7 +53,7 @@ const CarouselItem: FC<CarouselItemProps> = ({
         onViewableItemsChanged={(items, changet) => {
           // alert(JSON.stringify(items.viewableItems));
           if (items.viewableItems.length > 0) {
-            console.log(items.viewableItems);
+            //  console.log(items.viewableItems);
             onIndexChanged(items.viewableItems[0].index);
           }
         }}
@@ -98,7 +98,7 @@ const CarouselItem: FC<CarouselItemProps> = ({
                     fontWeight: "normal",
                   }}
                 >
-                  Contrat N°: {contract.number}
+                  Contrat N°: {contract.contratId}
                 </Text>
                 <Text
                   style={{
@@ -108,7 +108,7 @@ const CarouselItem: FC<CarouselItemProps> = ({
                   }}
                 >
                   {" "}
-                  {contract.amount} TND
+                  {contract.montantContrat} TND
                 </Text>
               </View>
             </LinearGradient>

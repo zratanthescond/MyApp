@@ -25,11 +25,11 @@ const HomeTab = (): JSX.Element => {
       }}
       tabBar={(props) => <MyTabBar {...props} />}
     >
-      <Screen name="home" component={Example} />
+      <Screen name="Dashboard" component={Dashboard} />
       <Screen name="bordureau" component={Bordureau} />
       <Screen name="Cartes" component={Cartes} />
       <Screen name="Financement" component={Financement} />
-      <Screen name="Dashboard" component={Dashboard} />
+      <Screen name="Virements" component={Dashboard} />
     </Navigator>
   );
 };

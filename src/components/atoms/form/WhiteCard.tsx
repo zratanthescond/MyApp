@@ -6,15 +6,20 @@ import { Style } from "util";
 interface WhiteCardProps {
   children: ReactNode;
   height?: number;
-  flex?:boolean;
-  style?:Style;
+  flex?: boolean;
+  style?: Style;
 }
-export default function WhiteCard({ children, height, flex,style}: WhiteCardProps) {
+export default function WhiteCard({
+  children,
+  height,
+  flex,
+  style,
+}: WhiteCardProps) {
   const { gutters, borders, layout, backgrounds, fonts, colors } = useTheme();
   const flexDirection = flex == null ? layout.row : layout.col;
   return (
     <View
-      style={[style,
+      style={[
         layout.flex_1,
         backgrounds.white,
         borders.rounded_16,
@@ -22,6 +27,7 @@ export default function WhiteCard({ children, height, flex,style}: WhiteCardProp
         layout.justifyAround,
         flexDirection,
         { paddingHorizontal: 15, height: height, marginVertical: 7.5 },
+        style,
       ]}
     >
       {children}

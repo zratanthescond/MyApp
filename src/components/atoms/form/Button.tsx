@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 
-export default function Button() {
+export default function Button({ label, outlined, onPress }) {
   const { gutters, borders, layout, backgrounds, fonts, colors } = useTheme();
   const { height, width } = Dimensions.get("window");
   const navigation =
@@ -22,11 +22,13 @@ export default function Button() {
   };
   return (
     <View style={[layout.row, gutters.marginTop_12]}>
-      <TouchableOpacity style={styles.outlineButton}>
-        <Text style={styles.TextAnnuler}>Annuler</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.ValideButton} onPress={onHandlePress}>
-        <Text style={styles.TextSuivant}>Suivant</Text>
+      <TouchableOpacity
+        onPress={() => onPress()}
+        style={outlined ? styles.outlineButton : styles.ValideButton}
+      >
+        <Text style={outlined ? styles.TextAnnuler : styles.TextSuivant}>
+          {label}
+        </Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,7 +1,10 @@
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
-
-export default function useAuth() {
+type useAuthType = {
+  isLogged: boolean;
+  setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
+};
+export default function useAuth(): useAuthType {
   const { isLogged, setIsLogged } = useContext(AuthContext);
   return { isLogged, setIsLogged };
 }

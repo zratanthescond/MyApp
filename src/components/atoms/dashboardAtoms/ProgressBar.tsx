@@ -57,7 +57,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           ]}
         ></View>
       </View>
-      {typeof accumulated !== 'undefined' && typeof part !== 'undefined' && (
+      {typeof accumulated !== "undefined" && typeof part !== "undefined" && (
         <View
           style={[
             layout.row,
@@ -66,7 +66,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
             gutters.padding_12,
           ]}
         >
-          <Text style={[]}> {accumulated}DT/Mois</Text>
+          <Text style={[fonts.bold, fonts.blue100]}> {accumulated}DT/Mois</Text>
           <Text style={[]}> {part}DT</Text>
         </View>
       )}

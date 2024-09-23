@@ -1,3 +1,4 @@
+import React from "react";
 import "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MMKV } from "react-native-mmkv";
@@ -6,8 +7,9 @@ import { ThemeProvider } from "@/theme";
 
 import ApplicationNavigator from "./navigators/Application";
 import "./translations";
-import React from "react";
+
 import { AuthProvider } from "./contexts/auth/AuthContext";
+import { ContractProvider } from "./contexts/ContractContext";
 
 const queryClient = new QueryClient();
 
@@ -18,7 +20,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider storage={storage}>
         <AuthProvider>
-          <ApplicationNavigator />
+          <ContractProvider>
+            <ApplicationNavigator />
+          </ContractProvider>
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>

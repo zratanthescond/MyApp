@@ -1,18 +1,20 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   TouchableOpacity,
   StyleSheet,
   Animated,
   Dimensions,
+  Alert,
 } from "react-native";
 import BottomTab from "./BottomTab";
 import { Icons } from "@/components/icons/AppIcons";
+import NavigatorModal from "./NavigatorModal";
 
 export default function MyTabBar({ state, descriptors, navigation }) {
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   const tabWidth = getWidth();
-
+  const [modalVisible, setModalVisible] = useState(false);
   const translateX = tabOffsetValue.interpolate({
     inputRange: [0, state.routes.length - 1],
     outputRange: [0, tabWidth * (state.routes.length - 1)],
@@ -25,12 +27,16 @@ export default function MyTabBar({ state, descriptors, navigation }) {
         const { options } = descriptors[route.key];
 
         const onPress = () => {
-          const event = navigation.emit({
-            type: "tabPress",
-            target: route.key,
-          });
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
+          if (index === 2) {
+            setModalVisible(!modalVisible);
+          } else {
+            const event = navigation.emit({
+              type: "tabPress",
+              target: route.key,
+            });
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
           }
         };
 
@@ -52,10 +58,15 @@ export default function MyTabBar({ state, descriptors, navigation }) {
               size={30}
               color={color}
               name={route.name}
+              modalVisible={modalVisible}
             />
           </TouchableOpacity>
         );
       })}
+      <NavigatorModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
       <Animated.View
         style={[
           styles.indicator,

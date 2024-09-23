@@ -14,7 +14,6 @@ export default function Bordureau() {
   const { gutters, borders, layout, backgrounds, fonts } = useTheme();
   const { height, width } = Dimensions.get("window");
 
-   
   return (
     <SafeAreaView
       forceInset={{
@@ -22,7 +21,10 @@ export default function Bordureau() {
       }}
       style={{ flex: 1 }}
     >
-      <ScrollView keyboardShouldPersistTaps="handled">
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: 60 }}
+      >
         <View
           style={[
             layout.flex_1,
@@ -34,6 +36,7 @@ export default function Bordureau() {
               borderTopLeftRadius: 80,
               marginHorizontal: 15,
               padding: 15,
+              paddingBottom: 15,
             },
           ]}
         >

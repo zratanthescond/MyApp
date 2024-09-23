@@ -1,9 +1,17 @@
 import AppIcon from "@/components/icons/AppIcons";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
-export default function BottomTab({ type, color, size = 24, index, name }) {
+export default function BottomTab({
+  type,
+  color,
+  size = 24,
+  index,
+  name,
+  isFocused,
+  modalVisible,
+}) {
   let icon = "home";
   switch (index) {
     case 0:
@@ -18,12 +26,28 @@ export default function BottomTab({ type, color, size = 24, index, name }) {
       break;
     case 4:
       icon = "bank-transfer";
+      break;
     default:
       icon = "folder";
-      break;
   }
   const gradient = index === 2;
 
+  const styles = StyleSheet.create({
+    middleIcon: {
+      display: modalVisible ? "none" : "flex",
+      bottom: modalVisible ? 0 : 18,
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      justifyContent: "center",
+      alignItems: "center",
+      shadowOffset: { width: 2, height: 2 },
+      shadowOpacity: 0.6,
+      elevation: 2,
+
+      zIndex: 1000,
+    },
+  });
   return (
     <View>
       {gradient ? (
@@ -65,16 +89,3 @@ export default function BottomTab({ type, color, size = 24, index, name }) {
     </View>
   );
 }
-const styles = StyleSheet.create({
-  middleIcon: {
-    bottom: 18,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.6,
-    elevation: 2,
-  },
-});

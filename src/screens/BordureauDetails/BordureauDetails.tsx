@@ -1,19 +1,35 @@
-import React from "react";
-import { Dimensions, SafeAreaView, ScrollView, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Alert,
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import GrayCard from "@/components/atoms/dashboardAtoms/GrayCard";
-import WhiteCard from "@/components/atoms/form/WhiteCard";
+
 import Button from "@/components/atoms/form/Button";
 import { useTheme } from "@/theme";
 import ProgressBar from "@/components/atoms/dashboardAtoms/ProgressBar";
 
 import Dropdown from "@/components/atoms/Dropdown";
 import { InputWithTag } from "@/components/atoms";
-import DatePicker from "@/components/atoms/bordureauAtoms/DatePicker";
-import Form from "../Bordureau/form";
-
-export default function BordureauDetails() {
-  const { height, width } = Dimensions.get("window");
-  const { gutters, borders, layout, backgrounds, fonts, colors } = useTheme();
+import { useNavigation, RouteProp } from "@react-navigation/native";
+import DatePicker from "react-native-date-picker";
+import { Facture, FormulaireData } from "@/types/bordereaux";
+import createBorderau from "@/services/Bordereaux/createBorderau";
+import { useMutation } from "@tanstack/react-query";
+export default function BordureauDetails({
+  route,
+}: {
+  route: RouteProp<{
+    params: {
+      data: FormulaireData;
+      setData: React.Dispatch<React.SetStateAction<FormulaireData>>;
+    };
+  }>;
+}) {
   const dataReglement = [
     { key: "1", value: "Traite" },
     { key: "2", value: "Chèque" },
@@ -25,51 +41,140 @@ export default function BordureauDetails() {
     { key: "2", value: "B.Commande" },
     { key: "3", value: "Marche" },
   ];
+  const navigate = useNavigation();
+  const [date, setDate] = useState(new Date());
+  const { data } = route.params;
+  const [bordereau, setBordereau] = useState<FormulaireData>(data);
+  const [facture, setFacture] = useState<Facture>({
+    MontantDocument: bordereau.MontantTotal / bordereau.NombreDocuments,
+    RefFacture: "",
+    Echeance: 0,
+    DateFacture: date,
+    ModeReglement: dataReglement[0].value,
+    TypeDocument: dataDocument[0].value,
+  });
+
+  const { height } = Dimensions.get("window");
+  const { layout, backgrounds, fonts, colors } = useTheme();
+
   const textStyle = [
     fonts.gray800,
     fonts.bold,
     { paddingVertical: 10 },
     { paddingHorizontal: 5 },
   ];
+
+  const [open, setOpen] = useState(false);
+  const handleInputChange = (
+    field: keyof Facture,
+    value: string | number | Date
+  ) => {
+    setFacture({
+      ...facture,
+      [field]: value,
+    });
+  };
+  const handleAddData = (newData: Facture) => {
+    setBordereau({
+      ...bordereau,
+      Factures: [...bordereau.Factures, newData],
+    });
+  };
+  const mutatation = useMutation({
+    mutationFn: () => {
+      return createBorderau(bordereau);
+    },
+  });
+  const buttonLable = () => {
+    if (bordereau.Factures.length < bordereau.NombreDocuments) {
+      return {
+        label: `Suivant (${bordereau.Factures.length}/${bordereau.NombreDocuments})`,
+        onPress: () => {
+          handleAddData(facture);
+        },
+      };
+    }
+    return {
+      label: "Envoyer",
+      onPress: () => {
+        mutatation.mutate();
+      },
+    };
+  };
+  useEffect(() => {
+    console.log(facture);
+  }, [facture]);
+
   return (
     <SafeAreaView style={{ flex: 1, marginVertical: 2 }}>
-      <View
-        style={{ justifyContent: "center", marginLeft: 20, marginRight: 20 }}
-      >
-        <ProgressBar
-          title="Simulation Pour Compléter"
-          progress={50}
-          color="purple100"
-          progressColor="purple500"
-        />
-      </View>
       <View style={{ justifyContent: "center" }}>
-        <GrayCard height={height / 2}>
+        <GrayCard>
           <ScrollView
             contentContainerStyle={{
               gap: 8,
               flexDirection: "column",
-              backgroundColor: colors.white,
+              backgroundColor: colors.gray100,
               marginVertical: 10,
               borderRadius: 20,
+              paddingBottom: 20,
             }}
           >
+            {mutatation.isError && <Text>{mutatation.error.message}</Text>}
+            <View
+              style={{
+                justifyContent: "center",
+                marginLeft: 20,
+                marginRight: 20,
+              }}
+            >
+              <ProgressBar
+                title="Simulation Pour Compléter"
+                progress={
+                  (bordereau.Factures.reduce(
+                    (acc, f) => acc + f.MontantDocument,
+                    0
+                  ) *
+                    100) /
+                  bordereau.MontantTotal
+                }
+                color="purple100"
+                progressColor="purple500"
+                accumulated={bordereau.Factures.reduce(
+                  (acc, f) => acc + f.MontantDocument,
+                  0
+                )}
+                part={data.MontantTotal}
+              />
+            </View>
             <View
               style={{
                 flexDirection: "row",
-                justifyContent: "space-around",
-                width: "100%",
+                justifyContent: "space-between",
+                width: "96%",
                 zIndex: 100,
                 padding: 10,
+                backgroundColor: colors.white,
+                marginHorizontal: 7.5,
+                borderRadius: 10,
               }}
             >
               <View style={{ width: "40%" }}>
                 <Text style={textStyle}>Type De reglement</Text>
-                <Dropdown data={dataReglement} />
+                <Dropdown
+                  data={dataReglement}
+                  setSelected={(val: string) =>
+                    handleInputChange("ModeReglement", val)
+                  }
+                />
               </View>
               <View style={{ width: "40%" }}>
                 <Text style={textStyle}>Type De document</Text>
-                <Dropdown data={dataDocument} />
+                <Dropdown
+                  data={dataDocument}
+                  setSelected={(val: string) => {
+                    handleInputChange("TypeDocument", val);
+                  }}
+                />
               </View>
             </View>
             <View
@@ -81,9 +186,14 @@ export default function BordureauDetails() {
             >
               <InputWithTag
                 title="Montant Doc"
-                inputDisabled
                 tag={{ type: "text", text: "TND" }}
-                textInputPlaceholder="20,263.063"
+                textInputPlaceholder={(
+                  data.MontantTotal / data.NombreDocuments
+                ).toString()}
+                onChange={(text) => {
+                  handleInputChange("MontantDocument", text as number);
+                }}
+                value={facture.MontantDocument}
               />
             </View>
 
@@ -92,37 +202,73 @@ export default function BordureauDetails() {
               <InputWithTag
                 titleWidth={0}
                 textInputPlaceholder="Ref Document"
-                onChange={() => {}}
+                onChange={(text: string) =>
+                  handleInputChange("RefFacture", text as string)
+                }
               />
             </View>
             <View style={[layout.col, { padding: 7.5, borderRadius: 10 }]}>
-              <Text style={textStyle}>Type De reglement</Text>
+              <Text style={textStyle}>Echeance</Text>
               <InputWithTag
                 titleWidth={0}
                 textInputPlaceholder="Echeance"
-                onChange={() => {}}
+                onChange={(text) => {
+                  handleInputChange("Echeance", text as number);
+                }}
               />
             </View>
             <View style={[layout.col, { padding: 7.5, borderRadius: 10 }]}>
               <Text style={textStyle}>Date du document</Text>
               <InputWithTag
+                inputDisabled={true}
                 titleWidth={0}
-                textInputPlaceholder="date"
-                onChange={() => {}}
+                textInputPlaceholder={date.toLocaleString()}
+                onChange={(text: Date) => {
+                  handleInputChange("DateFacture", text as Date);
+                }}
                 tag={{
                   type: "icon",
                   name: "calendar-month",
                   iconType: "MaterialIcons",
                 }}
-                onIconPress={() => {}}
+                onIconPress={() => {
+                  setOpen(true);
+                }}
               />
             </View>
-            {/* /*<DatePicker name="dateDoc" style={{position:"absolute" ,top:8}}/> */}
+            <DatePicker
+              mode="date"
+              modal
+              open={open}
+              date={date}
+              onConfirm={(date) => {
+                setOpen(false);
+                setDate(date);
+              }}
+              onCancel={() => {
+                setOpen(false);
+              }}
+            />
+            <View
+              style={{
+                alignSelf: "center",
+                height: height / 10,
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Button
+                outlined={true}
+                label={"Annulé"}
+                onPress={() => navigate.goBack()}
+              />
+              <Button
+                label={buttonLable().label}
+                onPress={buttonLable().onPress}
+              />
+            </View>
           </ScrollView>
         </GrayCard>
-      </View>
-      <View style={{ alignSelf: "center", height: height / 10 }}>
-        <Button />
       </View>
     </SafeAreaView>
   );

@@ -21,16 +21,17 @@ type Tag = TextTag | IconTag;
 
 // Interface pour les props du composant InputWithTag
 interface InputWithTagProps {
-  title: string;
-  titleWidth: number;
-  tag?: Tag;
-  onChange: () => void;
+  title: string | null;
+  titleWidth: number | undefined;
+  tag: Tag | undefined;
+  onChange: (text: string | number | Date) => void | undefined;
   textInputPlaceholder: string;
-  onIconPress: (arg: boolean) => void;
-  inputDisabled?: boolean;
+  onIconPress: (arg: boolean) => void | undefined;
+  inputDisabled: boolean | undefined;
+  value: string | number | Date | undefined;
 }
 
-const InputWithTag: React.FC<InputWithTagProps> = ({
+function InputWithTag({
   title,
   titleWidth,
   tag,
@@ -38,7 +39,8 @@ const InputWithTag: React.FC<InputWithTagProps> = ({
   textInputPlaceholder,
   onIconPress,
   inputDisabled,
-}) => {
+  value,
+}: InputWithTagProps): JSX.Element {
   const { layout, fonts, colors, backgrounds } = useTheme();
 
   return (
@@ -65,7 +67,6 @@ const InputWithTag: React.FC<InputWithTagProps> = ({
           layout.justifyCenter,
           layout.itemsCenter,
           {
-            elevation: 20,
             shadowColor: colors.gray50,
             flex: 1,
             borderRadius: 10,
@@ -79,16 +80,18 @@ const InputWithTag: React.FC<InputWithTagProps> = ({
               backgroundColor: colors.white,
               borderRadius: 10,
               flex: 1,
+              elevation: 20,
             },
           ]}
-          onChangeText={() => {
-            onChange();
+          onChangeText={(text) => {
+            onChange(text);
           }}
           placeholder={textInputPlaceholder}
           keyboardType="numeric"
           maxLength={11}
           editable={!inputDisabled}
           selectTextOnFocus={!inputDisabled}
+          value={value?.toString()}
         />
         {tag && tag.type === "text" && (
           <Text
@@ -136,6 +139,6 @@ const InputWithTag: React.FC<InputWithTagProps> = ({
       </View>
     </View>
   );
-};
+}
 
 export default InputWithTag;
