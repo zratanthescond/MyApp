@@ -5,6 +5,7 @@ export type Facture = {
   DateFacture: Date;
   ModeReglement: string;
   TypeDocument: string;
+  ContratId: number;
 };
 export type FormulaireData = {
   MontantTotal: number;

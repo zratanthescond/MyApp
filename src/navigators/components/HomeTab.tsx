@@ -7,8 +7,10 @@ import { Example, Bordureau, Cartes, Financement, Dashboard } from "@/screens";
 import MyTabBar from "./MyTabBar";
 import React from "react";
 import BordureauDetails from "@/screens/BordureauDetails/BordureauDetails";
+import MyDrawer from "./Drawer";
+import { Alert } from "react-native";
 
-const HomeTab = (): JSX.Element => {
+function HomeTab(): JSX.Element {
   const { Navigator, Screen } = createBottomTabNavigator<HomeTabParamList>();
 
   return (
@@ -29,8 +31,8 @@ const HomeTab = (): JSX.Element => {
       <Screen name="bordureau" component={Bordureau} />
       <Screen name="Cartes" component={Cartes} />
       <Screen name="Financement" component={Financement} />
-      <Screen name="Virements" component={Dashboard} />
+      <Screen name="profile" component={MyDrawer} />
     </Navigator>
   );
-};
+}
 export default HomeTab;

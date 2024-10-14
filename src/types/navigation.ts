@@ -6,6 +6,7 @@ export type ApplicationStackParamList = {
   Example: undefined;
   BordureauDetails: undefined;
   Individu: undefined;
+  Factures: undefined;
 };
 
 export type ApplicationScreenProps =

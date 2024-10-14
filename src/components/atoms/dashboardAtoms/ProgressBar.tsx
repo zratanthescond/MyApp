@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { useTheme } from "@/theme";
+import WhiteCard from "../form/WhiteCard";
 
 // Interface pour les props du composant ProgressBar
 interface ProgressBarProps {
@@ -8,58 +9,64 @@ interface ProgressBarProps {
   title: string;
   color: string;
   progressColor: string;
-  accumulated?: number;
-  part?: number;
+  accumulated: number | 0;
+  part: number;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({
+function ProgressBar({
   progress,
   title,
   color,
   progressColor,
   accumulated,
   part,
-}) => {
+}: ProgressBarProps): React.ReactElement {
   const { borders, backgrounds, layout, fonts, gutters } = useTheme();
 
   return (
-    <View
+    <WhiteCard
       style={[
-        { width: "100%", height: 100 },
-        borders.rounded_16,
-        backgrounds.white,
-        gutters.marginBottom_16,
+        layout.flex_1,
+        layout.col,
+        layout.justifyBetween,
+        layout.itemsCenter,
       ]}
     >
       <View
         style={[
+          layout.flex_1,
           layout.row,
           layout.itemsCenter,
           layout.justifyBetween,
           gutters.padding_12,
+          layout.fullWidth,
         ]}
       >
-        <Text style={[]}> {title}</Text>
-        <Text style={[]}> {progress}%</Text>
+        <Text style={[fonts.bold, fonts.blue100]}> {title}</Text>
+        <Text style={[fonts.bold, fonts.blue100]}> {progress}%</Text>
       </View>
       <View
         style={[
-          { width: "90%", height: 10, alignSelf: "center" },
+          layout.flex_1,
           backgrounds[color],
-          borders.rounded_4,
+          borders.rounded_16,
+          layout.fullWidth,
+
+          [{ height: 10 }],
         ]}
       >
         <View
           style={[
             { width: `${progress}%`, height: 10, alignSelf: "start" },
             backgrounds[progressColor],
-            borders.rounded_4,
+            borders.rounded_16,
           ]}
-        ></View>
+        />
       </View>
       {typeof accumulated !== "undefined" && typeof part !== "undefined" && (
         <View
           style={[
+            layout.fullWidth,
             layout.row,
             layout.itemsCenter,
             layout.justifyBetween,
@@ -67,11 +74,11 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           ]}
         >
           <Text style={[fonts.bold, fonts.blue100]}> {accumulated}DT/Mois</Text>
-          <Text style={[]}> {part}DT</Text>
+          <Text style={[fonts.bold, fonts.blue100]}> {part}DT</Text>
         </View>
       )}
-    </View>
+    </WhiteCard>
   );
-};
+}
 
 export default ProgressBar;

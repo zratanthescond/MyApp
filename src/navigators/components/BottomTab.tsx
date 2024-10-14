@@ -25,7 +25,7 @@ export default function BottomTab({
       icon = "credit-card";
       break;
     case 4:
-      icon = "bank-transfer";
+      icon = "account";
       break;
     default:
       icon = "folder";

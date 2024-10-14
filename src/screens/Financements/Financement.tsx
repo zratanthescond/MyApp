@@ -112,25 +112,31 @@ function Financement(): JSX.Element {
         }}
       />
 
-      <GrayCard>
+      <GrayCard style={[layout.col, layout.fullHeight, layout.flex_1]}>
         <View
           style={[
             layout.col,
-            { height: height / 10, width: width - 50, columnGap: 20 },
+            layout.flex_1,
+            layout.justifyBetween,
+
+            gutters.padding_12,
           ]}
         >
           <View
-            style={{
-              flexDirection: "row",
-
-              justifyContent: "space-between",
-            }}
+            style={[
+              layout.fullWidth,
+              layout.row,
+              layout.justifyBetween,
+              gutters.padding_12,
+            ]}
           >
             <Text> 50 000 TND</Text>
             <Text>500 000 TND</Text>
           </View>
+
           <Slider
             onValueChange={(value) => {
+              progress.value = value;
               handleInputChange("MontantFinancement", value.toFixed(2) * 1);
             }}
             maximumValue={max}
@@ -140,9 +146,13 @@ function Financement(): JSX.Element {
         </View>
         <View
           style={[
-            backgrounds.white,
             layout.row,
-            { marginHorizontal: 7.5, padding: 7.5, borderRadius: 10 },
+            backgrounds.white,
+            gutters.padding_12,
+            gutters.margin_12,
+            {
+              borderRadius: 10,
+            },
           ]}
         >
           <InputWithTag
@@ -150,6 +160,7 @@ function Financement(): JSX.Element {
             tag={{ type: "text", text: "TND" }}
             textInputPlaceholder={"0.00"}
             onChange={(val) => {
+              progress.value = val;
               handleInputChange("MontantFinancement", val);
             }}
             value={data.MontantFinancement}
@@ -158,11 +169,11 @@ function Financement(): JSX.Element {
         <View
           style={[
             layout.row,
+            backgrounds.white,
+            gutters.padding_12,
+            gutters.margin_12,
             {
-              padding: 7.5,
               borderRadius: 10,
-              backgroundColor: colors.white,
-              marginHorizontal: 7.5,
             },
           ]}
         >
@@ -170,7 +181,7 @@ function Financement(): JSX.Element {
           <InputWithTag
             inputDisabled
             titleWidth={0}
-            textInputPlaceholder={"22/02/1999"}
+            textInputPlaceholder="22/02/1999"
             onChange={() => {}}
             tag={{
               type: "icon",
@@ -183,19 +194,16 @@ function Financement(): JSX.Element {
             value={data.DateDeFinancement}
           />
         </View>
+        <View style={[layout.row, layout.justifyBetween]}>
+          <Button outlined label="Annulé" onPress={() => {}} />
+          <Button
+            outlined={false}
+            label="Suivant"
+            onPress={() => setModalVisible(true)}
+          />
+        </View>
       </GrayCard>
 
-      <View
-        style={{
-          justifyContent: "space-between",
-          marginLeft: 30,
-          marginRight: 20,
-          flexDirection: "row",
-        }}
-      >
-        <Button outlined={true} label={"Annulé"} />
-        <Button label={"Suivant"} onPress={() => setModalVisible(true)} />
-      </View>
       <DatePicker
         mode="date"
         date={data.DateDeFinancement}
@@ -212,7 +220,7 @@ function Financement(): JSX.Element {
       <BottomModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        title={"Financements"}
+        title="Financements"
       >
         <GrayCard>
           <View style={styles.rowContainer}>
@@ -236,7 +244,6 @@ function Financement(): JSX.Element {
           <View style={styles.rowContainer}>
             <Text style={styles.boldText}>Date de demande</Text>
             <Text style={styles.smallText}>
-              {" "}
               {data.DateDeFinancement.toLocaleDateString()}
             </Text>
           </View>

@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { DrawerActions, NavigationContainer } from "@react-navigation/native";
 
 import { Startup, Financement } from "@/screens";
 import { useTheme } from "@/theme";
@@ -14,15 +14,17 @@ import AppIcon, { Icons } from "../components/icons/AppIcons";
 import { example, startup } from "@/translations/en";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import HeaderLogo from "@/components/header/HeaderLogo";
-import LinearGradient from "react-native-linear-gradient";
-import { Colors } from "@/types/theme/colors";
-import React from "react";
-import MyTabBar from "./components/MyTabBar";
+
 import HomeTab from "./components/HomeTab";
 import BordureauDetails from "@/screens/BordureauDetails/BordureauDetails";
 import useAuth from "@/contexts/auth/useAuth";
 import AuthStack from "./components/AthStack";
 import Individu from "@/screens/Individu/Individu";
+import Facture from "@/screens/Facture/Facture";
+import LimiteScreen from "@/screens/Limite/LimiteScreen";
+import MyDrawer from "./components/Drawer";
+import ProfileUpdate from "@/screens/Profile/ProfileUpdate";
+
 const Stack = createStackNavigator<ApplicationStackParamList>();
 
 function ApplicationNavigator() {
@@ -44,6 +46,12 @@ function ApplicationNavigator() {
         <Stack.Screen name="Example" component={HomeTab} />
         <Stack.Screen name="BordureauDetails" component={BordureauDetails} />
         <Stack.Screen name="Individu" component={Individu} />
+
+        <Stack.Screen name="Factures" component={Facture} />
+
+        <Stack.Screen name="Limite" component={LimiteScreen} />
+
+        <Stack.Screen name="ProfileUpdate" component={ProfileUpdate} />
       </Stack.Navigator>
     </NavigationContainer>
   );

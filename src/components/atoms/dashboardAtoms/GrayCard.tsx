@@ -7,7 +7,7 @@ interface GrayCard {
   height?: number;
   width?: number;
 }
-export default function GrayCard({ children, height, width }: GrayCard) {
+export default function GrayCard({ children, height, width, style }: GrayCard) {
   const { borders, backgrounds, gutters, layout, colors } = useTheme();
 
   return (
@@ -21,6 +21,7 @@ export default function GrayCard({ children, height, width }: GrayCard) {
         layout.col,
         gutters.paddingVertical_12,
         { height: height },
+        style,
       ]}
     >
       {children}

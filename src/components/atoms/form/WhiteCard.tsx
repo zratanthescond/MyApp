@@ -20,13 +20,14 @@ export default function WhiteCard({
   return (
     <View
       style={[
-        layout.flex_1,
         backgrounds.white,
         borders.rounded_16,
         layout.itemsCenter,
         layout.justifyAround,
         flexDirection,
         { paddingHorizontal: 15, height: height, marginVertical: 7.5 },
+
+        { width: "90%" },
         style,
       ]}
     >

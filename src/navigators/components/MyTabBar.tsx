@@ -6,20 +6,29 @@ import {
   Animated,
   Dimensions,
   Alert,
+  Modal,
+  TouchableWithoutFeedback,
+  TouchableOpacityBase,
+  TouchableNativeFeedback,
 } from "react-native";
 import BottomTab from "./BottomTab";
 import { Icons } from "@/components/icons/AppIcons";
 import NavigatorModal from "./NavigatorModal";
+import MyDrawer from "./Drawer";
+import { DrawerActions } from "@react-navigation/native";
+import ProfileDrawer from "@/components/molecules/ProfileDrawer";
+import { useTheme } from "@/theme";
 
 export default function MyTabBar({ state, descriptors, navigation }) {
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   const tabWidth = getWidth();
   const [modalVisible, setModalVisible] = useState(false);
+  const [profileModalVisible, setProfileModalVisible] = useState(false);
   const translateX = tabOffsetValue.interpolate({
     inputRange: [0, state.routes.length - 1],
     outputRange: [0, tabWidth * (state.routes.length - 1)],
   });
-
+  const { layout, backgrounds, borders, colors } = useTheme();
   return (
     <View style={styles.bottomBar}>
       {state.routes.map((route, index) => {
@@ -27,15 +36,19 @@ export default function MyTabBar({ state, descriptors, navigation }) {
         const { options } = descriptors[route.key];
 
         const onPress = () => {
-          if (index === 2) {
-            setModalVisible(!modalVisible);
+          if (index === 4) {
+            setProfileModalVisible(!profileModalVisible);
           } else {
-            const event = navigation.emit({
-              type: "tabPress",
-              target: route.key,
-            });
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
+            if (index === 2) {
+              setModalVisible(!modalVisible);
+            } else {
+              const event = navigation.emit({
+                type: "tabPress",
+                target: route.key,
+              });
+              if (!isFocused && !event.defaultPrevented) {
+                navigation.navigate(route.name);
+              }
             }
           }
         };
@@ -75,6 +88,18 @@ export default function MyTabBar({ state, descriptors, navigation }) {
           },
         ]}
       />
+      <Modal
+        transparent={true}
+        visible={profileModalVisible}
+        animationType="fade"
+      >
+        <TouchableOpacity
+          style={[layout.flex_1]}
+          onPress={() => setProfileModalVisible(false)}
+        >
+          <ProfileDrawer onClose={() => setProfileModalVisible(false)} />
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 }

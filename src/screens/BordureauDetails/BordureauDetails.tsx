@@ -20,6 +20,11 @@ import DatePicker from "react-native-date-picker";
 import { Facture, FormulaireData } from "@/types/bordereaux";
 import createBorderau from "@/services/Bordereaux/createBorderau";
 import { useMutation } from "@tanstack/react-query";
+import WhiteCard from "@/components/atoms/form/WhiteCard";
+import { SelectList } from "react-native-dropdown-select-list";
+import { getAcheteur } from "@/services/Individu/individu";
+import { useQuery } from "@tanstack/react-query";
+import useContract from "@/contexts/auth/useContract";
 export default function BordureauDetails({
   route,
 }: {
@@ -30,6 +35,7 @@ export default function BordureauDetails({
     };
   }>;
 }) {
+  const { contractId } = useContract();
   const dataReglement = [
     { key: "1", value: "Traite" },
     { key: "2", value: "Chèque" },
@@ -52,10 +58,11 @@ export default function BordureauDetails({
     DateFacture: date,
     ModeReglement: dataReglement[0].value,
     TypeDocument: dataDocument[0].value,
+    ContratId: contractId,
   });
 
   const { height } = Dimensions.get("window");
-  const { layout, backgrounds, fonts, colors } = useTheme();
+  const { layout, backgrounds, fonts, colors, gutters } = useTheme();
 
   const textStyle = [
     fonts.gray800,
@@ -105,60 +112,84 @@ export default function BordureauDetails({
     console.log(facture);
   }, [facture]);
 
+  const acheteur = useQuery({
+    queryKey: ["acheteur"],
+    queryFn: () => getAcheteur(contractId),
+  });
+  [acheteurList, setAcheteurList] = useState([]);
+  useEffect(() => {
+    setAcheteurList([]);
+    if (acheteur.data?.$values) {
+      acheteur.data.$values.map((acheteur) => {
+        setAcheteurList((prevList) => [
+          ...prevList,
+          { key: acheteur.individuId, value: acheteur.nom },
+        ]);
+      });
+    }
+  }, [acheteur.data]);
   return (
-    <SafeAreaView style={{ flex: 1, marginVertical: 2 }}>
-      <View style={{ justifyContent: "center" }}>
+    <SafeAreaView>
+      <View style={[layout.fullWidth, layout.fullHeight, backgrounds.white]}>
         <GrayCard>
-          <ScrollView
-            contentContainerStyle={{
-              gap: 8,
-              flexDirection: "column",
-              backgroundColor: colors.gray100,
-              marginVertical: 10,
-              borderRadius: 20,
-              paddingBottom: 20,
-            }}
-          >
+          <ScrollView contentContainerStyle={[layout.itemsCenter]}>
             {mutatation.isError && <Text>{mutatation.error.message}</Text>}
-            <View
-              style={{
-                justifyContent: "center",
-                marginLeft: 20,
-                marginRight: 20,
-              }}
-            >
-              <ProgressBar
-                title="Simulation Pour Compléter"
-                progress={
-                  (bordereau.Factures.reduce(
-                    (acc, f) => acc + f.MontantDocument,
-                    0
-                  ) *
-                    100) /
-                  bordereau.MontantTotal
-                }
-                color="purple100"
-                progressColor="purple500"
-                accumulated={bordereau.Factures.reduce(
+
+            <ProgressBar
+              title="Simulation Pour Compléter"
+              progress={
+                (bordereau.Factures.reduce(
                   (acc, f) => acc + f.MontantDocument,
                   0
-                )}
-                part={data.MontantTotal}
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "96%",
-                zIndex: 100,
-                padding: 10,
-                backgroundColor: colors.white,
-                marginHorizontal: 7.5,
-                borderRadius: 10,
-              }}
+                ) *
+                  100) /
+                bordereau.MontantTotal
+              }
+              color="purple100"
+              progressColor="purple500"
+              accumulated={bordereau.Factures.reduce(
+                (acc, f) => acc + f.MontantDocument,
+                0
+              )}
+              part={data.MontantTotal}
+            />
+
+            <WhiteCard
+              style={[
+                layout.row,
+
+                gutters.padding_16,
+                layout.justifyBetween,
+                layout.flex_1,
+                layout.itemsCenter,
+                //  gutters.marginHorizontal_12,
+                { zIndex: 101 },
+              ]}
             >
-              <View style={{ width: "40%" }}>
+              <Text style={textStyle}>Acheteur</Text>
+              {acheteur.data && (
+                <Dropdown
+                  data={acheteurList}
+                  setSelected={(val: string) =>
+                    handleInputChange("individuId", val)
+                  }
+                  save="key"
+                  search={true}
+                />
+              )}
+            </WhiteCard>
+            <WhiteCard
+              style={[
+                layout.row,
+                gutters.padding_16,
+                layout.flex_1,
+                layout.justifyBetween,
+                layout.itemsCenter,
+                gutters.marginHorizontal_12,
+                layout.z10,
+              ]}
+            >
+              <View style={[layout.flex_1, layout.col]}>
                 <Text style={textStyle}>Type De reglement</Text>
                 <Dropdown
                   data={dataReglement}
@@ -167,7 +198,7 @@ export default function BordureauDetails({
                   }
                 />
               </View>
-              <View style={{ width: "40%" }}>
+              <View style={[layout.flex_1, layout.col]}>
                 <Text style={textStyle}>Type De document</Text>
                 <Dropdown
                   data={dataDocument}
@@ -176,14 +207,8 @@ export default function BordureauDetails({
                   }}
                 />
               </View>
-            </View>
-            <View
-              style={[
-                backgrounds.white,
-                layout.row,
-                { marginHorizontal: 7.5, padding: 7.5, borderRadius: 10 },
-              ]}
-            >
+            </WhiteCard>
+            <WhiteCard style={[layout.row, gutters.padding_16]}>
               <InputWithTag
                 title="Montant Doc"
                 tag={{ type: "text", text: "TND" }}
@@ -195,9 +220,9 @@ export default function BordureauDetails({
                 }}
                 value={facture.MontantDocument}
               />
-            </View>
+            </WhiteCard>
 
-            <View style={[layout.col, { padding: 7.5, borderRadius: 10 }]}>
+            <WhiteCard style={[layout.row, gutters.padding_16]}>
               <Text style={textStyle}>Ref Document</Text>
               <InputWithTag
                 titleWidth={0}
@@ -206,8 +231,8 @@ export default function BordureauDetails({
                   handleInputChange("RefFacture", text as string)
                 }
               />
-            </View>
-            <View style={[layout.col, { padding: 7.5, borderRadius: 10 }]}>
+            </WhiteCard>
+            <WhiteCard style={[layout.row, gutters.padding_16]}>
               <Text style={textStyle}>Echeance</Text>
               <InputWithTag
                 titleWidth={0}
@@ -216,8 +241,8 @@ export default function BordureauDetails({
                   handleInputChange("Echeance", text as number);
                 }}
               />
-            </View>
-            <View style={[layout.col, { padding: 7.5, borderRadius: 10 }]}>
+            </WhiteCard>
+            <WhiteCard style={[layout.row, gutters.padding_16]}>
               <Text style={textStyle}>Date du document</Text>
               <InputWithTag
                 inputDisabled={true}
@@ -235,7 +260,7 @@ export default function BordureauDetails({
                   setOpen(true);
                 }}
               />
-            </View>
+            </WhiteCard>
             <DatePicker
               mode="date"
               modal
@@ -250,12 +275,12 @@ export default function BordureauDetails({
               }}
             />
             <View
-              style={{
-                alignSelf: "center",
-                height: height / 10,
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
+              style={[
+                layout.flex_1,
+                layout.row,
+                layout.justifyBetween,
+                gutters.padding_12,
+              ]}
             >
               <Button
                 outlined={true}
