@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { SafeScreen } from "@/components/template";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "@/theme";
 
 import AppIcon from "@/components/icons/AppIcons";
@@ -30,8 +30,9 @@ export default function Individu(): React.ReactElement {
     },
   });
   const acheteurs = useQuery({
-    queryKey: ["acheteurs"],
+    queryKey: ["acheteurs", modalVisible],
     queryFn: () => {
+      console.log("fetching data")
       return getAcheteur(contractId);
     },
   });
@@ -49,17 +50,23 @@ export default function Individu(): React.ReactElement {
 
   const mutation = useMutation({
     mutationKey: ["acheteurs"],
+
     mutationFn: () => {
+
       return addAcheteur(buyers, contractId);
     },
     onSuccess: (data) => {
-      setModalVisible(false);
-      alert("Acheteur ajouté");
+
+      Alert.alert("success", "Acheteur ajouté", [{
+        text: "OK",
+        onPress: () => setModalVisible(false)
+      }]);
     },
     onError: (error) => {
-      alert("Une erreur est survenue");
+      Alert.alert("error", "Une erreur est survenue", [{ text: "Ok" }]);
     },
-  });
+  }
+  );
 
   return (
     <SafeScreen>

@@ -13,6 +13,7 @@ import Touchable from "@/components/atoms/dashboardAtoms/touchable";
 import Contract from "@/services/Contrats/ContratModel";
 import LinearGradient from "react-native-linear-gradient";
 import { useTheme } from "@/theme";
+import { useTranslation } from "react-i18next";
 
 interface CarouselItemProps {
   data: Contract[];
@@ -30,6 +31,7 @@ const CarouselItem: FC<CarouselItemProps> = ({
 }) => {
   const itemSpacing = 15;
   const { borders, layout } = useTheme();
+  const { t } = useTranslation(["dashboard"]);
   return (
     <View
       style={{
@@ -98,7 +100,8 @@ const CarouselItem: FC<CarouselItemProps> = ({
                     fontWeight: "normal",
                   }}
                 >
-                  Contrat N°: {contract.contratId}
+                  {t("dashboard:Contrat")} N°: {contract.contratId}
+
                 </Text>
                 <Text
                   style={{

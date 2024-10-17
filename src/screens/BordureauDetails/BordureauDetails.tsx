@@ -25,6 +25,9 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { getAcheteur } from "@/services/Individu/individu";
 import { useQuery } from "@tanstack/react-query";
 import useContract from "@/contexts/auth/useContract";
+import { BordereauDetailsSchema } from "@/types/schemas/BordereauDetailsSchema";
+
+
 export default function BordureauDetails({
   route,
 }: {
@@ -50,6 +53,10 @@ export default function BordureauDetails({
   const navigate = useNavigation();
   const [date, setDate] = useState(new Date());
   const { data } = route.params;
+
+  // const dateBordereau = new Date(data.DateBordereau);
+  const [factureErrors, setFactureErrors] = useState<Record<string, string | undefined>>({});
+
   const [bordereau, setBordereau] = useState<FormulaireData>(data);
   const [facture, setFacture] = useState<Facture>({
     MontantDocument: bordereau.MontantTotal / bordereau.NombreDocuments,
@@ -82,15 +89,40 @@ export default function BordureauDetails({
     });
   };
   const handleAddData = (newData: Facture) => {
+    const validationResult = BordereauDetailsSchema.safeParse(newData);
+
+    if (!validationResult.success) {
+      const formattedErrors = validationResult.error.format();
+      setFactureErrors({
+        MontantDocument: formattedErrors.MontantDocument?._errors[0],
+        DateFacture: formattedErrors.DateFacture?._errors[0],
+        Echeance: formattedErrors.Echeance?._errors[0],
+        RefFacture: formattedErrors.RefFacture?._errors[0],
+      });
+      return; // Stop if there are validation errors
+    }
+
     setBordereau({
       ...bordereau,
       Factures: [...bordereau.Factures, newData],
     });
+
+    // Reset errors if submission is successful
+    setFactureErrors({});
   };
+
   const mutatation = useMutation({
+
     mutationFn: () => {
+
       return createBorderau(bordereau);
     },
+    onSuccess: () => {
+      return Alert.alert('success', 'Bordereau Added successfuly', [{ text: 'OK', onPress: () => navigate.goBack() }],)
+    },
+    onError: () => {
+      return Alert.alert('Error', 'error ', [{ text: 'OK', onPress: () => navigate.goBack() }],)
+    }
   });
   const buttonLable = () => {
     if (bordereau.Factures.length < bordereau.NombreDocuments) {
@@ -130,7 +162,8 @@ export default function BordureauDetails({
   }, [acheteur.data]);
   return (
     <SafeAreaView>
-      <View style={[layout.fullWidth, layout.fullHeight, backgrounds.white]}>
+      <View style={[layout.fullWidth, layout.fullHeight, backgrounds.white
+      ]}>
         <GrayCard>
           <ScrollView contentContainerStyle={[layout.itemsCenter]}>
             {mutatation.isError && <Text>{mutatation.error.message}</Text>}
@@ -187,6 +220,7 @@ export default function BordureauDetails({
                 layout.itemsCenter,
                 gutters.marginHorizontal_12,
                 layout.z10,
+                { gap: 10 }
               ]}
             >
               <View style={[layout.flex_1, layout.col]}>
@@ -208,7 +242,7 @@ export default function BordureauDetails({
                 />
               </View>
             </WhiteCard>
-            <WhiteCard style={[layout.row, gutters.padding_16]}>
+            <WhiteCard style={[layout.col, gutters.padding_16]}>
               <InputWithTag
                 title="Montant Doc"
                 tag={{ type: "text", text: "TND" }}
@@ -220,47 +254,68 @@ export default function BordureauDetails({
                 }}
                 value={facture.MontantDocument}
               />
+              {factureErrors.MontantDocument && (
+                <Text style={{ color: 'red' }}>{factureErrors.MontantDocument}</Text>
+              )}
             </WhiteCard>
 
-            <WhiteCard style={[layout.row, gutters.padding_16]}>
-              <Text style={textStyle}>Ref Document</Text>
-              <InputWithTag
-                titleWidth={0}
-                textInputPlaceholder="Ref Document"
-                onChange={(text: string) =>
-                  handleInputChange("RefFacture", text as string)
-                }
-              />
+            <WhiteCard style={[layout.col, gutters.padding_16]}>
+              <View style={[layout.row]}>
+                <Text style={textStyle}>Ref Doc</Text>
+                <InputWithTag
+                  titleWidth={0}
+                  textInputPlaceholder="Ref Doc"
+                  onChange={(text: string) =>
+                    handleInputChange("RefFacture", text as string)
+                  }
+                />
+              </View>
+              {factureErrors.RefFacture && (
+                <Text style={{ color: 'red' }}>{factureErrors.RefFacture}</Text>
+              )}
             </WhiteCard>
-            <WhiteCard style={[layout.row, gutters.padding_16]}>
-              <Text style={textStyle}>Echeance</Text>
-              <InputWithTag
-                titleWidth={0}
-                textInputPlaceholder="Echeance"
-                onChange={(text) => {
-                  handleInputChange("Echeance", text as number);
-                }}
-              />
+
+            <WhiteCard style={[layout.col, gutters.padding_16]}>
+              <View style={[layout.row]}>
+                <Text style={textStyle}>Echeance</Text>
+                <InputWithTag
+                  titleWidth={0}
+                  textInputPlaceholder="Echeance"
+                  onChange={(text) => {
+                    handleInputChange("Echeance", text as number);
+                  }}
+                />
+              </View>
+              {factureErrors.Echeance && (
+                <Text style={{ color: 'red' }}>{factureErrors.Echeance}</Text>
+              )}
             </WhiteCard>
-            <WhiteCard style={[layout.row, gutters.padding_16]}>
-              <Text style={textStyle}>Date du document</Text>
-              <InputWithTag
-                inputDisabled={true}
-                titleWidth={0}
-                textInputPlaceholder={date.toLocaleString()}
-                onChange={(text: Date) => {
-                  handleInputChange("DateFacture", text as Date);
-                }}
-                tag={{
-                  type: "icon",
-                  name: "calendar-month",
-                  iconType: "MaterialIcons",
-                }}
-                onIconPress={() => {
-                  setOpen(true);
-                }}
-              />
+
+            <WhiteCard style={[layout.col, gutters.padding_16]}>
+              <View style={[layout.row]}>
+                <Text style={textStyle}>Date Doc</Text>
+                <InputWithTag
+                  inputDisabled={true}
+                  titleWidth={0}
+                  textInputPlaceholder={date.toLocaleDateString("en-US")}
+                  onChange={(text: Date) => {
+                    handleInputChange("DateFacture", text as Date);
+                  }}
+                  tag={{
+                    type: "icon",
+                    name: "calendar-month",
+                    iconType: "MaterialIcons",
+                  }}
+                  onIconPress={() => {
+                    setOpen(true);
+                  }}
+                />
+              </View>
+              {factureErrors.DateFacture && (
+                <Text style={{ color: 'red' }}>{factureErrors.DateFacture}</Text>
+              )}
             </WhiteCard>
+
             <DatePicker
               mode="date"
               modal
@@ -290,6 +345,9 @@ export default function BordureauDetails({
               <Button
                 label={buttonLable().label}
                 onPress={buttonLable().onPress}
+                isLoading={mutatation.isPending}
+
+
               />
             </View>
           </ScrollView>

@@ -5,7 +5,7 @@ export default async function Login(data: any) {
   console.log(data);
   try {
     const response = await instance.post(
-      "http://10.0.2.2:5000/api/Auth/login",
+      "http://192.168.100.178:5000/api/Auth/login",
       data
     );
     console.log(response.data);

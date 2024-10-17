@@ -1,15 +1,16 @@
 import CardInformation from "@/components/atoms/dashboardAtoms/CardInformation";
 import BackgroundDispoCard from "@/components/molecules/BackgroundDispoCard";
 import CarouselItem from "@/components/molecules/CarouselItem";
-import Contract from "@/services/Contrats/ContratModel";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, SafeAreaView, Text, View } from "react-native";
 import { useTheme } from "@/theme";
 import { useQuery } from "@tanstack/react-query";
 import getMycontract from "@/services/Contrats/getByuser";
 import useContract from "@/contexts/auth/useContract";
+import { useTranslation } from "react-i18next";
 
 export default function Cartes() {
+  const { t } = useTranslation(["bordereau"]);
   const { data, isLoading, error } = useQuery({
     queryKey: ["contracts"],
     queryFn: () => {
@@ -41,12 +42,13 @@ export default function Cartes() {
 
   if (!data) return <View />;
 
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
         <BackgroundDispoCard
-          text1={"Disponible 1"}
-          text2={"Disponible 2"}
+          text1={t("dashboard:Available1")}
+          text2={t("dashboard:Available2")}
           activeCard={activeCard}
           setActiveCard={setActiveCard}
         />

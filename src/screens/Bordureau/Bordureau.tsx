@@ -9,10 +9,14 @@ import {
   View,
 } from "react-native";
 import Form from "./form";
+import { useTranslation } from "react-i18next";
 
 export default function Bordureau() {
   const { gutters, borders, layout, backgrounds, fonts } = useTheme();
   const { height, width } = Dimensions.get("window");
+  const { t } = useTranslation(["bordereau"]);
+
+
 
   return (
     <SafeAreaView
@@ -48,7 +52,7 @@ export default function Bordureau() {
               gutters.marginTop_24,
             ]}
           >
-            Nouvelle Bordureau
+            {t("bordereau:titre")}
           </Text>
 
           <Form />

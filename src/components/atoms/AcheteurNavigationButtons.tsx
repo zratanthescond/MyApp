@@ -21,26 +21,28 @@ export default function AcheteurNavigationButtons({ label, onPress }: Props) {
         }}
         style={[
           layout.row,
-          layout.justifyBetween,
+          layout.flex_1,
+          layout.justifyCenter,
           layout.itemsCenter,
-          backgrounds.white,
+          backgrounds.blue100,
           borders.rounded_16,
-          gutters.paddingHorizontal_12,
-          { paddingVertical: 5, elevation: 5 },
+          borders.w_1,
+          borders.blue100,
+          { padding:5, elevation: 5 ,gap:3},
         ]}
       >
         <AppIcon
           type="AntDesign"
           name="addfolder"
           size={15}
-          color={colors.gray800}
+          color={colors.white}
         />
         <Text
           style={[
-            fonts.gray800,
+            fonts.white,
             fonts.bold,
             fonts.size_12,
-            gutters.marginLeft_12,
+            
           ]}
         >
           {label}

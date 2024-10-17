@@ -40,7 +40,7 @@ export default function MiddleIcon({
       style={styles.middleIcon}
     >
       <TouchableOpacity
-        onPress={() => setModalVisible(!modalVisible) || onPress()}
+        onPress={() =>  onPress()}
       >
         <AppIcon
           name={icon || "close"}

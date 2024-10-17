@@ -23,8 +23,11 @@ import BottomModal from "@/components/molecules/BottomModal";
 import useContract from "@/contexts/auth/useContract";
 import DatePicker from "react-native-date-picker";
 import { MMKV } from "react-native-mmkv";
-import { useMutation } from "@tanstack/react-query";
+import { Mutation, useMutation } from "@tanstack/react-query";
 import { createFinancement } from "@/services/Financement/createFinancement";
+import { FinancementSchema } from "@/types/schemas/FinancementSchema";
+import { array } from "zod";
+import { useTranslation } from "react-i18next";
 type FinancementType = {
   MontantFinancement: number;
   DateDeFinancement: Date;
@@ -42,6 +45,7 @@ function Financement(): JSX.Element {
     { paddingVertical: 10 },
     { paddingHorizontal: 5 },
   ];
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const user = JSON.parse(storage?.getString("user"));
   const [open, setOpen] = useState(false);
   const [activeCard, setActiveCard] = useState<number>(1);
@@ -65,8 +69,8 @@ function Financement(): JSX.Element {
   const [data, setData] = useState<FinancementType>({
     MontantFinancement: 0,
     DateDeFinancement: new Date(),
-    TypeDeFinancement: "",
-    MethodeDePaiement: "",
+    TypeDeFinancement: "Financement",
+    MethodeDePaiement: "Chèque",
     ContratId: contractId,
   });
   const handleInputChange = (
@@ -77,6 +81,7 @@ function Financement(): JSX.Element {
       ...data,
       [field]: value,
     });
+    setErrors(prevErrors => ({ ...prevErrors, [field]: undefined }));
   };
 
   useEffect(() => {
@@ -84,181 +89,219 @@ function Financement(): JSX.Element {
     console.log(storage.getString("user"));
   }, [data]);
 
+  const { t } = useTranslation(["financement"]);
   const mutatation = useMutation({
     mutationFn: () => {
       return createFinancement({ individuId: user.individuId, data: data });
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       setModalVisible(false);
-      Alert.alert("Financement creé avec_succès");
+      Alert.alert("success", "Financement creé avec_succès", [{
+        text: "OK",
+        onPress: () => setData({ ...data, MontantFinancement: 0, DateDeFinancement: new Date() })
+      }]);
     },
   });
+  const hundleSuivant = () => {
+    const result = FinancementSchema.safeParse(data);
+
+    if (!result.success) {
+      const formattedErrors = result.error.format();
+      setErrors({
+        MontantFinancement: formattedErrors.MontantFinancement?._errors[0],
+        DateDeFinancement: formattedErrors.DateDeFinancement?._errors[0],
+
+      });
+      return;
+    }
+
+    setModalVisible(true)
+  };
+
+
+
   return (
     <SafeAreaView style={{ flex: 1, marginVertical: 2 }}>
-      <BackgroundDispoCard
-        activeCard={activeCard}
-        text1="Financement"
-        text2="Libération"
-        setActiveCard={(val: number) => {
-          setActiveCard(val);
-          const type = val === 1 ? "Financement" : "LiberationFDG";
-          handleInputChange("TypeDeFinancement", type);
-        }}
-      />
+      <ScrollView contentContainerStyle={[layout.flex_1, gutters.paddingBottom_40]} >
+        <BackgroundDispoCard
+          activeCard={activeCard}
+          text1={t("financement:Type1")}
+          text2={t("financement:Type2")}
+          setActiveCard={(val: number) => {
+            setActiveCard(val);
+            const type = val === 1 ? "Financement" : "LiberationFDG";
+            handleInputChange("TypeDeFinancement", type);
+          }}
+        />
 
-      <PaymentModeCard
-        getPaymentMode={(mode: string) => {
-          handleInputChange("MethodeDePaiement", mode);
-        }}
-      />
+        <PaymentModeCard
+          getPaymentMode={(mode: string) => {
+            handleInputChange("MethodeDePaiement", mode);
+          }}
+        />
 
-      <GrayCard style={[layout.col, layout.fullHeight, layout.flex_1]}>
-        <View
-          style={[
-            layout.col,
-            layout.flex_1,
-            layout.justifyBetween,
-
-            gutters.padding_12,
-          ]}
-        >
+        <GrayCard style={[layout.col, layout.fullHeight, layout.flex_1]}>
           <View
             style={[
-              layout.fullWidth,
-              layout.row,
+              backgrounds.white,
+              gutters.margin_12,
+              borders.rounded_16,
+              layout.col,
+              layout.flex_1,
               layout.justifyBetween,
+
               gutters.padding_12,
             ]}
           >
-            <Text> 50 000 TND</Text>
-            <Text>500 000 TND</Text>
-          </View>
+            <View
+              style={[
+                layout.fullWidth,
+                layout.row,
+                layout.justifyBetween,
+                gutters.padding_12,
+              ]}
+            >
+              <Text style={[fonts.purple500, fonts.bold, fonts.size_16]}> 50 000 TND</Text>
+              <Text style={[fonts.red500, fonts.bold, fonts.size_16]}>500 000 TND</Text>
+            </View>
+            <View style={[layout.flex_1, gutters.padding_12]}>
+              <Slider
+                onValueChange={(value) => {
+                  progress.value = value;
+                  handleInputChange("MontantFinancement", value);
+                }}
+                maximumValue={max}
+                minimumValue={min}
+                progress={progress}
 
-          <Slider
-            onValueChange={(value) => {
-              progress.value = value;
-              handleInputChange("MontantFinancement", value.toFixed(2) * 1);
-            }}
-            maximumValue={max}
-            minimumValue={min}
-            progress={progress}
-          />
-        </View>
-        <View
-          style={[
-            layout.row,
-            backgrounds.white,
-            gutters.padding_12,
-            gutters.margin_12,
-            {
-              borderRadius: 10,
-            },
-          ]}
-        >
-          <InputWithTag
-            title={"Montant Doc"}
-            tag={{ type: "text", text: "TND" }}
-            textInputPlaceholder={"0.00"}
-            onChange={(val) => {
-              progress.value = val;
-              handleInputChange("MontantFinancement", val);
-            }}
-            value={data.MontantFinancement}
-          />
-        </View>
-        <View
-          style={[
-            layout.row,
-            backgrounds.white,
-            gutters.padding_12,
-            gutters.margin_12,
-            {
-              borderRadius: 10,
-            },
-          ]}
-        >
-          <Text style={textStyle}>Date du document</Text>
-          <InputWithTag
-            inputDisabled
-            titleWidth={0}
-            textInputPlaceholder="22/02/1999"
-            onChange={() => {}}
-            tag={{
-              type: "icon",
-              name: "calendar-month",
-              iconType: "MaterialIcons",
-            }}
-            onIconPress={() => {
-              setOpen(true);
-            }}
-            value={data.DateDeFinancement}
-          />
-        </View>
-        <View style={[layout.row, layout.justifyBetween]}>
-          <Button outlined label="Annulé" onPress={() => {}} />
-          <Button
-            outlined={false}
-            label="Suivant"
-            onPress={() => setModalVisible(true)}
-          />
-        </View>
-      </GrayCard>
-
-      <DatePicker
-        mode="date"
-        date={data.DateDeFinancement}
-        modal
-        open={open}
-        onConfirm={(date) => {
-          setOpen(false);
-          handleInputChange("DateDeFinancement", date);
-        }}
-        onCancel={() => {
-          setOpen(false);
-        }}
-      />
-      <BottomModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        title="Financements"
-      >
-        <GrayCard>
-          <View style={styles.rowContainer}>
-            <Text style={styles.boldText}>Adhérant</Text>
-            <Text style={styles.smallText}>
-              {user.nom} {user.prenom}
-            </Text>
+              />
+            </View>
           </View>
-          <View style={styles.rowContainer}>
-            <Text style={styles.boldText}>Type de Financement</Text>
-            <Text style={styles.smallText}> {data.TypeDeFinancement}</Text>
-          </View>
-          <View style={styles.rowContainer}>
-            <Text style={styles.boldText}>Type de Paiement</Text>
-            <Text style={styles.smallText}> {data.MethodeDePaiement}</Text>
-          </View>
-          <View style={styles.rowContainer}>
-            <Text style={styles.boldText}>Montant demandé</Text>
-            <Text style={styles.smallText}> {data.MontantFinancement}</Text>
-          </View>
-          <View style={styles.rowContainer}>
-            <Text style={styles.boldText}>Date de demande</Text>
-            <Text style={styles.smallText}>
-              {data.DateDeFinancement.toLocaleDateString()}
-            </Text>
-          </View>
-          {mutatation.isError && <Text>{mutatation.error.message}</Text>}
-          <View style={styles.rowContainer}>
-            <Button outlined={true} label="Annulé" />
-            <Button
-              label="confirmer"
-              onPress={() => {
-                mutatation.mutate();
+          <View
+            style={[
+              layout.row,
+              layout.flex_1,
+              backgrounds.white,
+              gutters.padding_12,
+              gutters.margin_12,
+              borders.rounded_16,
+            ]}
+          >
+            <InputWithTag
+              titleWidth={100}
+              title={t("financement:Montant")}
+              tag={{ type: "text", text: "TND" }}
+              type="numeric"
+              textInputPlaceholder={"0.00"}
+              onChange={(val: number) => {
+                progress.value = val;
+                handleInputChange("MontantFinancement", parseFloat(val) || 0);
               }}
+              value={data.MontantFinancement}
+              errorMessage={errors.MontantFinancement}
+
+            />
+          </View>
+          <View
+            style={[
+              layout.itemsCenter,
+              layout.row,
+              layout.flex_1,
+              backgrounds.white,
+              gutters.padding_12,
+              gutters.margin_12,
+              borders.rounded_16,
+            ]}
+          >
+            <Text style={textStyle}>{t("financement:Date")}</Text>
+            <InputWithTag
+              inputDisabled
+              titleWidth={0}
+              textInputPlaceholder="22/02/1999"
+              onChange={() => { }}
+              tag={{
+                type: "icon",
+                name: "calendar-month",
+                iconType: "MaterialIcons",
+              }}
+              onIconPress={() => {
+                setOpen(true);
+              }}
+              value={data.DateDeFinancement}
+              errorMessage={errors.DateDeFinancement}
+            />
+          </View>
+          <View style={[layout.row, layout.justifyBetween]}>
+            <Button outlined label={t("financement:Annuler")} onPress={() => {
+              setData({
+                ...data, MontantFinancement: 0, DateDeFinancement: new Date()
+              })
+            }} />
+            <Button
+
+              label={t("financement:Suivant")}
+              onPress={() => hundleSuivant()}
             />
           </View>
         </GrayCard>
-      </BottomModal>
+
+        <DatePicker
+          mode="date"
+          date={data.DateDeFinancement}
+          modal
+          open={open}
+          onConfirm={(date) => {
+            setOpen(false);
+            handleInputChange("DateDeFinancement", date);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
+        <BottomModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          title="Financements"
+        >
+          <GrayCard>
+            <View style={styles.rowContainer}>
+              <Text style={styles.boldText}>Adhérant</Text>
+              <Text style={styles.smallText}>
+                {user.nom} {user.prenom}
+              </Text>
+            </View>
+            <View style={styles.rowContainer}>
+              <Text style={styles.boldText}>Type de Financement</Text>
+              <Text style={styles.smallText}> {data.TypeDeFinancement}</Text>
+            </View>
+            <View style={styles.rowContainer}>
+              <Text style={styles.boldText}>Type de Paiement</Text>
+              <Text style={styles.smallText}> {data.MethodeDePaiement}</Text>
+            </View>
+            <View style={styles.rowContainer}>
+              <Text style={styles.boldText}>Montant demandé</Text>
+              <Text style={styles.smallText}> {data.MontantFinancement}</Text>
+            </View>
+            <View style={styles.rowContainer}>
+              <Text style={styles.boldText}>Date de demande</Text>
+              <Text style={styles.smallText}>
+                {data.DateDeFinancement.toLocaleDateString()}
+              </Text>
+            </View>
+            {mutatation.isError && <Text>{mutatation.error.message}</Text>}
+            <View style={styles.rowContainer}>
+              <Button outlined={true} label="Annuler" onPress={() => { setModalVisible(false) }} />
+              <Button
+                isLoading={mutatation.isPending}
+                label="confirmer"
+                onPress={() => {
+                  mutatation.mutate();
+                }}
+              />
+            </View>
+          </GrayCard>
+        </BottomModal>
+      </ScrollView>
     </SafeAreaView>
   );
 }

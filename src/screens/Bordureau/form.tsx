@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, Alert, Text } from "react-native";
 import useTheme from "@/theme/hooks/useTheme";
 import { useNavigation } from "@react-navigation/native";
 import WhiteCard from "@/components/atoms/form/WhiteCard";
@@ -9,13 +9,17 @@ import Button from "@/components/atoms/form/Button";
 import DatePicker from "react-native-date-picker";
 import useContract from "@/contexts/auth/useContract";
 import { FormulaireData } from "@/types/bordereaux";
+import { BordereauSchema } from "@/types/schemas/Bordereau"
+import { useTranslation } from "react-i18next";
 
 function Form(): JSX.Element {
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
+  const { height, width } = Dimensions.get("window");
+
   const navigate = useNavigation();
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const { borders, layout, backgrounds } = useTheme();
-  const { height, width } = Dimensions.get("window");
   const { contractId } = useContract();
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [data, setData] = useState<FormulaireData>({
@@ -27,11 +31,14 @@ function Form(): JSX.Element {
     Factures: [],
   });
 
-  const handleInputChange = (field: keyof FormulaireData, value: string) => {
+
+
+  const handleInputChange = (field: keyof FormulaireData, value: string | number | Date) => {
     setData({
       ...data,
       [field]: value,
     });
+    setErrors(prevErrors => ({ ...prevErrors, [field]: undefined }));
   };
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -40,6 +47,32 @@ function Form(): JSX.Element {
     console.log(data.Factures.length);
   }, [data]);
 
+  const { t } = useTranslation(["bordereau"]);
+
+  const hundleSuivant = () => {
+    const result = BordereauSchema.safeParse(data);
+
+    if (!result.success) {
+      const formattedErrors = result.error.format();
+      setErrors({
+        MontantTotal: formattedErrors.MontantTotal?._errors[0],
+        DateBordereau: formattedErrors.DateBordereau?._errors[0],
+        NombreDocuments: formattedErrors.NombreDocuments?._errors[0],
+        AnneeBordereau: formattedErrors.AnneeBordereau?._errors[0],
+      });
+      return;
+    }
+    /* const dataToSend = {
+       ...data,
+       DateBordereau: data.DateBordereau.toISOString(), // Assurez-vous que cela soit bien un objet Date
+     }*/
+
+    navigate.navigate("BordureauDetails", { data, setData });
+  };
+
+  useEffect(() => {
+    handleInputChange("AnneeBordereau", selectedYear)
+  }, [selectedYear]);
   return (
     <>
       <View
@@ -53,19 +86,25 @@ function Form(): JSX.Element {
           { padding: 15 },
         ]}
       >
-        <WhiteCard height={height / 10}>
+        <WhiteCard style={[layout.col]} height={height / 8} >
           <InputWithTag
-            title="Montant Total"
+            title={t("bordereau:MontantTotal")}
+            type="numeric"
             tag={{ type: "text", text: "TND" }}
             titleWidth={width / 3.5}
             textInputPlaceholder="Montant"
-            onChange={(text: number) => handleInputChange("MontantTotal", text)}
+            onChange={(text: number) => handleInputChange("MontantTotal", parseFloat(text) || 0)}
             value={data.MontantTotal}
+
+            errorMessage={errors.MontantTotal}
           />
+
         </WhiteCard>
-        <WhiteCard height={height / 10}>
+
+
+        <WhiteCard style={[layout.col]} height={height / 8} >
           <InputWithTag
-            title="Année"
+            title={t("bordereau:Année")}
             tag={{
               type: "icon",
               name: "calendar-month",
@@ -77,37 +116,48 @@ function Form(): JSX.Element {
             onIconPress={() => setModalVisible(true)}
             inputDisabled
             value={selectedYear}
+            errorMessage={errors.AnneeBordereau}
           />
+
         </WhiteCard>
-        <WhiteCard height={height / 10}>
+        <WhiteCard style={[layout.col]} height={height / 8} >
           <InputWithTag
-            title="Date Du Bordureau"
+            title={t("bordereau:Date")}
             tag={{
               type: "icon",
               name: "calendar-month",
               iconType: "MaterialIcons",
             }}
-            titleWidth={width / 2}
-            onChange={() => {
+            titleWidth={width / 4}
+            onChange={(date) => {
               handleInputChange("DateBordereau", date as Date);
+              // Alert.alert(date.toDateString())
             }}
-            textInputPlaceholder={date.toLocaleString()}
+            textInputPlaceholder={date.toLocaleDateString("en-US")}
             onIconPress={() => setOpen(true)}
+            inputDisabled
+            value={date.toLocaleDateString("en-US")}
+            errorMessage={errors.DateBordereau}
           />
+
+
         </WhiteCard>
-        <WhiteCard height={height / 10}>
+        <WhiteCard style={[layout.col]} height={height / 8} >
           <InputWithTag
-            title="N° de document"
+            title={t("bordereau:NBDocs")}
+            type="numeric"
             titleWidth={width / 2}
-            onChange={(text) => handleInputChange("NombreDocuments", text)}
-            textInputPlaceholder="nombre des fois"
+            onChange={(text) => handleInputChange("NombreDocuments", parseInt(text))}
+            textInputPlaceholder={t("bordereau:Nombredoc")}
+            errorMessage={errors.NombreDocuments}
           />
+
         </WhiteCard>
       </View>
       <Button
-        label="Suivant"
-        onPress={() => navigate.navigate("BordureauDetails", { data, setData })}
-        outlined={undefined}
+        label={t("bordereau:Suivant")}
+        onPress={() => { hundleSuivant() }}
+        outlined
       />
 
       <YearPicker
@@ -124,7 +174,9 @@ function Form(): JSX.Element {
         onConfirm={(date) => {
           setOpen(false);
           setDate(date);
+          handleInputChange("DateBordereau", date as Date);
         }}
+
         onCancel={() => {
           setOpen(false);
         }}
@@ -179,6 +231,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     alignSelf: "center",
   },
+
 });
 
 export default Form;

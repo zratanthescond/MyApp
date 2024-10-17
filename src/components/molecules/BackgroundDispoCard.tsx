@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Dimensions, View } from "react-native";
 import { useTheme } from "@/theme";
 import Card from "@/components/atoms/dashboardAtoms/DisponibleCard";
+import { useTranslation } from "react-i18next";
 
 const { height, width } = Dimensions.get("window");
 
@@ -29,9 +30,9 @@ function BackgroundDispoCard({
   const handleCardPress = (card: number) => {
     setActiveCard(card);
   };
+  const { t } = useTranslation(["financement"]);
 
   const { layout, backgrounds, gutters, colors } = useTheme();
-
   return (
     <View
       style={[

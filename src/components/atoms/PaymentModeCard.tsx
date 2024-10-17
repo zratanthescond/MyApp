@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Dimensions,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,17 +8,23 @@ import {
   View,
 } from "react-native";
 import { useTheme } from "@/theme";
+import { useTranslation } from "react-i18next";
 
-type PaymentOption = "Chèque" | "Virement" | "Espèce";
+type PaymentOption = string;
 
-function PaymentModeCard({ getPaymentMode }: void): JSX.Element {
+function PaymentModeCard({ getPaymentMode }: { getPaymentMode: (mode: PaymentOption) => void }): JSX.Element {
   const { height, width } = Dimensions.get("window");
   const { gutters, borders, layout, backgrounds, fonts, colors } = useTheme();
+  const { t } = useTranslation(["financement"]);
 
-  const options: PaymentOption[] = ["Chèque", "Virement", "Espèce"];
-  const [selectedOption, setSelectedOption] = useState<PaymentOption | null>(
-    options[0]
-  );
+
+  const options: PaymentOption[] = [
+    t("financement:Paiement1"),
+    t("financement:Paiement2"),
+    t("financement:Paiement3")
+  ];
+
+  const [selectedOption, setSelectedOption] = useState<PaymentOption | null>(options[0]);
 
   const handleOptionSelect = (option: PaymentOption) => {
     setSelectedOption(option);
@@ -34,8 +39,7 @@ function PaymentModeCard({ getPaymentMode }: void): JSX.Element {
           style={[
             styles.card,
             {
-              backgroundColor:
-                selectedOption === option ? colors.blue100 : colors.blue50,
+              backgroundColor: selectedOption === option ? colors.blue100 : colors.blue50,
             },
           ]}
           onPress={() => handleOptionSelect(option)}
@@ -66,6 +70,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   selectedText: {
-    color: "white", // Couleur de texte différente pour l'option sélectionnée
+    color: "white",
   },
 });

@@ -3,6 +3,7 @@ import { useTheme } from "@/theme";
 import ProgressBar from "@/components/atoms/dashboardAtoms/ProgressBar";
 import { ScrollView } from "react-native-gesture-handler";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 import { useEffect, useState } from "react";
 import useContract from "@/contexts/auth/useContract";
@@ -12,6 +13,7 @@ type CardInformationProps = {
   activeCard: number;
 };
 function CardInformation({ activeCard }: CardInformationProps) {
+  const { t } = useTranslation(["dashboard"]);
   const { borders, backgrounds, gutters, layout } = useTheme();
   const { height, width } = Dimensions.get("window");
   const [disponible, setDisponible] = useState();
@@ -64,7 +66,7 @@ function CardInformation({ activeCard }: CardInformationProps) {
         ]}
       >
         <ProgressBar
-          title={"Facture en cours"}
+          title={t("dashboard:Factureencours")}
           progress={parseInt(Math.random() * 100)}
           color={"purple100"}
           progressColor={"purple500"}
@@ -72,7 +74,7 @@ function CardInformation({ activeCard }: CardInformationProps) {
           accumulated={disponible?.factureEnCours}
         />
         <ProgressBar
-          title={"Fonds de garantie"}
+          title={t("dashboard:FondGarentie")}
           progress={parseInt(Math.random() * 100)}
           color={"purple100"}
           progressColor={"red500"}
@@ -80,7 +82,7 @@ function CardInformation({ activeCard }: CardInformationProps) {
           accumulated={disponible?.fondsDeGaranties}
         />
         <ProgressBar
-          title={"Fonds de reserve"}
+          title={t("dashboard:FondReserve")}
           progress={parseInt(Math.random() * 100)}
           color={"purple100"}
           progressColor={"red500"}
@@ -88,7 +90,7 @@ function CardInformation({ activeCard }: CardInformationProps) {
           accumulated={disponible?.fondsDeReserve}
         />
         <ProgressBar
-          title={"depassement Limite Financement Acheteurs"}
+          title={t("dashboard:Depassement")}
           progress={parseInt(Math.random() * 100)}
           color={"purple100"}
           progressColor={"red500"}

@@ -45,11 +45,11 @@ export default function IndividuComponent({
             layout.col,
             layout.justifyBetween,
             gutters.marginHorizontal_16,
-
+            layout.flex_1,
             layout.itemsCenter,
             gutters.padding_16,
           ]}
-          height={90}
+          //height={90}
         >
           {checkbox && (
             <View style={checkboxStyle}>

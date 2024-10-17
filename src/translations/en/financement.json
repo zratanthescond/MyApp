@@ -1,0 +1,11 @@
+{
+    "Type1": "Financing",
+    "Type2": "Release",
+    "Paiement1": "Check",
+    "Paiement2": "Transfer",
+    "Paiement3": "Cash",
+    "Montant": "Amount",
+    "Date": "Date Docs",
+    "Annuler": "Cancel",
+    "Suivant": "Next"
+}

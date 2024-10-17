@@ -16,9 +16,11 @@ export default function IndividuNavigation({ individuId }: Props) {
         layout.itemsCenter,
         layout.flex_1,
         layout.justifyAround,
+        
+        {gap:10}
         // layout.absolute,
         // { bottom: -12 },
-        gutters.paddingHorizontal_16,
+       // gutters.paddingHorizontal_16,
       ]}
     >
       <AcheteurNavigationButtons

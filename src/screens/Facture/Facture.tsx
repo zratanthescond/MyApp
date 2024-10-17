@@ -23,20 +23,20 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import getFactureByAcheteur from "@/services/Factures/Facture";
 type FormData =
   | {
-      TypeDuLitige: string;
-      DateLitige: Date;
-      DateEcheanceLitige: Date;
-      ContratId: number;
-      FactureId: number;
-    }
+    TypeDuLitige: string;
+    DateLitige: Date;
+    DateEcheanceLitige: Date;
+    ContratId: number;
+    FactureId: number;
+  }
   | {
-      DateEcheanceApresProrogation: Date;
-      ContratId: number;
-      FactureId: number;
-      MotifProrogation: string;
-      TypeProrogaton: string;
-      Echeance: number;
-    };
+    DateEcheanceApresProrogation: Date;
+    ContratId: number;
+    FactureId: number;
+    MotifProrogation: string;
+    TypeProrogaton: string;
+    Echeance: number;
+  };
 export default function Facture() {
   const { contractId } = useContract();
   const { fonts, colors, layout, backgrounds, gutters, borders } = useTheme();
@@ -46,8 +46,11 @@ export default function Facture() {
   const { params } = useRoute();
   const { individuId } = params as { individuId: number };
   const { data, isError, isLoading } = useQuery({
+
     queryKey: ["facture"],
+
     queryFn: () => {
+
       return getFactureByAcheteur({ individuId, contractId });
     },
   });
@@ -130,14 +133,11 @@ export default function Facture() {
         </View>
         <ScrollView>
           {isLoading && <ActivityIndicator />}
-          {isError && <Text>No facture for this buyer</Text>}
-          {!isLoading && !isError && data && data.$values.length === 0 && (
-            <Text>No facture for this buyer</Text>
+          {isError && <Text>No factures found for this buyer</Text>}
+          {!isLoading && !isError && (!data || !data.$values || data.$values.length === 0) && (
+            <Text>No factures found for this buyer</Text>
           )}
-          {!isLoading &&
-            !isError &&
-            data &&
-            data.$values.length > 0 &&
+          {!isLoading && !isError && data && data.$values && data.$values.length > 0 &&
             data.$values.map((data: any) => {
               return (
                 <FactureComponent
@@ -148,7 +148,6 @@ export default function Facture() {
                     setModalVisible(true);
                     setFormData({
                       ...formData,
-
                       FactureId: data.factureId as number,
                     });
                   }}
@@ -157,6 +156,7 @@ export default function Facture() {
               );
             })}
         </ScrollView>
+
       </View>
       <BottomModal
         title={title}

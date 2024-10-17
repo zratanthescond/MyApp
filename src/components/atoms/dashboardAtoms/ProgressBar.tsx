@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import { useTheme } from "@/theme";
 import WhiteCard from "../form/WhiteCard";
-
+import { useTranslation } from "react-i18next";
 // Interface pour les props du composant ProgressBar
 interface ProgressBarProps {
   progress: number;
@@ -22,7 +22,7 @@ function ProgressBar({
   part,
 }: ProgressBarProps): React.ReactElement {
   const { borders, backgrounds, layout, fonts, gutters } = useTheme();
-
+  const { t } = useTranslation(["dashboard"]);
   return (
     <WhiteCard
       style={[
@@ -73,7 +73,7 @@ function ProgressBar({
             gutters.padding_12,
           ]}
         >
-          <Text style={[fonts.bold, fonts.blue100]}> {accumulated}DT/Mois</Text>
+          <Text style={[fonts.bold, fonts.blue100]}> {accumulated}DT/{t("dashboard:Mois")}</Text>
           <Text style={[fonts.bold, fonts.blue100]}> {part}DT</Text>
         </View>
       )}

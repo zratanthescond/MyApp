@@ -1,0 +1,11 @@
+{
+    "Type1": "Financement",
+    "Type2": "Libération",
+    "Paiement1": "Chèque",
+    "Paiement2": "Virement",
+    "Paiement3": "Espèce",
+    "Montant": "Montant",
+    "Date": "Date Docs",
+    "Annuler": "Annuler",
+    "Suivant": "Suivant"
+}

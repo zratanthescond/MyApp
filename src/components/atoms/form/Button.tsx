@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   StyleSheet,
   Text,
@@ -11,7 +12,7 @@ import {
   View,
 } from "react-native";
 
-export default function Button({ label, outlined, onPress }) {
+export default function Button({ label, outlined, onPress,isLoading=false }) {
   const { gutters, borders, layout, backgrounds, fonts, colors } = useTheme();
   const { height, width } = Dimensions.get("window");
   const navigation =
@@ -20,15 +21,20 @@ export default function Button({ label, outlined, onPress }) {
   const onHandlePress = () => {
     navigation.navigate("BordureauDetails");
   };
+
   return (
     <View style={[layout.row, gutters.marginTop_12]}>
+      
       <TouchableOpacity
+    
         onPress={() => onPress()}
         style={outlined ? styles.outlineButton : styles.ValideButton}
+        disabled={isLoading}
       >
-        <Text style={outlined ? styles.TextAnnuler : styles.TextSuivant}>
+          {isLoading?(<ActivityIndicator/>): <Text style={outlined ? styles.TextAnnuler : styles.TextSuivant}>
           {label}
-        </Text>
+        </Text>}
+       
       </TouchableOpacity>
     </View>
   );

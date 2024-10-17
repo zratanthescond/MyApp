@@ -10,15 +10,15 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ isActive, onPress, text }) => {
   const { layout, backgrounds, gutters, colors } = useTheme();
-const { height, width } = Dimensions.get('window');
+  const { height, width } = Dimensions.get('window');
   return (
     <TouchableOpacity
       onPress={onPress}
       style={{
-      
+
 
         flex: 1,
-        height:40,
+        height: 40,
         marginRight: 5,
         justifyContent: 'center',
         alignItems: 'center',
@@ -32,11 +32,11 @@ const { height, width } = Dimensions.get('window');
 
           backgroundColor: isActive ? 'white' : 'transparent',
           padding: 10,
-          borderRadius: 10, 
-          width: '100%', 
-          height: 50,  
-          justifyContent: 'center', 
-          alignItems: 'center', 
+          borderRadius: 10,
+          width: '100%',
+          height: 50,
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <Text style={{ textAlign: 'center', fontSize: 14 }}>{text}</Text>

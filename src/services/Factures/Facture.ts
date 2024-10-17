@@ -11,7 +11,7 @@ export default async function getFactureByAcheteur({
   console.log("individuId", individuId);
   try {
     const response = await instance.get(
-      `http://10.0.2.2:5000/api/Facture/GetFacturesByAcheteur/${contractId}/${individuId}`
+      `http://192.168.100.178:5000/api/Facture/GetFacturesByAcheteur/${contractId}/${individuId}`
     );
     return response.data;
   } catch (error) {

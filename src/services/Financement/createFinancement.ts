@@ -3,7 +3,7 @@ import { instance } from "../instance";
 export async function createFinancement({ data, individuId }) {
   try {
     const res = await instance.post(
-      `http://10.0.2.2:5000/api/Financement/${individuId}/Financements`,
+      `http://192.168.100.178:5000/api/Financement/${individuId}/Financements`,
       data
     );
     return res.data;
