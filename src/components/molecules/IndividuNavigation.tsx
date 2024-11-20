@@ -1,11 +1,12 @@
 import { useTheme } from "@/theme";
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import AcheteurNavigationButtons from "../atoms/AcheteurNavigationButtons";
 type Props = {
   individuId: number;
+  pendingLimiteCount: number;
 };
-export default function IndividuNavigation({ individuId }: Props) {
+export default function IndividuNavigation({ individuId, pendingLimiteCount }: Props) {
   const { fonts, colors, layout, backgrounds, gutters, borders } = useTheme();
   const navigation = useNavigation();
   return (
@@ -16,15 +17,15 @@ export default function IndividuNavigation({ individuId }: Props) {
         layout.itemsCenter,
         layout.flex_1,
         layout.justifyAround,
-        
-        {gap:10}
+
+        { gap: 10 }
         // layout.absolute,
         // { bottom: -12 },
-       // gutters.paddingHorizontal_16,
+        // gutters.paddingHorizontal_16,
       ]}
     >
       <AcheteurNavigationButtons
-        label="Litige"
+        label="Factures"
         onPress={() => {
           navigation.navigate({
             name: "Factures",
@@ -32,18 +33,20 @@ export default function IndividuNavigation({ individuId }: Props) {
           });
         }}
       />
-      <AcheteurNavigationButtons
-        label="Prorogation"
-        onPress={() => {
-          navigation.navigate("Factures");
-        }}
-      />
-      <AcheteurNavigationButtons
-        label="Limite"
-        onPress={() => {
-          navigation.navigate("Limite");
-        }}
-      />
+      {pendingLimiteCount > 0 ?
+        <AcheteurNavigationButtons
+          label={` in progress (${pendingLimiteCount})`}
+          onPress={() => Alert.alert('Error', 'Vous avez une prorogation en cours ', [{ text: 'OK', onPress: () => { } }],)}
+        /> :
+        <AcheteurNavigationButtons
+          label="Limite"
+          onPress={() => {
+            navigation.navigate("Limite");
+          }}
+        />
+
+      }
+
     </View>
   );
 }

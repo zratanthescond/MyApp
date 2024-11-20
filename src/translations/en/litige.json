@@ -1,0 +1,16 @@
+{
+    "titre": "Dispute",
+    "dateLitige": "Dispute Date",
+    "Dateecheance": "Due Date",
+    "TypeLitige": "Dispute Type",
+    "TypeLitige1": "Purchase",
+    "TypeLitige2": "Survey",
+    "TypeLitige3": "Executive",
+    "TypeLitige4": "Other",
+    "Enregistrer": "Save",
+    "Annuler": "Cancel",
+    "success": "Success",
+    "LitigeAjouteSucces": "Dispute added successfully",
+    "error": "Error",
+    "OK": "OK"
+}

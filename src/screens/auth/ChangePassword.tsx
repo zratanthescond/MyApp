@@ -1,9 +1,9 @@
 import AppIcon, { Icons } from "@/components/icons/AppIcons";
 import { SafeScreen } from "@/components/template";
 import { useTheme } from "@/theme";
-import React from "react";
+import React, { useEffect } from "react";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   ImageBackground,
   Text,
@@ -15,9 +15,15 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import loginLogo from "../../theme/assets/images/loginLogo.png";
-
+import { on } from "events";
+import { use } from "i18next";
+import { useMutation } from "@tanstack/react-query";
+import { default as ChangePasswordService } from "@/services/ForgetPassword/ChangePassword";
 const { width, height } = Dimensions.get("window");
 export default function ChangePassword() {
+  const { params: { phoneNumber, code } }: any = useRoute();
+
+
   const { layout, backgrounds, colors, gutters, fonts, borders } = useTheme();
   const navigation = useNavigation();
   const styles = StyleSheet.create({
@@ -38,16 +44,28 @@ export default function ChangePassword() {
     cardShadow: {
       borderRadius: 20,
       backgroundColor: "transparent",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
-      shadowOpacity: 0.22,
-      shadowRadius: 2.22,
-      elevation: 20,
+
+      elevation: 100,
     },
   });
+  const ResetPassword = useMutation({
+    mutationKey: ["ResetPassword"],
+    mutationFn: () => {
+      return ChangePasswordService({ code: code, newPassword: password, phoneNumber: phoneNumber });
+    },
+    onSuccess: (data) => {
+      //console.log(data);
+      navigation.navigate("PasswordChanged");
+    },
+    onError: (error) => {
+      //console.log(error);
+    },
+  })
+  const [password, setPassword] = React.useState<string>("");
+  const [confirmPassword, setConfirmPassword] = React.useState<string>("");
+  useEffect(() => {
+    //console.log(password);
+  }, [password]);
   return (
     <SafeScreen>
       <View style={[layout.flex_1, backgrounds.white]}>
@@ -66,13 +84,16 @@ export default function ChangePassword() {
               layout.row,
               layout.itemsCenter,
               { maxHeight: 80, gap: 15 },
+
             ]}
+            onPress={() => navigation.goBack()}
           >
             <AppIcon
               type={Icons.AntDesign}
               name="left"
               color={colors.gray800}
               size={16}
+
             />
             <Text
               style={[{ color: colors.gray800 }, fonts.bold, fonts.size_16]}
@@ -121,7 +142,9 @@ export default function ChangePassword() {
                 >
                   Type your new password
                 </Text>
-                <TextInput style={styles.textInput} secureTextEntry={true} />
+                <TextInput style={styles.textInput} secureTextEntry={true} placeholder="Your new Password"
+                  onChangeText={(text) => setPassword(text)}
+                />
                 <Text
                   style={[
                     { alignSelf: "flex-start", color: colors.gray200 },
@@ -129,12 +152,13 @@ export default function ChangePassword() {
                     fonts.bold,
                     gutters.padding_12,
                   ]}
+
                 >
                   Confirm password
                 </Text>
-                <TextInput style={styles.textInput} secureTextEntry={true} />
+                <TextInput style={styles.textInput} secureTextEntry={true} placeholder="Confirm your new Password" onChangeText={(text) => setConfirmPassword(text)} />
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("passwordChanged")}
+                  onPress={() => ResetPassword.mutate()}
                   style={[
                     backgrounds.blue100,
                     layout.itemsCenter,

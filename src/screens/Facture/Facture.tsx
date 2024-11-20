@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import WhiteCard from "@/components/atoms/form/WhiteCard";
 import { SafeScreen } from "@/components/template";
 import layout from "@/theme/layout";
@@ -21,22 +21,11 @@ import ProrogationForm from "@/components/molecules/ProrogationForm";
 import useContract from "@/contexts/auth/useContract";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import getFactureByAcheteur from "@/services/Factures/Facture";
-type FormData =
-  | {
-    TypeDuLitige: string;
-    DateLitige: Date;
-    DateEcheanceLitige: Date;
-    ContratId: number;
-    FactureId: number;
-  }
-  | {
-    DateEcheanceApresProrogation: Date;
-    ContratId: number;
-    FactureId: number;
-    MotifProrogation: string;
-    TypeProrogaton: string;
-    Echeance: number;
-  };
+import { Litige, Prorogation } from "@/types/type";
+import { use } from "i18next";
+import SearchComponent from "@/components/molecules/SearchComponent";
+import { set } from "zod";
+import SelectBuyer from "@/components/molecules/SelectBuyer";
 export default function Facture() {
   const { contractId } = useContract();
   const { fonts, colors, layout, backgrounds, gutters, borders } = useTheme();
@@ -45,40 +34,51 @@ export default function Facture() {
   const navigation = useNavigation();
   const { params } = useRoute();
   const { individuId } = params as { individuId: number };
+  const [inputState, setInputState] = useState<string>("search");
+  const [filtredData, setFiltredData] = useState<any>({});
+  const [newIndividuId, setNewIndividuId] = useState<number>(individuId);
   const { data, isError, isLoading } = useQuery({
 
-    queryKey: ["facture"],
+    queryKey: ["facture", newIndividuId],
+
 
     queryFn: () => {
 
-      return getFactureByAcheteur({ individuId, contractId });
+      return getFactureByAcheteur({ newIndividuId, contractId });
     },
   });
-  const [formData, setFormData] = React.useState<FormData>(() => {
-    console.log(title);
-    if (title === "litige") {
-      return {
-        TypeDuLitige: "",
-        DateLitige: new Date(),
-        DateEcheanceLitige: new Date(),
-        ContratId: contractId,
-        FactureId: 0,
-      };
-    }
-    if (title === "prorogation") {
-      return {
-        DateEcheanceApresProrogation: new Date(),
-        ContratId: contractId,
-        FactureId: 0,
-        MotifProrogation: "",
-        TypeProrogaton: "",
-        Echeance: 0,
-      };
-    }
-  });
+  const [litigeForm, setlitigeForm] = React.useState<Litige>(
+
+    {
+
+      TypeDuLitige: "",
+      DateLitige: new Date(),
+      DateEcheanceLitige: new Date(),
+      ContratId: contractId,
+      FactureId: 0,
+
+    });
+  const [prorogationForm, setprorogationForm] = React.useState<Prorogation>(
+    {
+
+      DateEcheanceApresProrogation: new Date(),
+      ContratId: contractId,
+      FactureId: 0,
+      MotifProrogation: "",
+      TypeProrogation: "achat",
+      Echeance: new Date(),
+
+
+    });
+
+
+
   useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+    setFiltredData(data);
+  }, [data]);
+  function capitalizeFirstLetter(title: string) {
+    return title[0].toUpperCase() + title.slice(1);
+  }
   return (
     <SafeScreen>
       <View
@@ -98,39 +98,43 @@ export default function Facture() {
             gutters.paddingHorizontal_12,
             borders.rounded_16,
             gutters.paddingVertical_12,
+            layout.z10,
+
           ]}
         >
-          <InputWithTag
-            titleWidth={0}
-            textInputPlaceholder="Search"
-            tag={{
-              type: "icon",
-              name: "search1",
-              iconType: "AntDesign",
-            }}
-          />
+          {inputState === "search" ? (
+            <SearchComponent data={data} setfiltredData={setFiltredData} field="refFacture" Objectkey="facture" />
+          ) :
+            (<SelectBuyer onSelect={(value: number) => { setNewIndividuId(value); }} />
+            )}
+
+
           <TouchableOpacity
             style={[backgrounds.purple500, borders.rounded_4, { padding: 5 }]}
-            onPress={() => navigation.navigate("bordureau")}
+            onPress={() => {
+              setInputState(inputState === "search" ? "select" : "search");
+            }}
+
           >
-            <AppIcon
-              name="plussquareo"
-              type="AntDesign"
-              color={colors.white}
-              size={30}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[backgrounds.blue50, borders.rounded_4, { padding: 5 }]}
-          >
-            <AppIcon
-              name="filter"
-              type="AntDesign"
-              color={colors.white}
-              size={30}
-            />
+            {inputState === "search" ? (
+              <AppIcon
+                name="account-sync"
+                type="MaterialCommunityIcons"
+                color={colors.white}
+                size={30}
+              />
+            ) : (
+              <AppIcon
+                name="text-box-search-outline"
+                type="MaterialCommunityIcons"
+                color={colors.white}
+                size={30}
+              />
+            )}
+
           </TouchableOpacity>
         </View>
+
         <ScrollView>
           {isLoading && <ActivityIndicator />}
           {isError && <Text>No factures found for this buyer</Text>}
@@ -138,20 +142,38 @@ export default function Facture() {
             <Text>No factures found for this buyer</Text>
           )}
           {!isLoading && !isError && data && data.$values && data.$values.length > 0 &&
-            data.$values.map((data: any) => {
+            filtredData && filtredData.$values && filtredData.$values.map((data: any) => {
+
               return (
                 <FactureComponent
-                  key={data.factureId}
-                  facture={data}
-                  onButtonPress={(value) => {
+
+                  key={data.facture.factureId}
+                  facture={data.facture}
+                  litigeCount={data.litigeCount}
+                  prorogationCount={data.prorogationCount}
+                  // data={data}
+                  onButtonPress={(value: string, factureId: number, dateFacture: Date) => {
+
                     setTitle(value);
+
                     setModalVisible(true);
-                    setFormData({
-                      ...formData,
-                      FactureId: data.factureId as number,
-                    });
+                    value === "litige"
+
+                      ?
+                      setlitigeForm({
+                        ...litigeForm,
+
+                        FactureId: data.factureId as number,
+
+                      })
+                      : setprorogationForm({
+                        ...prorogationForm,
+                        FactureId: factureId as number,
+                        Echeance: data.dateFacture,
+                      });
+
                   }}
-                  data={data}
+
                 />
               );
             })}
@@ -159,14 +181,14 @@ export default function Facture() {
 
       </View>
       <BottomModal
-        title={title}
+        header={<Text style={[fonts.bold, fonts.size_16, fonts.gray800]}>{title && capitalizeFirstLetter(title)}</Text>}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       >
         {title === "litige" ? (
-          <LitigeForm formData={formData} setFormData={setFormData} />
+          <LitigeForm formData={litigeForm} setFormData={setlitigeForm} setModalVisible={() => setModalVisible(false)} />
         ) : (
-          <ProrogationForm formData={formData} setFormData={setFormData} />
+          <ProrogationForm formData={prorogationForm} setFormData={setprorogationForm} setModalVisible={() => setModalVisible(false)} />
         )}
       </BottomModal>
     </SafeScreen>

@@ -1,6 +1,7 @@
 import { Example, Startup } from "@/screens";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
+import React from "react";
 
 const Drawer = createDrawerNavigator();
 

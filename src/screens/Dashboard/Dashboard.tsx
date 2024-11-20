@@ -20,17 +20,21 @@ export default function Cartes() {
   });
   const [activeCard, setActiveCard] = useState<number>(1);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const { contractId, setContractId } = useContract();
+  const { contractId, setContractId, contractMontant, setContractMontant, referenceContrat, setContractReference } = useContract();
+
   const { gutters, borders, layout } = useTheme();
   useEffect(() => {
     if (data) {
-      console.log("contract ID FROM DATA", data[currentIndex]?.contratId);
-      console.log("currentIndex", currentIndex);
+      //console.log("contract ID FROM DATA", data[currentIndex]?.contratId);
+      //console.log("currentIndex", currentIndex);
       setContractId(data[Math.abs(currentIndex)]?.contratId);
+      setContractMontant(data[Math.abs(currentIndex)]?.montantContrat);
+      setContractReference(data[Math.abs(currentIndex)]?.referenceContrat);
+
     }
   }, [currentIndex, data]);
   if (error) {
-    console.log(error);
+    //console.log(error);
     return <View>{error.message}</View>;
   }
   if (isLoading)
@@ -46,12 +50,12 @@ export default function Cartes() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
-        <BackgroundDispoCard
+        {/* <BackgroundDispoCard
           text1={t("dashboard:Available1")}
           text2={t("dashboard:Available2")}
           activeCard={activeCard}
           setActiveCard={setActiveCard}
-        />
+        /> */}
 
         <CarouselItem
           data={data}

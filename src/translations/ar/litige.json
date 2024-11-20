@@ -1,0 +1,16 @@
+{
+    "titre": "نزاع",
+    "dateLitige": "تاريخ النزاع",
+    "Dateecheance": "تاريخ الاستحقاق",
+    "TypeLitige": "نوع النزاع",
+    "TypeLitige1": "شراء",
+    "TypeLitige2": "استطلاع",
+    "TypeLitige3": "تنفيذي",
+    "TypeLitige4": "آخر",
+    "Enregistrer": "حفظ",
+    "Annuler": "إلغاء",
+    "success": "نجاح",
+    "LitigeAjouteSucces": "تم إضافة النزاع بنجاح",
+    "error": "خطأ",
+    "OK": "موافق"
+}

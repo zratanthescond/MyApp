@@ -1,0 +1,18 @@
+{
+    "total_amount": "Le montant total doit être supérieur à 1000",
+    "date": "La date doit être postérieure à aujourd'hui",
+    "number_doc": "Le nombre de documents doit être supérieur à 0",
+    "year": "L'année doit être après l'année actuelle",
+    "financing_amount": "Le montant de financement doit être supérieur ou égal à 0",
+    "financing_date_required": "La date de financement est requise",
+    "date_after_today": "La date doit être postérieure à aujourd'hui",
+    "document_amount": "Le montant du document doit être supérieur à 1000",
+    "echeance_more_than_0": "L'échéance du document doit être supérieure à 0",
+    "ref_facture_min_5_chars": "La référence de la facture doit contenir au moins 5 caractères",
+    "financing_amount_required": "Le montant de financement est requis",
+    "document_amount_required": "Le montant du document est requis",
+    "date_required": "La date est requise",
+    "echeance_required": "La date d'échéance est requise",
+    "ref_facture_required": "La référence de la facture est requise",
+    "motif_required": "Le motif est requis"
+}

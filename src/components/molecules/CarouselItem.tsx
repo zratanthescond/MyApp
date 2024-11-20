@@ -24,22 +24,25 @@ interface CarouselItemProps {
 const { height, width } = Dimensions.get("window");
 const cardWidth = (width * 2) / 3;
 const itemsPadding = width / 12;
+
 const CarouselItem: FC<CarouselItemProps> = ({
   data,
   currentIndex,
   onIndexChanged,
 }) => {
   const itemSpacing = 15;
-  const { borders, layout } = useTheme();
+  const { borders, layout, gutters, backgrounds } = useTheme();
   const { t } = useTranslation(["dashboard"]);
+
   return (
     <View
-      style={{
-        flex: 1,
-        height: height / 6,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      style={[
+        layout.fullWidth,
+        gutters.paddingVertical_12,
+
+        borders.rounded_16,
+        gutters.marginHorizontal_12,
+      ]}
     >
       <FlatList
         data={data}
@@ -55,7 +58,7 @@ const CarouselItem: FC<CarouselItemProps> = ({
         onViewableItemsChanged={(items, changet) => {
           // alert(JSON.stringify(items.viewableItems));
           if (items.viewableItems.length > 0) {
-            //  console.log(items.viewableItems);
+            //  //console.log(items.viewableItems);
             onIndexChanged(items.viewableItems[0].index);
           }
         }}
@@ -100,7 +103,7 @@ const CarouselItem: FC<CarouselItemProps> = ({
                     fontWeight: "normal",
                   }}
                 >
-                  {t("dashboard:Contrat")} N°: {contract.contratId}
+                  {t("dashboard:Contrat")} N°: {contract.referenceContrat}
 
                 </Text>
                 <Text
@@ -125,6 +128,7 @@ const CarouselItem: FC<CarouselItemProps> = ({
           width,
           justifyContent: "center",
           alignItems: "center",
+          marginVertical: 10,
           // Ajuster la marge pour les points
         }}
       >

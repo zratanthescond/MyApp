@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Dimensions,
   TextInput,
+  Alert,
 } from "react-native";
 import React from "react";
 import { Icons } from "@/components/icons/AppIcons";
@@ -17,10 +18,16 @@ import { useNavigation } from "@react-navigation/native";
 import useAuth from "@/contexts/auth/useAuth";
 import Login from "@/services/users/login";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { MMKV } from "react-native-mmkv";
 const { height, width } = Dimensions.get("window");
+
 export default function LoginScreen() {
-  const [email, setEmail] = React.useState("anwar@gmail.com");
-  const [password, setPassword] = React.useState("anwar456");
+  const storage = new MMKV();
+  const credentials = JSON.parse(storage.getString("credentials"));
+  const [email, setEmail] = React.useState(credentials?.email);
+  const [password, setPassword] = React.useState(credentials?.password);
+
+
   const { colors, layout, backgrounds, gutters, fonts, borders } = useTheme();
   const navigation = useNavigation();
   const { setIsLogged } = useAuth();
@@ -31,7 +38,7 @@ export default function LoginScreen() {
       setIsLogged(true);
     },
     onError: (error) => {
-      console.log(error.responce.data);
+      Alert.alert("Error", "Invalid credentials", [{ text: "Ok" }]);
     },
   });
   const styles = StyleSheet.create({

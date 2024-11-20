@@ -24,6 +24,12 @@ import Facture from "@/screens/Facture/Facture";
 import LimiteScreen from "@/screens/Limite/LimiteScreen";
 import MyDrawer from "./components/Drawer";
 import ProfileUpdate from "@/screens/Profile/ProfileUpdate";
+import listBordereau from "@/screens/Bordureau/listBordereau";
+import listFinancement from "@/screens/Financements/ListFinancement";
+import ListLimit from "@/screens/Limite/listLimit";
+import ListFacture from "@/screens/Facture/ListFacture";
+import ListLitige from "@/screens/Facture/ListLitige";
+import ListProrogation from "@/screens/Facture/ListProrogation";
 
 const Stack = createStackNavigator<ApplicationStackParamList>();
 
@@ -46,7 +52,12 @@ function ApplicationNavigator() {
         <Stack.Screen name="Example" component={HomeTab} />
         <Stack.Screen name="BordureauDetails" component={BordureauDetails} />
         <Stack.Screen name="Individu" component={Individu} />
-
+        <Stack.Screen name="listBordereau" component={listBordereau} />
+        <Stack.Screen name="listFinancement" component={listFinancement} />
+        <Stack.Screen name="listLimit" component={ListLimit} />
+        <Stack.Screen name="ListFacture" component={ListFacture} />
+        <Stack.Screen name="ListLitige" component={ListLitige} />
+        <Stack.Screen name="ListProrogation" component={ListProrogation} />
         <Stack.Screen name="Factures" component={Facture} />
 
         <Stack.Screen name="Limite" component={LimiteScreen} />

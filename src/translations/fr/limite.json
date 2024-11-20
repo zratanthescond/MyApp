@@ -1,0 +1,17 @@
+{
+    "Titre": "Type de paiement",
+    "typepaiement1": "Cheque",
+    "typepaiement2": "Virement",
+    "typepaiement3": "Espèce",
+    "dateDemande": "Date Demande",
+    "dateLimite": "Date Limite",
+    "dateDerniereDemande": "Date Derniere Demande",
+    "delaiDemande": "Delai Demande",
+    "holderDelai": "Delai Demande",
+    "Enregistrer": "Enregistrer",
+    "Annuler": "Annuler",
+    "success": "Succès",
+    "ProrogationAjouteSucces": "Limite ajouté avec succès",
+    "error": "Erreur",
+    "OK": "OK"
+}

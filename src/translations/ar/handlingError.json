@@ -1,0 +1,18 @@
+{
+    "total_amount": "يجب أن يكون المبلغ الإجمالي أكبر من 1000",
+    "date": "يجب أن تكون التاريخ بعد اليوم",
+    "number_doc": "يجب أن يكون عدد الوثائق أكبر من 0",
+    "year": "يجب أن تكون السنة بعد السنة الحالية",
+    "financing_amount": "يجب أن يكون مبلغ التمويل أكبر من أو يساوي 0",
+    "financing_date_required": "تاريخ التمويل مطلوب",
+    "date_after_today": "يجب أن تكون التاريخ بعد اليوم",
+    "document_amount": "يجب أن يكون مبلغ الوثيقة أكبر من 1000",
+    "echeance_more_than_0": "يجب أن تكون المدة المستحقة أكبر من 0",
+    "ref_facture_min_5_chars": "يجب أن تحتوي مرجع الفاتورة على الأقل 5 أحرف",
+    "financing_amount_required": "مبلغ التمويل مطلوب",
+    "document_amount_required": "مبلغ الوثيقة مطلوب",
+    "date_required": "التاريخ مطلوب",
+    "echeance_required": "تاريخ الاستحقاق مطلوب",
+    "ref_facture_required": "مرجع الفاتورة مطلوب",
+    "motif_required": "السبب مطلوب"
+}

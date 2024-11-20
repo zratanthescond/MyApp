@@ -1,7 +1,7 @@
 import AppIcon, { Icons } from "@/components/icons/AppIcons";
 import { SafeScreen } from "@/components/template";
 import { useTheme } from "@/theme";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -13,13 +13,32 @@ import {
   StyleSheet,
   Dimensions,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
 import loginLogo from "../../theme/assets/images/loginLogo.png";
+import { use } from "i18next";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import SendNumber from "@/services/ForgetPassword/SendNumber";
 
 const { width, height } = Dimensions.get("window");
 export default function ForgotPassword() {
   const { layout, backgrounds, colors, gutters, fonts, borders } = useTheme();
   const navigation = useNavigation();
+  const { mutate, isPending, error } = useMutation({
+    mutationKey: ["SendNumber"],
+    mutationFn: () => {
+      return SendNumber(PhoneNumber);
+    },
+    onSuccess: (data) => {
+      //console.log(data);
+      Alert.alert("success", "Un message a été envoyé a votre numéro " + PhoneNumber, [{ text: "Ok", onPress: () => navigation.navigate("verifyCode", { phoneNumber: PhoneNumber }) }]);
+
+    },
+    onError: (error) => {
+      Alert.alert("error", "Le numéro n'est pas correct", [{ text: "Ok" }]);
+      //console.log(error);
+    },
+  })
   const styles = StyleSheet.create({
     loginLogo: {
       height: height / 3,
@@ -38,16 +57,18 @@ export default function ForgotPassword() {
     cardShadow: {
       borderRadius: 20,
       backgroundColor: "transparent",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
-      shadowOpacity: 0.22,
-      shadowRadius: 2.22,
-      elevation: 20,
+
+
+
+      elevation: 40,
     },
   });
+  const [PhoneNumber, setPhoneNumber] = React.useState<string>("");
+  useEffect(() => {
+    //console.log(PhoneNumber);
+
+  }, [PhoneNumber]);
+
   return (
     <SafeScreen>
       <View style={[layout.flex_1, backgrounds.white]}>
@@ -113,8 +134,10 @@ export default function ForgotPassword() {
               >
                 <TextInput
                   style={styles.textInput}
-                  placeholder="+216"
+                  placeholder="Your phone number"
                   keyboardType="numeric"
+                  onChangeText={(text) => setPhoneNumber(text)}
+                  value={PhoneNumber}
                 />
                 <Text
                   style={[{ color: colors.gray800 }, fonts.bold, fonts.size_16]}
@@ -122,7 +145,7 @@ export default function ForgotPassword() {
                   We texted you a code to verify you phone number
                 </Text>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("verifyCode")}
+                  onPress={() => mutate()}
                   style={[
                     backgrounds.blue100,
                     layout.itemsCenter,

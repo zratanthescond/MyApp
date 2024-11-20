@@ -15,11 +15,12 @@ export default function WhiteCard({
   flex,
   style,
 }: WhiteCardProps) {
-  const { gutters, borders, layout, backgrounds, fonts, colors } = useTheme();
+  const { gutters, borders, layout, backgrounds } = useTheme();
   const flexDirection = flex == null ? layout.row : layout.col;
   return (
     <View
       style={[
+        gutters.paddingVertical_12,
         backgrounds.white,
         borders.rounded_16,
         layout.itemsCenter,

@@ -23,12 +23,13 @@ export default function NavigatorModal({
     <Modal
       visible={modalVisible}
       setModalVisible={setModalVisible}
-     transparent={true}
+      transparent={true}
+      animationType="fade"
     >
       <View
         style={{
-          height: height / 6,
-          backgroundColor: colors.gray50,
+          height: height / 7,
+          backgroundColor: colors.white,
           position: "absolute",
           width: width - 20,
           bottom: 70,
@@ -39,14 +40,16 @@ export default function NavigatorModal({
           borderTopStartRadius: 200,
           zIndex: 0,
           alignSelf: "center",
-          elevation: 20,
+
+
+
         }}
       >
         <MiddleIcon
           center={true}
           modalVisible={modalVisible}
-         // setModalVisible={setModalVisible}
-         onPress={()=>setModalVisible(!modalVisible)}
+          // setModalVisible={setModalVisible}
+          onPress={() => setModalVisible(!modalVisible)}
         />
         <View
           style={{
@@ -54,34 +57,52 @@ export default function NavigatorModal({
             alignSelf: "center",
             justifyContent: "space-between",
             width: "100%",
-            paddingHorizontal: 30,
+            paddingHorizontal: 10,
+
           }}
         >
           <MiddleIcon
             modalVisible={modalVisible}
             //setModalVisible={setModalVisible}
-               onPress={()=>setModalVisible(!modalVisible)}
-            bottom={10}
-            color={[colors.purple50, colors.purple100, colors.purple500]}
-            icon={"filetext1"}
-          />
-          <MiddleIcon
-            modalVisible={modalVisible}
-           // setModalVisible={setModalVisible}
-              onPress={()=>setModalVisible(!modalVisible)}
-            bottom={50}
-            color={[colors.purple50, colors.purple500, colors.blue100]}
-            icon={"adduser"}
-            onPress={() =>{ navigation.navigate("Individu") ;setModalVisible(!modalVisible)}}
+            onPress={() => setModalVisible(!modalVisible)}
+            bottom={0}
+            left={15}
+            onPress={() => { navigation.navigate("listBordereau"); setModalVisible(!modalVisible) }}
+            //color={[colors.purple50, colors.purple100, colors.purple500]}
+            icon={"folder-eye"}
           />
           <MiddleIcon
             modalVisible={modalVisible}
             //setModalVisible={setModalVisible}
-               onPress={()=>setModalVisible(!modalVisible)}
-            bottom={10}
-            color={[colors.blue100, colors.purple500, colors.purple50]}
-            icon={"paperclip"}
+            onPress={() => { navigation.navigate("listFinancement"); setModalVisible(!modalVisible) }}
+            bottom={60}
+            left={-15}
+            //color={[colors.purple50, colors.blue50, colors.purple500]}
+            icon={"cash-100"}
           />
+          <MiddleIcon
+            iconType="MaterialCommunityIcons"
+            modalVisible={modalVisible}
+            left={0}
+            onPress={() => { navigation.navigate("listLimit"); setModalVisible(!modalVisible) }} bottom={60}
+
+            icon={"file-cancel-outline"}
+          />
+          <MiddleIcon
+            iconType="AntDesign"
+            modalVisible={modalVisible}
+            // setModalVisible={setModalVisible}
+            onPress={() => setModalVisible(!modalVisible)}
+            bottom={0}
+            left={-20}
+            //color={[colors.purple50, colors.purple500, colors.blue100]}
+            icon={"adduser"}
+            onPress={() => { navigation.navigate("Individu"); setModalVisible(!modalVisible) }}
+          />
+
+
+
+
         </View>
       </View>
     </Modal>

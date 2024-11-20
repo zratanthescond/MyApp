@@ -25,7 +25,8 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { getAcheteur } from "@/services/Individu/individu";
 import { useQuery } from "@tanstack/react-query";
 import useContract from "@/contexts/auth/useContract";
-import { BordereauDetailsSchema } from "@/types/schemas/BordereauDetailsSchema";
+import { CreateBordereauDetailsSchema } from "@/types/schemas/BordereauDetailsSchema";
+import { useTranslation } from "react-i18next";
 
 
 export default function BordureauDetails({
@@ -38,6 +39,8 @@ export default function BordureauDetails({
     };
   }>;
 }) {
+  const { t } = useTranslation();
+  const BordereauDetailsSchema = CreateBordereauDetailsSchema(t);
   const { contractId } = useContract();
   const dataReglement = [
     { key: "1", value: "Traite" },
@@ -83,9 +86,12 @@ export default function BordureauDetails({
     field: keyof Facture,
     value: string | number | Date
   ) => {
+    const convertedValue =
+      field === 'MontantDocument' || field === 'Echeance' ? Number(value) : value;
+
     setFacture({
       ...facture,
-      [field]: value,
+      [field]: convertedValue,
     });
   };
   const handleAddData = (newData: Facture) => {
@@ -127,7 +133,7 @@ export default function BordureauDetails({
   const buttonLable = () => {
     if (bordereau.Factures.length < bordereau.NombreDocuments) {
       return {
-        label: `Suivant (${bordereau.Factures.length}/${bordereau.NombreDocuments})`,
+        label: `Suivant (${bordereau.Factures.length + 1}/${bordereau.NombreDocuments})`,
         onPress: () => {
           handleAddData(facture);
         },
@@ -141,14 +147,14 @@ export default function BordureauDetails({
     };
   };
   useEffect(() => {
-    console.log(facture);
+    //console.log(facture);
   }, [facture]);
 
   const acheteur = useQuery({
     queryKey: ["acheteur"],
     queryFn: () => getAcheteur(contractId),
   });
-  [acheteurList, setAcheteurList] = useState([]);
+  const [acheteurList, setAcheteurList] = useState([]);
   useEffect(() => {
     setAcheteurList([]);
     if (acheteur.data?.$values) {
@@ -280,10 +286,10 @@ export default function BordureauDetails({
                 <Text style={textStyle}>Echeance</Text>
                 <InputWithTag
                   titleWidth={0}
+                  type="numeric"
                   textInputPlaceholder="Echeance"
-                  onChange={(text) => {
-                    handleInputChange("Echeance", text as number);
-                  }}
+                  onChange={(text) => handleInputChange("Echeance", parseInt(text))}
+
                 />
               </View>
               {factureErrors.Echeance && (

@@ -1,4 +1,5 @@
 import AppIcon from "@/components/icons/AppIcons";
+import React from "react";
 import { TouchableOpacity, StyleSheet, Dimensions, Text } from "react-native";
 import { LinearGradient } from "react-native-linear-gradient";
 
@@ -11,6 +12,8 @@ export default function MiddleIcon({
   color,
   icon,
   onPress,
+  left,
+  iconType,
 }) {
   const styles = StyleSheet.create({
     middleIcon: {
@@ -21,7 +24,8 @@ export default function MiddleIcon({
       alignItems: "center",
       shadowOffset: { width: 2, height: 2 },
       shadowOpacity: 0.6,
-      elevation: 2,
+      elevation: 20,
+      left: left ? left : 0,
 
       zIndex: 1000,
       ...(center && { alignSelf: "center", bottom: -height / 8 }),
@@ -35,18 +39,24 @@ export default function MiddleIcon({
         (color && color[1]) || "#4980A1",
         (color && color[2]) || "#5D8FAD",
       ]}
-      end={{ x: 1, y: 0.9999 }}
-      start={{ x: 1, y: 0.9999 }}
+      locations={[0, 0.5, 0.6]}
+
+      start={{ x: 0.25, y: 0.25 }}
+      end={{ x: 0.5, y: 0.5 }}
       style={styles.middleIcon}
+      useAngle={true}
+      angle={20}
+
     >
       <TouchableOpacity
-        onPress={() =>  onPress()}
+        onPress={() => onPress()}
       >
         <AppIcon
           name={icon || "close"}
-          type={"AntDesign"}
+          type={iconType || "MaterialCommunityIcons"}
           size={40}
           color={"white"}
+
         />
       </TouchableOpacity>
     </LinearGradient>

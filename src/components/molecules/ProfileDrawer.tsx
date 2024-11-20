@@ -4,6 +4,7 @@ import {
   Dimensions,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useTheme } from "@/theme";
@@ -14,6 +15,8 @@ import { storage } from "@/App";
 import useAuth from "@/contexts/auth/useAuth";
 import Dropdown from "../atoms/Dropdown";
 import { useNavigation } from "@react-navigation/native";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 export default function ProfileDrawer({ onClose }) {
   const { width, height } = Dimensions.get("window");
   const {
@@ -38,7 +41,7 @@ export default function ProfileDrawer({ onClose }) {
   const { setIsLogged } = useAuth();
   const user = storage.getString("user");
   const userObject = JSON.parse(user);
-
+  const { t } = useTranslation(["drawer"]);
   const navigation = useNavigation();
   return (
     <TouchableWithoutFeedback>
@@ -101,7 +104,7 @@ export default function ProfileDrawer({ onClose }) {
             gutters.padding_12,
           ]}
         >
-          <Text style={[fonts.bold, fonts.size_16, fonts.white]}>Profile</Text>
+          <Text style={[fonts.bold, fonts.size_16, fonts.white]}>{t("drawer:profile")}</Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("ProfileUpdate");
@@ -129,7 +132,7 @@ export default function ProfileDrawer({ onClose }) {
                   gutters.marginLeft_12,
                 ]}
               >
-                Edit Profile
+                {t("drawer:edit_profile")}
               </Text>
             </View>
           </TouchableOpacity>
@@ -140,7 +143,7 @@ export default function ProfileDrawer({ onClose }) {
               gutters.marginVertical_12,
             ]}
           />
-          <Text style={[fonts.bold, fonts.size_16, fonts.white]}>Settings</Text>
+          <Text style={[fonts.bold, fonts.size_16, fonts.white]}> {t("drawer:settings")}</Text>
           <TouchableOpacity
             onPress={() => {
               setIsLogged(false);
@@ -168,7 +171,7 @@ export default function ProfileDrawer({ onClose }) {
                   gutters.marginLeft_12,
                 ]}
               >
-                logout
+                {t("drawer:logout")}
               </Text>
             </View>
           </TouchableOpacity>
@@ -180,7 +183,7 @@ export default function ProfileDrawer({ onClose }) {
             ]}
           />
           <Text style={[fonts.bold, fonts.size_16, fonts.white]}>
-            Preferences
+            {t("drawer:preferences")}
           </Text>
           <View
             style={[
@@ -205,9 +208,9 @@ export default function ProfileDrawer({ onClose }) {
                 gutters.marginRight_24,
               ]}
             >
-              Langages
+              {t("drawer:languages")}
             </Text>
-            <Dropdown data={["En", "Fr", "Ar"]} setSelected={() => {}} />
+            <Dropdown data={["En", "Fr", "Ar"]} setSelected={(value: string) => { void i18next.changeLanguage(value.toLocaleLowerCase()); }} />
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -246,7 +249,8 @@ export default function ProfileDrawer({ onClose }) {
                   gutters.marginLeft_12,
                 ]}
               >
-                {variant === "default" ? "DarkMode" : "LightMode"}
+                {variant === "default" ? t("drawer:darkMode") : t("drawer:light-mode")}
+
               </Text>
             </View>
           </TouchableOpacity>

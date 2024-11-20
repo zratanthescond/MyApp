@@ -49,6 +49,7 @@ function PaymentModeCard({ getPaymentMode }: { getPaymentMode: (mode: PaymentOpt
           </Text>
         </TouchableOpacity>
       ))}
+
     </ScrollView>
   );
 }

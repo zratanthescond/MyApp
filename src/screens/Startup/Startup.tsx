@@ -8,6 +8,7 @@ import { Brand } from "@/components/molecules";
 import { SafeScreen } from "@/components/template";
 
 import type { ApplicationScreenProps } from "@/types/navigation";
+import React from "react";
 
 function Startup({ navigation }: ApplicationScreenProps) {
   const { layout, gutters, fonts } = useTheme();

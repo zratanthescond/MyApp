@@ -25,8 +25,8 @@ import DatePicker from "react-native-date-picker";
 import { MMKV } from "react-native-mmkv";
 import { Mutation, useMutation } from "@tanstack/react-query";
 import { createFinancement } from "@/services/Financement/createFinancement";
-import { FinancementSchema } from "@/types/schemas/FinancementSchema";
-import { array } from "zod";
+import FinancementSchema from "@/types/schemas/FinancementSchema";
+import { z } from "zod";
 import { useTranslation } from "react-i18next";
 type FinancementType = {
   MontantFinancement: number;
@@ -36,6 +36,8 @@ type FinancementType = {
   ContratId: number;
 };
 function Financement(): JSX.Element {
+  const financementSchema = FinancementSchema();
+  const { contractId, contractMontant } = useContract();
   const storage = new MMKV();
   const { height, width } = Dimensions.get("window");
   const { gutters, borders, layout, backgrounds, fonts, colors } = useTheme();
@@ -49,9 +51,9 @@ function Financement(): JSX.Element {
   const user = JSON.parse(storage?.getString("user"));
   const [open, setOpen] = useState(false);
   const [activeCard, setActiveCard] = useState<number>(1);
-  const progress = useSharedValue(50000);
-  const min = useSharedValue(0);
-  const max = useSharedValue(500000);
+  const progress = useSharedValue(contractMontant / 10);
+  const min = useSharedValue(contractMontant / 10);
+  const max = useSharedValue(contractMontant);
   const [modalVisible, setModalVisible] = useState(false);
   const styles = StyleSheet.create({
     rowContainer: {
@@ -65,7 +67,7 @@ function Financement(): JSX.Element {
     boldText: [fonts.bold, fonts.gray800],
     smallText: [fonts.size_12, fonts.gray400],
   });
-  const { contractId } = useContract();
+
   const [data, setData] = useState<FinancementType>({
     MontantFinancement: 0,
     DateDeFinancement: new Date(),
@@ -85,8 +87,8 @@ function Financement(): JSX.Element {
   };
 
   useEffect(() => {
-    console.log(data);
-    console.log(storage.getString("user"));
+    //console.log(data);
+    //console.log(storage.getString("user"));
   }, [data]);
 
   const { t } = useTranslation(["financement"]);
@@ -103,7 +105,8 @@ function Financement(): JSX.Element {
     },
   });
   const hundleSuivant = () => {
-    const result = FinancementSchema.safeParse(data);
+
+    const result = financementSchema.safeParse(data);
 
     if (!result.success) {
       const formattedErrors = result.error.format();
@@ -122,7 +125,9 @@ function Financement(): JSX.Element {
 
   return (
     <SafeAreaView style={{ flex: 1, marginVertical: 2 }}>
+
       <ScrollView contentContainerStyle={[layout.flex_1, gutters.paddingBottom_40]} >
+
         <BackgroundDispoCard
           activeCard={activeCard}
           text1={t("financement:Type1")}
@@ -141,7 +146,7 @@ function Financement(): JSX.Element {
         />
 
         <GrayCard style={[layout.col, layout.fullHeight, layout.flex_1]}>
-          <View
+          {/*  <View
             style={[
               backgrounds.white,
               gutters.margin_12,
@@ -161,10 +166,10 @@ function Financement(): JSX.Element {
                 gutters.padding_12,
               ]}
             >
-              <Text style={[fonts.purple500, fonts.bold, fonts.size_16]}> 50 000 TND</Text>
-              <Text style={[fonts.red500, fonts.bold, fonts.size_16]}>500 000 TND</Text>
+              <Text style={[fonts.purple500, fonts.bold, fonts.size_16]}> {contractMontant / 10} TND</Text>
+              <Text style={[fonts.red500, fonts.bold, fonts.size_16]}>{contractMontant} TND</Text>
             </View>
-            <View style={[layout.flex_1, gutters.padding_12]}>
+             <View style={[layout.flex_1, gutters.padding_12]}>
               <Slider
                 onValueChange={(value) => {
                   progress.value = value;
@@ -175,8 +180,8 @@ function Financement(): JSX.Element {
                 progress={progress}
 
               />
-            </View>
-          </View>
+            </View>  
+          </View> */}
           <View
             style={[
               layout.row,
@@ -187,20 +192,23 @@ function Financement(): JSX.Element {
               borders.rounded_16,
             ]}
           >
+
+
             <InputWithTag
               titleWidth={100}
               title={t("financement:Montant")}
               tag={{ type: "text", text: "TND" }}
               type="numeric"
-              textInputPlaceholder={"0.00"}
+              textInputPlaceholder={"0.000"}
               onChange={(val: number) => {
                 progress.value = val;
-                handleInputChange("MontantFinancement", parseFloat(val) || 0);
+                handleInputChange("MontantFinancement", parseFloat(val) >= contractMontant ? contractMontant : parseFloat(val) || 0);
               }}
-              value={data.MontantFinancement}
+              value={data.MontantFinancement === 0 ? "" : data.MontantFinancement}
               errorMessage={errors.MontantFinancement}
 
             />
+
           </View>
           <View
             style={[
@@ -294,9 +302,7 @@ function Financement(): JSX.Element {
               <Button
                 isLoading={mutatation.isPending}
                 label="confirmer"
-                onPress={() => {
-                  mutatation.mutate();
-                }}
+                onPress={() => hundleSuivant()}
               />
             </View>
           </GrayCard>

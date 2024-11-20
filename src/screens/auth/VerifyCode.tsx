@@ -1,9 +1,9 @@
 import AppIcon, { Icons } from "@/components/icons/AppIcons";
 import { SafeScreen } from "@/components/template";
 import { useTheme } from "@/theme";
-import React from "react";
+import React, { useEffect } from "react";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   ImageBackground,
   Text,
@@ -18,8 +18,10 @@ import loginLogo from "../../theme/assets/images/loginLogo.png";
 
 const { width, height } = Dimensions.get("window");
 export default function VerifyCode() {
+  const { params: { phoneNumber } }: any = useRoute();
   const { layout, backgrounds, colors, gutters, fonts, borders } = useTheme();
   const navigation = useNavigation();
+
   const styles = StyleSheet.create({
     loginLogo: {
       height: height / 3,
@@ -38,16 +40,18 @@ export default function VerifyCode() {
     cardShadow: {
       borderRadius: 20,
       backgroundColor: "transparent",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
-      shadowOpacity: 0.22,
-      shadowRadius: 2.22,
-      elevation: 20,
+
+
+      elevation: 120,
     },
   });
+
+
+  const [code, setCode] = React.useState<string>("");
+  useEffect(() => {
+    //console.log(code);
+    //console.log(phoneNumber);
+  }, [code]);
   return (
     <SafeScreen>
       <View style={[layout.flex_1, backgrounds.white]}>
@@ -106,7 +110,6 @@ export default function VerifyCode() {
                   borders.blue50,
                   gutters.padding_12,
                   gutters.margin_12,
-                  borders.red500,
                   borders.w_1,
                   borders.rounded_16,
                 ]}
@@ -124,19 +127,9 @@ export default function VerifyCode() {
                     style={styles.textInput}
                     placeholder="Code"
                     keyboardType="numeric"
+                    onChangeText={(value) => setCode(value)}
                   />
-                  <TouchableOpacity
-                    style={[
-                      backgrounds.blue100,
-                      layout.flex_1,
-                      gutters.padding_12,
-                      borders.rounded_16,
-                    ]}
-                  >
-                    <Text style={[{ color: colors.white }, fonts.bold]}>
-                      Resend
-                    </Text>
-                  </TouchableOpacity>
+
                 </View>
 
                 <Text
@@ -147,14 +140,14 @@ export default function VerifyCode() {
                     gutters.margin_12,
                   ]}
                 >
-                  We texted you a code to verify you phone number(+216) *****499
+                  We texted you a code to verify you phone number {phoneNumber}
                   {"\n"}
                   {"\n"}
                   this code will be expired after 10 minutes after this message.
                   press resend button if you don't get a message
                 </Text>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("changePassword")}
+                  onPress={() => navigation.navigate("changePassword", { code: code, phoneNumber: phoneNumber })}
                   style={[
                     backgrounds.blue100,
                     layout.itemsCenter,

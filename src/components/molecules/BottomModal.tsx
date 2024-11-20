@@ -7,6 +7,7 @@ export default function BottomModal({
   setModalVisible,
   children,
   title,
+  header,
 }) {
   const { width, height } = Dimensions.get("screen");
   const { colors, fonts } = useTheme();
@@ -26,17 +27,25 @@ export default function BottomModal({
         >
           <View
             style={{
-              height: height / 10,
-              padding: 10,
               flexDirection: "row",
               justifyContent: "space-between",
+              alignItems: "center",
+              margin: 10,
+              height: 50,
+              paddingHorizontal: 20,
             }}
           >
-            <Text style={[{ color: colors.gray800 }, fonts.bold]}>{title}</Text>
+            {header}
             <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <AppIcon name="close" type="AntDesign" color={colors.gray800} />
+              <AppIcon
+                type="AntDesign"
+                name="close"
+                color={colors.gray800}
+                size={20}
+              />
             </TouchableOpacity>
           </View>
+
           <View>{children}</View>
         </View>
       </View>

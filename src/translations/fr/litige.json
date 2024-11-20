@@ -1,0 +1,16 @@
+{
+    "titre": "Dispute",
+    "dateLitige": "Date du Litige",
+    "Dateecheance": "Date d'Échéance",
+    "TypeLitige": "Type de Litige",
+    "TypeLitige1": "Achat",
+    "TypeLitige2": "Sondage",
+    "TypeLitige3": "Exécutif",
+    "TypeLitige4": "Autre",
+    "Enregistrer": "Enregistrer",
+    "Annuler": "Annuler",
+    "success": "Succès",
+    "LitigeAjouteSucces": "Litige ajouté avec succès",
+    "error": "Erreur",
+    "OK": "OK"
+}

@@ -26,9 +26,9 @@ function CardInformation({ activeCard }: CardInformationProps) {
     enabled: !!contractId,
   });
   useEffect(() => {
-    console.log("contract id in card", contractId);
+    //console.log("contract id in card", contractId);
     if (data) {
-      console.log(data);
+      //console.log(data);
       const disponibleDtata = data.find((d) => d.formule === activeCard);
       setDisponible(disponibleDtata);
     }
@@ -45,15 +45,15 @@ function CardInformation({ activeCard }: CardInformationProps) {
   return (
     <View
       style={[
-        gutters.padding_12,
+        layout.fullWidth,
         backgrounds.gray100,
         layout.itemsCenter,
         borders.rounded_16,
-        gutters.margin_12,
+        layout.flex_1,
         gutters.marginBottom_32,
         layout.justifyAround,
         layout.col,
-        { width: width - 24, height: height - (315 + height / 6) },
+        // { width: width - 24, height: height - (315 + height / 6) },
       ]}
     >
       <ScrollView
@@ -81,14 +81,7 @@ function CardInformation({ activeCard }: CardInformationProps) {
           part={parseInt(Math.random() * 100)}
           accumulated={disponible?.fondsDeGaranties}
         />
-        <ProgressBar
-          title={t("dashboard:FondReserve")}
-          progress={parseInt(Math.random() * 100)}
-          color={"purple100"}
-          progressColor={"red500"}
-          part={parseInt(Math.random() * 100)}
-          accumulated={disponible?.fondsDeReserve}
-        />
+
         <ProgressBar
           title={t("dashboard:Depassement")}
           progress={parseInt(Math.random() * 100)}

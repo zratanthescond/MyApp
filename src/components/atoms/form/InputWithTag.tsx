@@ -16,6 +16,8 @@ interface IconTag {
   type: "icon";
   name: string;
   iconType: string;
+  backgroundColor: string;
+  iconColor: string;
 }
 enum inputType {
   "default",
@@ -56,6 +58,7 @@ function InputWithTag({
   value,
   type,
   errorMessage,
+
 }: InputWithTagProps): JSX.Element {
   const { layout, fonts, colors, backgrounds } = useTheme();
 
@@ -155,13 +158,15 @@ function InputWithTag({
                 borderLeftWidth: 2,
                 borderTopRightRadius: 10,
                 borderBottomRightRadius: 10,
-                backgroundColor: colors.white,
+                backgroundColor: tag.backgroundColor || colors.white,
+
               }}
             >
               <AppIcon
+                color={tag.iconColor}
                 name={tag.name}
                 type={tag.iconType}
-                style={{ padding: 3, flex: 1 }}
+                style={{ padding: 3, flex: 1, }}
               />
             </TouchableOpacity>
           )}

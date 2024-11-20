@@ -9,9 +9,11 @@ import React from "react";
 import BordureauDetails from "@/screens/BordureauDetails/BordureauDetails";
 import MyDrawer from "./Drawer";
 import { Alert } from "react-native";
+import { useTranslation } from "react-i18next";
 
 function HomeTab(): JSX.Element {
   const { Navigator, Screen } = createBottomTabNavigator<HomeTabParamList>();
+  const { t } = useTranslation(["bottomTab"]);
 
   return (
     <Navigator
@@ -27,11 +29,11 @@ function HomeTab(): JSX.Element {
       }}
       tabBar={(props) => <MyTabBar {...props} />}
     >
-      <Screen name="Dashboard" component={Dashboard} />
-      <Screen name="bordureau" component={Bordureau} />
-      <Screen name="Cartes" component={Cartes} />
-      <Screen name="Financement" component={Financement} />
-      <Screen name="profile" component={MyDrawer} />
+      <Screen name={t("bottomTab:dashboard")} component={Dashboard} />
+      <Screen name={t("bottomTab:bordereau")} component={Bordureau} />
+      <Screen name="carte " component={Cartes} />
+      <Screen name={t("bottomTab:financement")} component={Financement} />
+      <Screen name={t("bottomTab:profile")} component={MyDrawer} />
     </Navigator>
   );
 }

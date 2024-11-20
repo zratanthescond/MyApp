@@ -1,0 +1,12 @@
+{
+    "dateEcheance": "Due Date",
+    "DateApresEcheance": "Date After Due Date",
+    "motif": "Reason",
+    "holderMotif": "Due Reason",
+    "Enregistrer": "Save",
+    "Annuler": "Cancel",
+    "success": "Success",
+    "ProrogationAjouteSucces": "Dispute added successfully",
+    "error": "Error",
+    "OK": "OK"
+}

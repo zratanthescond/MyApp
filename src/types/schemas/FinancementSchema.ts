@@ -1,14 +1,24 @@
+
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
+import { useTheme } from '@/theme';
 
-export const FinancementSchema = z.object({
-    MontantFinancement: z.number({ required_error: 'Montant de financement est requis' })
-        .min(1, { message: '* Montant de financement doit être supérieur ou égal à 0' }),
+const FinancementSchema = () => {
+    const { t } = useTranslation(["handlingError"]);
 
-    DateDeFinancement: z
-        .instanceof(Date, { message: 'La date de financement est requise.' })
-        .refine((date) => {
-            //console.log(new Date(date).toDateString('en-US') === new Date(Date.now()).toDateString('en-US'))
 
-            return new Date(date).toDateString('en-US') >= new Date(Date.now()).toDateString('en-US');
-        }, "* The date must be after today"),
-});
+    return z.object({
+        MontantFinancement: z.number({ required_error: t('handlingError:financing_amount_required') })
+            .min(1, { message: t("handlingError:financing_amount") }),
+
+        DateDeFinancement: z
+            .instanceof(Date, { message: t('handlingError:financing_date_required') })
+            .refine((date) => {
+                const currentDate = new Date();
+                // Comparer les dates en utilisant leurs timestamps (millisecondes depuis le 1er janvier 1970)
+                return date.getTime() > currentDate.getTime();
+            }, t('handlingError:date_after_today')),
+    });
+
+};
+export default FinancementSchema;

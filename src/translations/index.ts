@@ -3,11 +3,13 @@ import { initReactI18next } from 'react-i18next';
 
 import * as en from './en';
 import * as fr from './fr';
+import * as ar from './ar';
+
 
 type TupleUnion<U extends string, R extends unknown[] = []> = {
 	[S in U]: Exclude<U, S> extends never
-		? [...R, S]
-		: TupleUnion<Exclude<U, S>, [...R, S]>;
+	? [...R, S]
+	: TupleUnion<Exclude<U, S>, [...R, S]>;
 }[U];
 
 const ns = Object.keys(en) as TupleUnion<keyof typeof en>;
@@ -20,6 +22,7 @@ void i18n.use(initReactI18next).init({
 	resources: {
 		en,
 		fr,
+		ar,
 	},
 	lng: 'en',
 	fallbackLng: 'en',

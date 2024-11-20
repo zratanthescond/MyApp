@@ -1,15 +1,26 @@
-import { z } from 'zod';
+import { z } from "zod";
+import { TFunction } from "i18next"; // Import type for type-checking
 
-export const BordereauSchema = z.object({
-    MontantTotal: z.number({ required_error: 'Total amount is required' }).min(1000, { message: '* Total amount should be more than 1000' }),
-    DateBordereau: z
-        .instanceof(Date, { message: 'The Date field is required.' })
-        .refine((date) => {
-            //console.log(new Date(date).toDateString('en-US') === new Date(Date.now()).toDateString('en-US'))
+export const createBordereauSchema = (t: TFunction) =>
+    z.object({
+        MontantTotal: z
+            .number({ required_error: t("handlingError:total_amount_required") })
+            .min(1000, { message: t("handlingError:total_amount") }),
 
-            return new Date(date).toDateString('en-US') >= new Date(Date.now()).toDateString('en-US');
-        }, "* The date must be after today"),
+        DateBordereau: z
+            .instanceof(Date, { message: t("handlingError:date_required") })
+            .refine(
+                (date) =>
+                    new Date(date).toLocaleDateString("en-US") <=
+                    new Date(Date.now()).toLocaleDateString("en-US"),
+                { message: t("handlingError:date_after_today") }
+            ),
 
-    NombreDocuments: z.number({ required_error: 'number doc is required' }).min(1, { message: '* Number doc should be more than 0' }),
-    AnneeBordereau: z.number({ required_error: 'year is required' }).min(new Date().getFullYear()),
-});
+        NombreDocuments: z
+            .number({ required_error: t("handlingError:number_doc_required") })
+            .min(1, { message: t("handlingError:number_doc") }),
+
+        AnneeBordereau: z
+            .number({ required_error: t("handlingError:year_required") })
+            .min(new Date().getFullYear(), { message: t("handlingError:year") }),
+    });

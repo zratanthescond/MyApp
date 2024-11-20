@@ -44,21 +44,21 @@ module.exports = {
 			}
 
 			if (!value) {
-				console.log('\n');
+				//console.log('\n');
 
-				console.log('📦 Loading the build tool...');
+				//console.log('📦 Loading the build tool...');
 				execSync(`${packageManager} add -D typescript`);
 
-				console.log('🧱 Building the javascript source...');
+				//console.log('🧱 Building the javascript source...');
 				execSync(
 					'npx tsc --jsx react-native --module ESNext -t esnext --outDir js --noEmit false'
 				);
 
 				try {
-					console.log('🖼️  Copying assets...');
+					//console.log('🖼️  Copying assets...');
 					execSync('cp -R src/theme/assets js/src/theme/assets');
 
-					console.log('♻️  Replacing source...');
+					//console.log('♻️  Replacing source...');
 					execSync('rm -rf src', { stdio: 'pipe' });
 					execSync('cp -R js/src ./src', { stdio: 'pipe' });
 					execSync('rm -rf js', { stdio: 'pipe' });
@@ -69,11 +69,11 @@ module.exports = {
 					process.exit(1);
 				}
 
-				console.log('💣 change eslint config...');
+				//console.log('💣 change eslint config...');
 				execSync('cp .eslintrcJsVersion.js .eslintrc.js', { stdio: 'pipe' });
 				execSync('rm .eslintrcJsVersion.js', { stdio: 'pipe' });
 
-				console.log('🌀 Removing types ...');
+				//console.log('🌀 Removing types ...');
 				execSync('rm -rf src/types/theme', { stdio: 'pipe' });
 				execSync('rm -rf src/types/*.ts', { stdio: 'pipe' });
 

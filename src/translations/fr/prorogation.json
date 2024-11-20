@@ -1,0 +1,12 @@
+{
+    "dateEcheance": "Date d'Echeance",
+    "DateApresEcheance": "Date Apres echéance",
+    "motif": "Motif",
+    "holderMotif": "Motif d'echéance",
+    "Enregistrer": "Enregistrer",
+    "Annuler": "Annuler",
+    "success": "Succès",
+    "ProrogationAjouteSucces": "Litige ajouté avec succès",
+    "error": "Erreur",
+    "OK": "OK"
+}

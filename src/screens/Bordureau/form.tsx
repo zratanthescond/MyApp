@@ -9,7 +9,7 @@ import Button from "@/components/atoms/form/Button";
 import DatePicker from "react-native-date-picker";
 import useContract from "@/contexts/auth/useContract";
 import { FormulaireData } from "@/types/bordereaux";
-import { BordereauSchema } from "@/types/schemas/Bordereau"
+import { createBordereauSchema } from "@/types/schemas/Bordereau"
 import { useTranslation } from "react-i18next";
 
 function Form(): JSX.Element {
@@ -31,7 +31,8 @@ function Form(): JSX.Element {
     Factures: [],
   });
 
-
+  const { t } = useTranslation(["handlingError"]);
+  const BordereauSchema = createBordereauSchema(t);
 
   const handleInputChange = (field: keyof FormulaireData, value: string | number | Date) => {
     setData({
@@ -43,11 +44,11 @@ function Form(): JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    console.log(data);
-    console.log(data.Factures.length);
+    //console.log(data);
+    //console.log(data.Factures.length);
   }, [data]);
 
-  const { t } = useTranslation(["bordereau"]);
+
 
   const hundleSuivant = () => {
     const result = BordereauSchema.safeParse(data);
@@ -62,10 +63,7 @@ function Form(): JSX.Element {
       });
       return;
     }
-    /* const dataToSend = {
-       ...data,
-       DateBordereau: data.DateBordereau.toISOString(), // Assurez-vous que cela soit bien un objet Date
-     }*/
+
 
     navigate.navigate("BordureauDetails", { data, setData });
   };
@@ -148,7 +146,7 @@ function Form(): JSX.Element {
             type="numeric"
             titleWidth={width / 2}
             onChange={(text) => handleInputChange("NombreDocuments", parseInt(text))}
-            textInputPlaceholder={t("bordereau:Nombredoc")}
+            textInputPlaceholder={t("bordereau:nombredoc")}
             errorMessage={errors.NombreDocuments}
           />
 

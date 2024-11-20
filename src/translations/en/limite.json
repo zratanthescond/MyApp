@@ -1,0 +1,17 @@
+{
+    "Title": "Payment Type",
+    "paymentType1": "Cheque",
+    "paymentType2": "Transfer",
+    "paymentType3": "Cash",
+    "requestDate": "Request Date",
+    "deadlineDate": "Deadline Date",
+    "lastRequestDate": "Last Request Date",
+    "requestDelay": "Request Delay",
+    "holderDelay": "Request Delay",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "success": "Success",
+    "LimitAddedSuccess": "Limit added successfully",
+    "error": "Error",
+    "OK": "OK"
+}

@@ -1,0 +1,17 @@
+{
+    "Titre": "نوع الدفع",
+    "typepaiement1": "شيك",
+    "typepaiement2": "تحويل",
+    "typepaiement3": "نقدي",
+    "dateDemande": "تاريخ الطلب",
+    "dateLimite": "تاريخ النهاية",
+    "dateDerniereDemande": "تاريخ آخر طلب",
+    "delaiDemande": "مدة الطلب",
+    "holderDelai": "مدة الطلب",
+    "Enregistrer": "حفظ",
+    "Annuler": "إلغاء",
+    "success": "نجاح",
+    "ProrogationAjouteSucces": "تمت إضافة الحد بنجاح",
+    "error": "خطأ",
+    "OK": "موافق"
+}

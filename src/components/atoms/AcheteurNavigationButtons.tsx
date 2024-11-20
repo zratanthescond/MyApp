@@ -28,7 +28,7 @@ export default function AcheteurNavigationButtons({ label, onPress }: Props) {
           borders.rounded_16,
           borders.w_1,
           borders.blue100,
-          { padding:5, elevation: 5 ,gap:3},
+          { padding: 10, elevation: 5, gap: 3 },
         ]}
       >
         <AppIcon
@@ -42,7 +42,7 @@ export default function AcheteurNavigationButtons({ label, onPress }: Props) {
             fonts.white,
             fonts.bold,
             fonts.size_12,
-            
+
           ]}
         >
           {label}

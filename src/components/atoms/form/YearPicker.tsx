@@ -18,7 +18,7 @@ export default function YearPicker({
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   useEffect(() => {
     yearsElemets();
-    console.log(years);
+    //console.log(years);
     setYears(numbers);
   }, [currentYear]);
   const yearsElemets = () => {

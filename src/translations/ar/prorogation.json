@@ -1,0 +1,12 @@
+{
+    "dateEcheance": "تاريخ الاستحقاق",
+    "DateApresEcheance": "تاريخ ما بعد الاستحقاق",
+    "motif": "السبب",
+    "holderMotif": "سبب الاستحقاق",
+    "Enregistrer": "تسجيل",
+    "Annuler": "إلغاء",
+    "success": "نجاح",
+    "ProrogationAjouteSucces": "تم إضافة النزاع بنجاح",
+    "error": "خطأ",
+    "OK": "موافق"
+}
