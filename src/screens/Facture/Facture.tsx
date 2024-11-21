@@ -26,6 +26,7 @@ import { use } from "i18next";
 import SearchComponent from "@/components/molecules/SearchComponent";
 import { set } from "zod";
 import SelectBuyer from "@/components/molecules/SelectBuyer";
+
 export default function Facture() {
   const { contractId } = useContract();
   const { fonts, colors, layout, backgrounds, gutters, borders } = useTheme();
@@ -38,40 +39,27 @@ export default function Facture() {
   const [filtredData, setFiltredData] = useState<any>({});
   const [newIndividuId, setNewIndividuId] = useState<number>(individuId);
   const { data, isError, isLoading } = useQuery({
-
     queryKey: ["facture", newIndividuId],
 
-
     queryFn: () => {
-
       return getFactureByAcheteur({ newIndividuId, contractId });
     },
   });
-  const [litigeForm, setlitigeForm] = React.useState<Litige>(
-
-    {
-
-      TypeDuLitige: "",
-      DateLitige: new Date(),
-      DateEcheanceLitige: new Date(),
-      ContratId: contractId,
-      FactureId: 0,
-
-    });
-  const [prorogationForm, setprorogationForm] = React.useState<Prorogation>(
-    {
-
-      DateEcheanceApresProrogation: new Date(),
-      ContratId: contractId,
-      FactureId: 0,
-      MotifProrogation: "",
-      TypeProrogation: "achat",
-      Echeance: new Date(),
-
-
-    });
-
-
+  const [litigeForm, setlitigeForm] = React.useState<Litige>({
+    TypeDuLitige: "",
+    DateLitige: new Date(),
+    DateEcheanceLitige: new Date(),
+    ContratId: contractId,
+    FactureId: 0,
+  });
+  const [prorogationForm, setprorogationForm] = React.useState<Prorogation>({
+    DateEcheanceApresProrogation: new Date(),
+    ContratId: contractId,
+    FactureId: 0,
+    MotifProrogation: "",
+    TypeProrogation: "achat",
+    Echeance: new Date(),
+  });
 
   useEffect(() => {
     setFiltredData(data);
@@ -99,22 +87,28 @@ export default function Facture() {
             borders.rounded_16,
             gutters.paddingVertical_12,
             layout.z10,
-
           ]}
         >
           {inputState === "search" ? (
-            <SearchComponent data={data} setfiltredData={setFiltredData} field="refFacture" Objectkey="facture" />
-          ) :
-            (<SelectBuyer onSelect={(value: number) => { setNewIndividuId(value); }} />
-            )}
-
+            <SearchComponent
+              data={data}
+              setfiltredData={setFiltredData}
+              field="refFacture"
+              Objectkey="facture"
+            />
+          ) : (
+            <SelectBuyer
+              onSelect={(value: number) => {
+                setNewIndividuId(value);
+              }}
+            />
+          )}
 
           <TouchableOpacity
             style={[backgrounds.purple500, borders.rounded_4, { padding: 5 }]}
             onPress={() => {
               setInputState(inputState === "search" ? "select" : "search");
             }}
-
           >
             {inputState === "search" ? (
               <AppIcon
@@ -131,64 +125,78 @@ export default function Facture() {
                 size={30}
               />
             )}
-
           </TouchableOpacity>
         </View>
 
         <ScrollView>
           {isLoading && <ActivityIndicator />}
           {isError && <Text>No factures found for this buyer</Text>}
-          {!isLoading && !isError && (!data || !data.$values || data.$values.length === 0) && (
-            <Text>No factures found for this buyer</Text>
-          )}
-          {!isLoading && !isError && data && data.$values && data.$values.length > 0 &&
-            filtredData && filtredData.$values && filtredData.$values.map((data: any) => {
-
+          {!isLoading &&
+            !isError &&
+            (!data || !data.$values || data.$values.length === 0) && (
+              <Text>No factures found for this buyer</Text>
+            )}
+          {!isLoading &&
+            !isError &&
+            data &&
+            data.$values &&
+            data.$values.length > 0 &&
+            filtredData &&
+            filtredData.$values &&
+            filtredData.$values.map((data: any) => {
               return (
                 <FactureComponent
-
                   key={data.facture.factureId}
                   facture={data.facture}
                   litigeCount={data.litigeCount}
                   prorogationCount={data.prorogationCount}
                   // data={data}
-                  onButtonPress={(value: string, factureId: number, dateFacture: Date) => {
-
+                  onButtonPress={(
+                    value: string,
+                    factureId: number,
+                    dateFacture: Date
+                  ) => {
                     setTitle(value);
 
                     setModalVisible(true);
                     value === "litige"
+                      ? setlitigeForm({
+                          ...litigeForm,
 
-                      ?
-                      setlitigeForm({
-                        ...litigeForm,
-
-                        FactureId: data.factureId as number,
-
-                      })
+                          FactureId: data.factureId as number,
+                        })
                       : setprorogationForm({
-                        ...prorogationForm,
-                        FactureId: factureId as number,
-                        Echeance: data.dateFacture,
-                      });
-
+                          ...prorogationForm,
+                          FactureId: factureId as number,
+                          Echeance: data.dateFacture,
+                        });
                   }}
-
                 />
               );
             })}
         </ScrollView>
-
       </View>
       <BottomModal
-        header={<Text style={[fonts.bold, fonts.size_16, fonts.gray800]}>{title && capitalizeFirstLetter(title)}</Text>}
+        header={
+          <Text style={[fonts.bold, fonts.size_16, fonts.gray800]}>
+            {title && capitalizeFirstLetter(title)}
+          </Text>
+        }
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       >
         {title === "litige" ? (
-          <LitigeForm formData={litigeForm} setFormData={setlitigeForm} setModalVisible={() => setModalVisible(false)} />
+          <LitigeForm
+            formData={litigeForm}
+            setFormData={setlitigeForm}
+            setModalVisible={() => setModalVisible(false)}
+          />
         ) : (
-          <ProrogationForm formData={prorogationForm} setFormData={setprorogationForm} setModalVisible={() => setModalVisible(false)} />
+          <ProrogationForm
+            formData={prorogationForm}
+            setFormData={setprorogationForm}
+            setModalVisible={() => setModalVisible(false)}
+          />
         )}
       </BottomModal>
     </SafeScreen>

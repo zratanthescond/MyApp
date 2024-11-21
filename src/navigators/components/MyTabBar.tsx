@@ -28,9 +28,21 @@ export default function MyTabBar({ state, descriptors, navigation }) {
     inputRange: [0, state.routes.length - 1],
     outputRange: [0, tabWidth * (state.routes.length - 1)],
   });
-  const { layout, backgrounds, borders, colors } = useTheme();
+  const { layout, backgrounds, borders, colors, gutters } = useTheme();
   return (
-    <View style={styles.bottomBar}>
+    <View
+      style={[
+        layout.row,
+        layout.justifyBetween,
+        layout.itemsCenter,
+        backgrounds.white,
+        { height: 60 },
+        borders.rounded_16,
+        gutters.marginHorizontal_12,
+        gutters.paddingHorizontal_12,
+        gutters.marginBottom_12,
+      ]}
+    >
       {state.routes.map((route, index) => {
         const isFocused = state.index === index;
         const { options } = descriptors[route.key];
@@ -53,7 +65,7 @@ export default function MyTabBar({ state, descriptors, navigation }) {
           }
         };
 
-        const color = isFocused ? "#062340" : "gray";
+        const color = isFocused ? colors.blue100 : colors.gray50;
 
         return (
           <TouchableOpacity
@@ -107,21 +119,14 @@ export default function MyTabBar({ state, descriptors, navigation }) {
 const styles = StyleSheet.create({
   bottomBar: {
     height: 60,
-    backgroundColor: "white",
+
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-around",
     width: "95%",
     alignSelf: "center",
     bottom: 10,
-    borderRadius: 5,
-  },
-  indicator: {
-    position: "absolute",
-    bottom: 0,
-    height: 2,
-    backgroundColor: "red",
-    borderRadius: 2,
+    borderRadius: 16,
   },
 });
 

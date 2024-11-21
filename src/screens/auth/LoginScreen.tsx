@@ -13,27 +13,30 @@ import {
 import React from "react";
 import { Icons } from "@/components/icons/AppIcons";
 import AppIcon from "@/components/icons/AppIcons";
-import loginLogo from "../../theme/assets/images/loginLogo.png";
 import { useNavigation } from "@react-navigation/native";
 import useAuth from "@/contexts/auth/useAuth";
 import Login from "@/services/users/login";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { MMKV } from "react-native-mmkv";
+import loginLogo from "../../theme/assets/images/loginLogo.png";
 const { height, width } = Dimensions.get("window");
 
 export default function LoginScreen() {
   const storage = new MMKV();
-  const credentials = JSON.parse(storage.getString("credentials"));
+
+  const credentials = JSON.parse(storage.getString("credentials") || "{}");
   const [email, setEmail] = React.useState(credentials?.email);
   const [password, setPassword] = React.useState(credentials?.password);
-
 
   const { colors, layout, backgrounds, gutters, fonts, borders } = useTheme();
   const navigation = useNavigation();
   const { setIsLogged } = useAuth();
 
   const mutate = useMutation({
-    mutationFn: Login,
+    mutationKey: ["login"],
+    mutationFn: () => {
+      return Login({ email, password });
+    },
     onSuccess: (data) => {
       setIsLogged(true);
     },

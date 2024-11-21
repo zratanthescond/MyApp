@@ -1,4 +1,11 @@
-import { Image, TouchableOpacity, View, Text, Modal, Dimensions } from "react-native";
+import {
+  Image,
+  TouchableOpacity,
+  View,
+  Text,
+  Modal,
+  Dimensions,
+} from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@/theme";
 import logo from "../../theme/assets/images/logo.png";
@@ -18,9 +25,12 @@ export default function HeaderLogo() {
   const navigation = useNavigation();
   const { contractId, referenceContrat } = useContract();
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [height, width] = [Dimensions.get("window").height, Dimensions.get("window").width];
+  const [height, width] = [
+    Dimensions.get("window").height,
+    Dimensions.get("window").width,
+  ];
   return (
-    < >
+    <>
       <View
         style={[
           layout.row,
@@ -36,7 +46,6 @@ export default function HeaderLogo() {
           onPress={() => {
             if (navigation.canGoBack()) {
               navigation.goBack();
-
             }
           }}
         >
@@ -52,39 +61,82 @@ export default function HeaderLogo() {
           onPress={() => {
             setModalVisible(!modalVisible);
           }}
-
         >
-          <View style={[backgrounds.blue100, { padding: 4 }, borders.rounded_4]}>
-            <Text style={[fonts.size_12, fonts.white]}>Contract: </Text>
+          <View
+            style={[
+              backgrounds.blue100,
+              { paddingVertical: 6, paddingHorizontal: 12 },
+              borders.rounded_16,
+              layout.itemsCenter,
+            ]}
+          >
+            <Text style={[fonts.size_12, fonts.white, fonts.bold]}>
+              Contract:
+            </Text>
 
-            <View style={[backgrounds.white, borders.rounded_4, layout.row, layout.itemsCenter, layout.justifyBetween]}>
-              <Text style={[fonts.size_12, fonts.blue100, { paddingLeft: 2 }]}>{referenceContrat && referenceContrat.substring(0, 6) + "..."}</Text>
-              <AppIcon name="chevron-down" type="MaterialCommunityIcons" size={20} color={colors.blue100} />
-
-
+            <View
+              style={[
+                backgrounds.white,
+                borders.rounded_16,
+                layout.row,
+                layout.itemsCenter,
+                layout.justifyBetween,
+              ]}
+            >
+              <Text style={[fonts.size_12, fonts.blue100, { paddingLeft: 2 }]}>
+                {referenceContrat && referenceContrat.substring(0, 6) + "..."}
+              </Text>
+              <AppIcon
+                name="chevron-down"
+                type="MaterialCommunityIcons"
+                size={20}
+                color={colors.blue100}
+              />
             </View>
-
-
           </View>
         </TouchableOpacity>
-
       </View>
-      {modalVisible &&
+      {modalVisible && (
         <>
-          < View style={[backgrounds.gray800, layout.absolute, { opacity: 0.7, height: height, width: width }]}>
-          </View >
-          < View style={[layout.absolute, layout.itemsCenter,
-          layout.justifyCenter, backgrounds.white, gutters.padding_12, gutters.margin_12, borders.rounded_16, { top: 100, width: width - 24 }]}>
-
-            <Text style={[fonts.gray800, fonts.bold, fonts.size_16, gutters.padding_12]}>Select Contract</Text>
-            <SelectContract setModalVisible={setModalVisible} modalVisible={modalVisible} lastContractId={contractId} />
+          <View
+            style={[
+              backgrounds.gray800,
+              layout.absolute,
+              { opacity: 0.7, height: height, width: width },
+            ]}
+          ></View>
+          <View
+            style={[
+              layout.absolute,
+              layout.itemsCenter,
+              layout.justifyCenter,
+              backgrounds.white,
+              gutters.padding_12,
+              gutters.margin_12,
+              borders.rounded_16,
+              { top: 100, width: width - 24 },
+            ]}
+          >
+            <Text
+              style={[
+                fonts.gray800,
+                fonts.bold,
+                fonts.size_16,
+                gutters.padding_12,
+              ]}
+            >
+              Select Contract
+            </Text>
+            <SelectContract
+              setModalVisible={setModalVisible}
+              modalVisible={modalVisible}
+              lastContractId={contractId}
+            />
 
             <Button label="Close" onPress={() => setModalVisible(false)} />
-
-
-          </View >
+          </View>
         </>
-      }
+      )}
     </>
-  )
+  );
 }

@@ -3,7 +3,14 @@ import { useTheme } from "@/theme";
 import { FormulaireData } from "@/types/bordereaux";
 import { BordereauSchema } from "@/types/schemas/Bordereau";
 import React from "react";
-import { View, Text, TextInput, TouchableOpacity, KeyboardTypeOptions, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  KeyboardTypeOptions,
+  StyleSheet,
+} from "react-native";
 
 // Interface pour la balise (tag) de type texte
 interface TextTag {
@@ -27,7 +34,6 @@ enum inputType {
   "email-address",
   "phone-pad",
   "url",
-
 }
 // Union des deux types de balises possibles
 type Tag = TextTag | IconTag;
@@ -58,7 +64,6 @@ function InputWithTag({
   value,
   type,
   errorMessage,
-
 }: InputWithTagProps): JSX.Element {
   const { layout, fonts, colors, backgrounds } = useTheme();
 
@@ -120,7 +125,7 @@ function InputWithTag({
             }}*/
             placeholder={textInputPlaceholder}
             keyboardType={type || "default"}
-            maxLength={11}
+            // maxLength={11}
             editable={!inputDisabled}
             selectTextOnFocus={!inputDisabled}
             value={value?.toString()}
@@ -159,14 +164,13 @@ function InputWithTag({
                 borderTopRightRadius: 10,
                 borderBottomRightRadius: 10,
                 backgroundColor: tag.backgroundColor || colors.white,
-
               }}
             >
               <AppIcon
                 color={tag.iconColor}
                 name={tag.name}
                 type={tag.iconType}
-                style={{ padding: 3, flex: 1, }}
+                style={{ padding: 3, flex: 1 }}
               />
             </TouchableOpacity>
           )}
@@ -178,12 +182,10 @@ function InputWithTag({
 }
 
 const styles = StyleSheet.create({
-
   errorText: {
     color: "red",
     fontSize: 10,
-    marginLeft: 0
-
+    marginLeft: 0,
   },
 });
 export default InputWithTag;

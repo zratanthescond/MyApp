@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View } from "react-native";
 import { useTheme } from "@/theme";
 import WhiteCard from "../form/WhiteCard";
@@ -11,6 +11,7 @@ interface ProgressBarProps {
   progressColor: string;
   accumulated: number | 0;
   part: number;
+  center?: number;
 }
 
 function ProgressBar({
@@ -20,9 +21,18 @@ function ProgressBar({
   progressColor,
   accumulated,
   part,
+  center,
 }: ProgressBarProps): React.ReactElement {
   const { borders, backgrounds, layout, fonts, gutters } = useTheme();
   const { t } = useTranslation(["dashboard"]);
+  const [progressValue, setProgressValue] = React.useState<number>(progress);
+  useEffect(() => {
+    if (progress) {
+      if (center > 0) {
+        setProgressValue(parseFloat(progress) / 2);
+      }
+    }
+  }, [progress, title, color, accumulated]);
   return (
     <WhiteCard
       style={[
@@ -45,21 +55,42 @@ function ProgressBar({
         <Text style={[fonts.bold, fonts.blue100]}> {title}</Text>
         <Text style={[fonts.bold, fonts.blue100]}> {progress}%</Text>
       </View>
+      {center && (
+        <View style={[layout.fullWidth, layout.itemsCenter]}>
+          <Text style={[fonts.bold, fonts.red500, { top: -10 }]}>{center}</Text>
+          <View
+            style={[
+              backgrounds.red500,
+              { height: 25, width: 2.5, top: 11 },
+              layout.z10,
+              layout.absolute,
+              borders.w_2,
+              borders.gray800,
+            ]}
+          ></View>
+        </View>
+      )}
+
       <View
         style={[
-          layout.flex_1,
           backgrounds[color],
           borders.rounded_16,
           layout.fullWidth,
 
-          [{ height: 10 }],
+          [{ height: 10, minWidth: "100%", width: "100%" }],
         ]}
       >
         <View
           style={[
-            { width: `${progress}%`, height: 10, alignSelf: "start" },
+            {
+              width: `${progressValue}%`,
+              height: 10,
+              alignSelf: "start",
+              minWidth: `${progressValue}%`,
+            },
             backgrounds[progressColor],
             borders.rounded_16,
+            layout.flex_16,
           ]}
         />
       </View>
@@ -73,8 +104,10 @@ function ProgressBar({
             gutters.padding_12,
           ]}
         >
-          <Text style={[fonts.bold, fonts.blue100]}> {accumulated}DT/{t("dashboard:Mois")}</Text>
-          <Text style={[fonts.bold, fonts.blue100]}> {part}DT</Text>
+          <Text style={[fonts.bold, fonts.blue100]}> {accumulated} Tnd</Text>
+          <Text style={[fonts.bold, fonts.blue100]}>
+            {part == "&#8734;" ? convertSymbolsFromCode(part) : part} Tnd
+          </Text>
         </View>
       )}
     </WhiteCard>
@@ -82,3 +115,19 @@ function ProgressBar({
 }
 
 export default ProgressBar;
+export function convertSymbolsFromCode(name = "") {
+  let final = null;
+  if (name) {
+    const val = name.match(/&#\d+;/) ? name.match(/&#\d+;/)[0] : false; // need to check whether it is an actual symbol code
+    if (val) {
+      const num = val.match(/\d+;/) ? val.match(/\d+;/)[0] : false; // if symbol, then get numeric code
+      if (num) {
+        final = num.replace(/;/g, "");
+      }
+    }
+    if (final) {
+      name = name.replace(/&#\d+;/g, String.fromCharCode(final));
+    }
+  }
+  return name;
+}

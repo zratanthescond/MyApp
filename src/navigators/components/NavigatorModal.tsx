@@ -40,9 +40,6 @@ export default function NavigatorModal({
           borderTopStartRadius: 200,
           zIndex: 0,
           alignSelf: "center",
-
-
-
         }}
       >
         <MiddleIcon
@@ -58,7 +55,6 @@ export default function NavigatorModal({
             justifyContent: "space-between",
             width: "100%",
             paddingHorizontal: 10,
-
           }}
         >
           <MiddleIcon
@@ -67,14 +63,20 @@ export default function NavigatorModal({
             onPress={() => setModalVisible(!modalVisible)}
             bottom={0}
             left={15}
-            onPress={() => { navigation.navigate("listBordereau"); setModalVisible(!modalVisible) }}
+            onPress={() => {
+              navigation.navigate("listBordereau");
+              setModalVisible(!modalVisible);
+            }}
             //color={[colors.purple50, colors.purple100, colors.purple500]}
             icon={"folder-eye"}
           />
           <MiddleIcon
             modalVisible={modalVisible}
             //setModalVisible={setModalVisible}
-            onPress={() => { navigation.navigate("listFinancement"); setModalVisible(!modalVisible) }}
+            onPress={() => {
+              navigation.navigate("listFinancement");
+              setModalVisible(!modalVisible);
+            }}
             bottom={60}
             left={-15}
             //color={[colors.purple50, colors.blue50, colors.purple500]}
@@ -84,8 +86,11 @@ export default function NavigatorModal({
             iconType="MaterialCommunityIcons"
             modalVisible={modalVisible}
             left={0}
-            onPress={() => { navigation.navigate("listLimit"); setModalVisible(!modalVisible) }} bottom={60}
-
+            onPress={() => {
+              navigation.navigate("listLimit");
+              setModalVisible(!modalVisible);
+            }}
+            bottom={60}
             icon={"file-cancel-outline"}
           />
           <MiddleIcon
@@ -97,12 +102,11 @@ export default function NavigatorModal({
             left={-20}
             //color={[colors.purple50, colors.purple500, colors.blue100]}
             icon={"adduser"}
-            onPress={() => { navigation.navigate("Individu"); setModalVisible(!modalVisible) }}
+            onPress={() => {
+              navigation.navigate("Individu");
+              setModalVisible(!modalVisible);
+            }}
           />
-
-
-
-
         </View>
       </View>
     </Modal>

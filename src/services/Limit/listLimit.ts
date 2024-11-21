@@ -1,12 +1,14 @@
 import { instance } from "../instance";
 
 export default async function listLimit(contractId: number): Promise<any> {
-    //console.log("contractId", contractId);
-    try {
-        const res = await instance.get(`http://192.168.46.15:5000/api/Limite/contrat/${contractId}`);
-        //console.log(res);
-        return res.data ? res.data : [];
-    } catch (error) {
-        //console.log(error.response.data);
-    }
+  //console.log("contractId", contractId);
+  try {
+    const res = await instance.get(
+      `http://10.0.2.2:5000/api/Limite/contrat/${contractId}`
+    );
+    //console.log(res);
+    return res.data ? res.data : [];
+  } catch (error) {
+    //console.log(error.response.data);
+  }
 }

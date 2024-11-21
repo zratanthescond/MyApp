@@ -40,23 +40,18 @@ export default function MiddleIcon({
         (color && color[2]) || "#5D8FAD",
       ]}
       locations={[0, 0.5, 0.6]}
-
       start={{ x: 0.25, y: 0.25 }}
       end={{ x: 0.5, y: 0.5 }}
       style={styles.middleIcon}
       useAngle={true}
       angle={20}
-
     >
-      <TouchableOpacity
-        onPress={() => onPress()}
-      >
+      <TouchableOpacity onPress={() => onPress()}>
         <AppIcon
           name={icon || "close"}
           type={iconType || "MaterialCommunityIcons"}
           size={40}
           color={"white"}
-
         />
       </TouchableOpacity>
     </LinearGradient>

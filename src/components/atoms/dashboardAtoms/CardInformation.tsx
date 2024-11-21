@@ -28,8 +28,8 @@ function CardInformation({ activeCard }: CardInformationProps) {
   useEffect(() => {
     //console.log("contract id in card", contractId);
     if (data) {
-      //console.log(data);
-      const disponibleDtata = data.find((d) => d.formule === activeCard);
+      //  alert(JSON.stringify(data));
+      const disponibleDtata = data.formule === activeCard;
       setDisponible(disponibleDtata);
     }
   }, [data, activeCard, contractId]);
@@ -45,7 +45,6 @@ function CardInformation({ activeCard }: CardInformationProps) {
   return (
     <View
       style={[
-        layout.fullWidth,
         backgrounds.gray100,
         layout.itemsCenter,
         borders.rounded_16,
@@ -53,42 +52,63 @@ function CardInformation({ activeCard }: CardInformationProps) {
         gutters.marginBottom_32,
         layout.justifyAround,
         layout.col,
+        gutters.marginHorizontal_12,
         // { width: width - 24, height: height - (315 + height / 6) },
       ]}
     >
       <ScrollView
-        style={{ width: "100%", height: "100%" }}
+        //style={[layout.flex_1]}
         contentContainerStyle={[
           layout.itemsCenter,
           layout.justifyBetween,
-          gutters.margin_12,
+          layout.fullWidth,
           gutters.paddingBottom_16,
+          gutters.paddingVertical_16,
         ]}
       >
         <ProgressBar
           title={t("dashboard:Factureencours")}
-          progress={parseInt(Math.random() * 100)}
+          progress={
+            data?.fuctureApprouved > 0
+              ? parseFloat(
+                  (data?.factureEnCours * 100) / data?.fuctureApprouved
+                ).toFixed(2) * 1
+              : 0
+          }
           color={"purple100"}
           progressColor={"purple500"}
-          part={parseInt(Math.random() * 100)}
-          accumulated={disponible?.factureEnCours}
+          part={data?.fuctureApprouved}
+          accumulated={data?.factureEnCours}
         />
         <ProgressBar
           title={t("dashboard:FondGarentie")}
-          progress={parseInt(Math.random() * 100)}
+          progress={
+            data?.contractFound > 0
+              ? parseFloat(
+                  (data?.fondsDeGaranties * 100) / data?.contractFound
+                ).toFixed(2) * 1
+              : 0
+          }
           color={"purple100"}
           progressColor={"red500"}
-          part={parseInt(Math.random() * 100)}
-          accumulated={disponible?.fondsDeGaranties}
+          part={data?.contractFound}
+          accumulated={data?.fondsDeGaranties}
         />
 
         <ProgressBar
           title={t("dashboard:Depassement")}
-          progress={parseInt(Math.random() * 100)}
+          progress={
+            data?.factureEnCours > 0
+              ? parseFloat(
+                  (data?.limitSum * 100) / data?.factureEnCours
+                ).toFixed(2) * 1
+              : 0
+          }
           color={"purple100"}
           progressColor={"red500"}
-          part={parseInt(Math.random() * 100)}
-          accumulated={disponible?.depassementLimiteFinancementAcheteurs}
+          part={`&#8734;`}
+          center={data?.factureEnCours}
+          accumulated={data?.depassementLimiteFinancementAcheteurs}
         />
       </ScrollView>
     </View>

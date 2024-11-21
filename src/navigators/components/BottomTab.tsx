@@ -2,7 +2,7 @@ import AppIcon from "@/components/icons/AppIcons";
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-
+import { useTheme } from "@/theme";
 export default function BottomTab({
   type,
   color,
@@ -31,11 +31,11 @@ export default function BottomTab({
       icon = "folder";
   }
   const gradient = index === 2;
-
+  const { colors, backgrounds } = useTheme();
   const styles = StyleSheet.create({
     middleIcon: {
       display: modalVisible ? "none" : "flex",
-      bottom: modalVisible ? 0 : 18,
+      bottom: modalVisible ? 0 : 15,
       width: 60,
       height: 60,
       borderRadius: 30,
@@ -48,17 +48,35 @@ export default function BottomTab({
       zIndex: 1000,
     },
   });
+
+  const curveStyle = StyleSheet.create({
+    curve: {
+      display: modalVisible ? "none" : "flex",
+      bottom: modalVisible ? 0 : 18,
+      width: 80,
+      height: 50,
+      borderBottomLeftRadius: 60,
+      borderBottomRightRadius: 60,
+
+      justifyContent: "center",
+      alignItems: "center",
+      top: -5,
+      zIndex: 1000,
+    },
+  });
   return (
     <View>
       {gradient ? (
-        <LinearGradient
-          colors={["#1C5585", "#4980A1", "#5D8FAD"]}
-          end={{ x: 0.6, y: 0.8 }}
-          start={{ x: 1, y: 0.8 }}
-          style={styles.middleIcon}
-        >
-          <AppIcon name={"plus"} type={type} size={20} color={"white"} />
-        </LinearGradient>
+        <View style={[curveStyle.curve, backgrounds.gray50]}>
+          <LinearGradient
+            colors={["#1C5585", "#4980A1", "#5D8FAD"]}
+            end={{ x: 0.6, y: 0.8 }}
+            start={{ x: 1, y: 0.8 }}
+            style={styles.middleIcon}
+          >
+            <AppIcon name={"plus"} type={type} size={20} color={"white"} />
+          </LinearGradient>
+        </View>
       ) : (
         <View
           style={{
