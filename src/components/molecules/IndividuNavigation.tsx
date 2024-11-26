@@ -35,8 +35,8 @@ export default function IndividuNavigation({ individuId, pendingLimiteCount }: P
       />
       {pendingLimiteCount > 0 ?
         <AcheteurNavigationButtons
-          label={` in progress (${pendingLimiteCount})`}
-          onPress={() => Alert.alert('Error', 'Vous avez une prorogation en cours ', [{ text: 'OK', onPress: () => { } }],)}
+          label={` Limite (${pendingLimiteCount})`}
+          onPress={() => Alert.alert('Error', 'Vous avez une Limite en cours ', [{ text: 'OK', onPress: () => { } }],)}
         /> :
         <AcheteurNavigationButtons
           label="Limite"

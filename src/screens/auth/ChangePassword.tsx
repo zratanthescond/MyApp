@@ -55,17 +55,20 @@ export default function ChangePassword() {
     },
     onSuccess: (data) => {
       //console.log(data);
-      navigation.navigate("PasswordChanged");
+      navigation.navigate("passwordChanged");
     },
     onError: (error) => {
+
       //console.log(error);
     },
   })
+  const [passwordMatch, setPasswordMatch] = React.useState<boolean>(true);
   const [password, setPassword] = React.useState<string>("");
   const [confirmPassword, setConfirmPassword] = React.useState<string>("");
   useEffect(() => {
-    //console.log(password);
-  }, [password]);
+    password === confirmPassword ? setPasswordMatch(true) : setPasswordMatch(false);
+  }, [password, confirmPassword]);
+
   return (
     <SafeScreen>
       <View style={[layout.flex_1, backgrounds.white]}>
@@ -157,6 +160,18 @@ export default function ChangePassword() {
                   Confirm password
                 </Text>
                 <TextInput style={styles.textInput} secureTextEntry={true} placeholder="Confirm your new Password" onChangeText={(text) => setConfirmPassword(text)} />
+                <Text
+                  style={[
+                    { alignSelf: "flex-start" },
+                    fonts.size_12,
+                    fonts.red500
+
+                  ]}
+                >
+                  {passwordMatch ? "" : "Passwords do not match"}
+
+                </Text>
+
                 <TouchableOpacity
                   onPress={() => ResetPassword.mutate()}
                   style={[

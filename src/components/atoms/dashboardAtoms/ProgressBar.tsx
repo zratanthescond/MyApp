@@ -27,10 +27,16 @@ function ProgressBar({
   const { t } = useTranslation(["dashboard"]);
   const [progressValue, setProgressValue] = React.useState<number>(progress);
   useEffect(() => {
-    if (progress) {
+    if (progress > 0) {
       if (center > 0) {
         setProgressValue(parseFloat(progress) / 2);
       }
+      else {
+        setProgressValue(parseFloat(progress));
+      }
+    }
+    else {
+      setProgressValue(0);
     }
   }, [progress, title, color, accumulated]);
   return (
@@ -55,7 +61,7 @@ function ProgressBar({
         <Text style={[fonts.bold, fonts.blue100]}> {title}</Text>
         <Text style={[fonts.bold, fonts.blue100]}> {progress}%</Text>
       </View>
-      {center && (
+      {center > 0 && (
         <View style={[layout.fullWidth, layout.itemsCenter]}>
           <Text style={[fonts.bold, fonts.red500, { top: -10 }]}>{center}</Text>
           <View

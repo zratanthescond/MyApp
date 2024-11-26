@@ -19,7 +19,7 @@ export default function SelectContract({ setModalVisible, modalVisible, lastCont
 
     useEffect(() => {
         setContractList([]);
-        //console.log(contract.data);
+
         if (contract.data) {
 
             contract.data.map((contract) => {

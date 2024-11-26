@@ -4,7 +4,7 @@ export default async function listLimit(contractId: number): Promise<any> {
   //console.log("contractId", contractId);
   try {
     const res = await instance.get(
-      `http://10.0.2.2:5000/api/Limite/contrat/${contractId}`
+      `/Limite/contrat/${contractId}`
     );
     //console.log(res);
     return res.data ? res.data : [];

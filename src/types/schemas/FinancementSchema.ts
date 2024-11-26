@@ -12,12 +12,14 @@ const FinancementSchema = () => {
             .min(1, { message: t("handlingError:financing_amount") }),
 
         DateDeFinancement: z
-            .instanceof(Date, { message: t('handlingError:financing_date_required') })
-            .refine((date) => {
-                const currentDate = new Date();
-                // Comparer les dates en utilisant leurs timestamps (millisecondes depuis le 1er janvier 1970)
-                return date.getTime() > currentDate.getTime();
-            }, t('handlingError:date_after_today')),
+            .instanceof(Date, { message: t("handlingError:date_required") })
+            .refine(
+                (date) =>
+                    new Date(date).toLocaleDateString("en-US") <=
+                    new Date(Date.now()).toLocaleDateString("en-US"),
+                { message: t("handlingError:date_after_today") }
+            ),
+
     });
 
 };

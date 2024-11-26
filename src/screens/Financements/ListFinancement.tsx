@@ -46,7 +46,7 @@ const ListFinancement = () => {
             case "Pending":
                 return '#FFF5E5'; // Orange
             default:
-                return '#FFE9E9'; // Rouge
+                return '#ffa1a1'; // Rouge
         }
     };
 

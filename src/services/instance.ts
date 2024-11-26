@@ -2,9 +2,8 @@ import axios from "axios";
 import { MMKV } from "react-native-mmkv";
 
 const storage = new MMKV();
-const prefixUrl = `${
-  process.env.BACKEND_URL ? process.env.BACKEND_URL : "http://10.0.2.2:5000/api"
-}/`;
+const prefixUrl = `${process.env.BACKEND_URL ? process.env.BACKEND_URL : "http://192.168.100.178:5000/api"
+  }/`;
 console.log(prefixUrl);
 export const instance = axios.create({
   baseURL: prefixUrl,

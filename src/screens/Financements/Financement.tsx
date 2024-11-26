@@ -67,7 +67,13 @@ function Financement(): JSX.Element {
     boldText: [fonts.bold, fonts.gray800],
     smallText: [fonts.size_12, fonts.gray400],
   });
-
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
   const [data, setData] = useState<FinancementType>({
     MontantFinancement: 0,
     DateDeFinancement: new Date(),
@@ -117,8 +123,8 @@ function Financement(): JSX.Element {
       });
       return;
     }
-
     setModalVisible(true)
+
   };
 
 
@@ -198,18 +204,18 @@ function Financement(): JSX.Element {
               titleWidth={100}
               title={t("financement:Montant")}
               tag={{ type: "text", text: "TND" }}
+
               type="numeric"
-              textInputPlaceholder={"0.000"}
-              onChange={(val: number) => {
-                progress.value = val;
+              onChange={(val: string) => {
                 handleInputChange("MontantFinancement", parseFloat(val) >= contractMontant ? contractMontant : parseFloat(val) || 0);
               }}
               value={data.MontantFinancement === 0 ? "" : data.MontantFinancement}
               errorMessage={errors.MontantFinancement}
 
             />
-
           </View>
+          <Text style={[fonts.red500, fonts.bold, fonts.size_12]}> Ne dépasser pas le montant disponible : {contractMontant} TND</Text>
+
           <View
             style={[
               layout.itemsCenter,
@@ -225,7 +231,6 @@ function Financement(): JSX.Element {
             <InputWithTag
               inputDisabled
               titleWidth={0}
-              textInputPlaceholder="22/02/1999"
               onChange={() => { }}
               tag={{
                 type: "icon",
@@ -235,7 +240,7 @@ function Financement(): JSX.Element {
               onIconPress={() => {
                 setOpen(true);
               }}
-              value={data.DateDeFinancement}
+              value={formatDate(data.DateDeFinancement)}
               errorMessage={errors.DateDeFinancement}
             />
           </View>
@@ -293,7 +298,7 @@ function Financement(): JSX.Element {
             <View style={styles.rowContainer}>
               <Text style={styles.boldText}>Date de demande</Text>
               <Text style={styles.smallText}>
-                {data.DateDeFinancement.toLocaleDateString()}
+                {formatDate(data.DateDeFinancement)}
               </Text>
             </View>
             {mutatation.isError && <Text>{mutatation.error.message}</Text>}
@@ -302,7 +307,8 @@ function Financement(): JSX.Element {
               <Button
                 isLoading={mutatation.isPending}
                 label="confirmer"
-                onPress={() => hundleSuivant()}
+                onPress={() => mutatation.mutate()
+                }
               />
             </View>
           </GrayCard>

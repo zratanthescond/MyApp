@@ -6,7 +6,7 @@ export default async function listFinancement(
   //console.log("contractId", contractId);
   try {
     const res = await instance.get(
-      `http://10.0.2.2:5000/api/Financement/contrat/${contractId}`
+      `http://192.168.100.178:5000/api/Financement/contrat/${contractId}`
     );
     //console.log(res);
     return res.data ? res.data : [];

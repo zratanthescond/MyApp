@@ -30,6 +30,7 @@ import ListLimit from "@/screens/Limite/listLimit";
 import ListFacture from "@/screens/Facture/ListFacture";
 import ListLitige from "@/screens/Facture/ListLitige";
 import ListProrogation from "@/screens/Facture/ListProrogation";
+import PasswordChanged from "@/screens/auth/PasswordChanged";
 
 const Stack = createStackNavigator<ApplicationStackParamList>();
 

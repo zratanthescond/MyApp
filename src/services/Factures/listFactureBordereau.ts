@@ -11,7 +11,7 @@ export default async function getFactureByBordereau({
   //console.log("individuId", newBordereauId);
   try {
     const response = await instance.get(
-      `http://10.0.2.2:5000/api/Facture/${contractId}/${newBordereauId}`
+      `/Facture/${contractId}/${newBordereauId}`
     );
     return response.data;
   } catch (error) {

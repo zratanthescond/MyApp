@@ -5,7 +5,7 @@ export default async function listeProrogation(
 ): Promise<any> {
   try {
     const res = await instance.get(
-      `http://10.0.2.2:5000/api/Prorogation/facture/${factureId}`
+      `/Prorogation/facture/${factureId}`
     );
     //console.log(res);
     return res.data ? res.data : [];

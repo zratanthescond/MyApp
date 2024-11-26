@@ -36,8 +36,8 @@ const ListLimit = () => {
         return `${day}/${month}/${year}`;
     };
 
-    const getButtonStyle = (statut) => {
-        switch (statut) {
+    const getButtonStyle = (status) => {
+        switch (status) {
             case 0: return { backgroundColor: 'green', color: 'white' }; // Approved
             case 2: return { backgroundColor: 'orange', color: 'white' }; // Pending
             default: return { backgroundColor: 'red', color: 'white' }; // Rejected
@@ -58,10 +58,10 @@ const ListLimit = () => {
 
                                 <TouchableOpacity
 
-                                    style={[styles.statusButton, getButtonStyle(limite.statut)]}
+                                    style={[styles.statusButton, getButtonStyle(limite.status)]}
                                 >
                                     <Text style={styles.statusButtonText}>
-                                        {limite.statut === 0 ? 'Approved' : limite.statut === 2 ? 'Pending' : 'Rejected'}
+                                        {limite.status === 0 ? 'Approuved' : limite.status === 2 ? 'Pending' : 'Rejected'}
                                     </Text>
                                 </TouchableOpacity>
                             </View>

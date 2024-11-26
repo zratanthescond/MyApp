@@ -3,7 +3,7 @@ import { Litige, Prorogation } from "@/types/type";
 export default async function AddLitige(data: Litige) {
   try {
     const res = await instance.post(
-      `http://10.0.2.2:5000/api/Litige/${data.ContratId}/factures/${data.FactureId}/litiges`,
+      `/Litige/${data.ContratId}/factures/${data.FactureId}/litiges`,
       data
     );
     //console.log(res.data);

@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import useContract from "@/contexts/auth/useContract";
 import getContractDisponibles from "@/services/Contrats/getContractDisponibles";
+import React from "react";
 
 type CardInformationProps = {
   activeCard: number;
@@ -71,8 +72,8 @@ function CardInformation({ activeCard }: CardInformationProps) {
           progress={
             data?.fuctureApprouved > 0
               ? parseFloat(
-                  (data?.factureEnCours * 100) / data?.fuctureApprouved
-                ).toFixed(2) * 1
+                (data?.factureEnCours * 100) / data?.fuctureApprouved
+              ).toFixed(2) * 1
               : 0
           }
           color={"purple100"}
@@ -85,8 +86,8 @@ function CardInformation({ activeCard }: CardInformationProps) {
           progress={
             data?.contractFound > 0
               ? parseFloat(
-                  (data?.fondsDeGaranties * 100) / data?.contractFound
-                ).toFixed(2) * 1
+                (data?.fondsDeGaranties * 100) / data?.contractFound
+              ).toFixed(2) * 1
               : 0
           }
           color={"purple100"}
@@ -100,8 +101,8 @@ function CardInformation({ activeCard }: CardInformationProps) {
           progress={
             data?.factureEnCours > 0
               ? parseFloat(
-                  (data?.limitSum * 100) / data?.factureEnCours
-                ).toFixed(2) * 1
+                (data?.limitSum * 100) / data?.factureEnCours
+              ).toFixed(2) * 1
               : 0
           }
           color={"purple100"}

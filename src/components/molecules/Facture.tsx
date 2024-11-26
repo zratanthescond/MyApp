@@ -90,7 +90,7 @@ export default function FactureComponent({ onButtonPress, facture, litigeCount, 
             <View style={[...buttonViewStyle, { gap: 20 }]}>
               {litigeCount > 0 ?
                 <AcheteurNavigationButtons
-                  label={` in progress (${litigeCount})`}
+                  label={` litige (${litigeCount})`}
                   onPress={() => Alert.alert('Error', 'Vous avez une litige en cours ', [{ text: 'OK', onPress: () => { } }],)}
                 /> : <AcheteurNavigationButtons
                   label="Litige"
@@ -98,7 +98,7 @@ export default function FactureComponent({ onButtonPress, facture, litigeCount, 
                 />}
               {prorogationCount > 0 ?
                 <AcheteurNavigationButtons
-                  label={` in progress (${prorogationCount})`}
+                  label={` prorogation (${prorogationCount})`}
                   onPress={() => Alert.alert('Error', 'Vous avez une prorogation en cours ', [{ text: 'OK', onPress: () => { } }],)}
                 /> : <AcheteurNavigationButtons
                   label="prorogation"

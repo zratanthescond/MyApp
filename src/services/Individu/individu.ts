@@ -5,7 +5,7 @@ export async function getIndividu(contractId: number): Promise<any> {
   //console.log(contractId);
   try {
     const res = await instance.get(
-      `http://10.0.2.2:5000/api/Individu/individusRoleIndividu/${contractId}`
+      `/Individu/individusRoleIndividu/${contractId}`
     );
     //console.log(res.data);
     return res.data;

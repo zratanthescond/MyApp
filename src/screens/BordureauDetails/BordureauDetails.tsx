@@ -120,7 +120,7 @@ export default function BordureauDetails({
   const mutatation = useMutation({
 
     mutationFn: () => {
-
+      setBordereau({ ...bordereau, ContratId: contractId });
       return createBorderau(bordereau);
     },
     onSuccess: () => {
@@ -158,10 +158,11 @@ export default function BordureauDetails({
   useEffect(() => {
     setAcheteurList([]);
     if (acheteur.data?.$values) {
+
       acheteur.data.$values.map((acheteur) => {
         setAcheteurList((prevList) => [
           ...prevList,
-          { key: acheteur.individuId, value: acheteur.nom },
+          { key: acheteur.acheteur.individuId, value: acheteur.acheteur.nom },
         ]);
       });
     }
