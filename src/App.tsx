@@ -10,6 +10,7 @@ import "./translations";
 
 import { AuthProvider } from "./contexts/auth/AuthContext";
 import { ContractProvider } from "./contexts/ContractContext";
+import { RefreshProvider } from "./contexts/RefreshContext";
 
 const queryClient = new QueryClient();
 
@@ -17,15 +18,17 @@ export const storage = new MMKV();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider storage={storage}>
-        <AuthProvider>
-          <ContractProvider>
-            <ApplicationNavigator />
-          </ContractProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <RefreshProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider storage={storage}>
+          <AuthProvider>
+            <ContractProvider>
+              <ApplicationNavigator />
+            </ContractProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </RefreshProvider>
   );
 }
 

@@ -69,8 +69,8 @@ function Financement(): JSX.Element {
   });
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
@@ -89,7 +89,7 @@ function Financement(): JSX.Element {
       ...data,
       [field]: value,
     });
-    setErrors(prevErrors => ({ ...prevErrors, [field]: undefined }));
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: undefined }));
   };
 
   useEffect(() => {
@@ -104,14 +104,20 @@ function Financement(): JSX.Element {
     },
     onSuccess: () => {
       setModalVisible(false);
-      Alert.alert("success", "Financement creé avec_succès", [{
-        text: "OK",
-        onPress: () => setData({ ...data, MontantFinancement: 0, DateDeFinancement: new Date() })
-      }]);
+      Alert.alert("success", "Financement creé avec_succès", [
+        {
+          text: "OK",
+          onPress: () =>
+            setData({
+              ...data,
+              MontantFinancement: 0,
+              DateDeFinancement: new Date(),
+            }),
+        },
+      ]);
     },
   });
   const hundleSuivant = () => {
-
     const result = financementSchema.safeParse(data);
 
     if (!result.success) {
@@ -119,21 +125,41 @@ function Financement(): JSX.Element {
       setErrors({
         MontantFinancement: formattedErrors.MontantFinancement?._errors[0],
         DateDeFinancement: formattedErrors.DateDeFinancement?._errors[0],
-
       });
       return;
     }
-    setModalVisible(true)
-
+    setModalVisible(true);
   };
-
-
+  const USDollar = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "TND",
+  });
+  const handleCreateFinancement = () => {
+    if (data.MontantFinancement > contractMontant) {
+      Alert.alert(
+        "error",
+        `Le montant de financement ne peut pas depasser le montant du contrat ${USDollar.format(
+          contractMontant
+        )}`,
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              setOpen(false);
+            },
+          },
+        ]
+      );
+      return;
+    }
+    mutatation.mutate();
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, marginVertical: 2 }}>
-
-      <ScrollView contentContainerStyle={[layout.flex_1, gutters.paddingBottom_40]} >
-
+      <ScrollView
+        contentContainerStyle={[layout.flex_1, gutters.paddingBottom_40]}
+      >
         <BackgroundDispoCard
           activeCard={activeCard}
           text1={t("financement:Type1")}
@@ -198,23 +224,29 @@ function Financement(): JSX.Element {
               borders.rounded_16,
             ]}
           >
-
-
             <InputWithTag
               titleWidth={100}
               title={t("financement:Montant")}
               tag={{ type: "text", text: "TND" }}
-
               type="numeric"
               onChange={(val: string) => {
-                handleInputChange("MontantFinancement", parseFloat(val) >= contractMontant ? contractMontant : parseFloat(val) || 0);
+                handleInputChange(
+                  "MontantFinancement",
+                  parseFloat(val) >= contractMontant
+                    ? contractMontant
+                    : parseFloat(val) || 0
+                );
               }}
-              value={data.MontantFinancement === 0 ? "" : data.MontantFinancement}
+              value={
+                data.MontantFinancement === 0 ? "" : data.MontantFinancement
+              }
               errorMessage={errors.MontantFinancement}
-
             />
           </View>
-          <Text style={[fonts.red500, fonts.bold, fonts.size_12]}> Ne dépasser pas le montant disponible : {contractMontant} TND</Text>
+          <Text style={[fonts.red500, fonts.bold, fonts.size_12]}>
+            {" "}
+            Ne dépasser pas le montant disponible : {contractMontant} TND
+          </Text>
 
           <View
             style={[
@@ -231,7 +263,7 @@ function Financement(): JSX.Element {
             <InputWithTag
               inputDisabled
               titleWidth={0}
-              onChange={() => { }}
+              onChange={() => {}}
               tag={{
                 type: "icon",
                 name: "calendar-month",
@@ -245,13 +277,18 @@ function Financement(): JSX.Element {
             />
           </View>
           <View style={[layout.row, layout.justifyBetween]}>
-            <Button outlined label={t("financement:Annuler")} onPress={() => {
-              setData({
-                ...data, MontantFinancement: 0, DateDeFinancement: new Date()
-              })
-            }} />
             <Button
-
+              outlined
+              label={t("financement:Annuler")}
+              onPress={() => {
+                setData({
+                  ...data,
+                  MontantFinancement: 0,
+                  DateDeFinancement: new Date(),
+                });
+              }}
+            />
+            <Button
               label={t("financement:Suivant")}
               onPress={() => hundleSuivant()}
             />
@@ -303,12 +340,17 @@ function Financement(): JSX.Element {
             </View>
             {mutatation.isError && <Text>{mutatation.error.message}</Text>}
             <View style={styles.rowContainer}>
-              <Button outlined={true} label="Annuler" onPress={() => { setModalVisible(false) }} />
+              <Button
+                outlined={true}
+                label="Annuler"
+                onPress={() => {
+                  setModalVisible(false);
+                }}
+              />
               <Button
                 isLoading={mutatation.isPending}
                 label="confirmer"
-                onPress={() => mutatation.mutate()
-                }
+                onPress={() => handleCreateFinancement()}
               />
             </View>
           </GrayCard>

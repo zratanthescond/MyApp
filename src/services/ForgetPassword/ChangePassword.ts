@@ -8,7 +8,7 @@ export default async function ChangePassword(data: ChangePasswordType) {
   try {
     //console.log(data);
     const res = await instance.post(
-      `http://192.168.100.178:5000/api/Auth/reset-password`,
+      `http://10.0.2.2:5000/api/Auth/reset-password`,
       data
     );
     return res.data;

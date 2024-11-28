@@ -8,11 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 import getMycontract from "@/services/Contrats/getByuser";
 import useContract from "@/contexts/auth/useContract";
 import { useTranslation } from "react-i18next";
-
+import useRefresh from "@/contexts/auth/useRefresh";
 export default function Cartes() {
   const { t } = useTranslation(["bordereau"]);
+  const { refresh } = useRefresh();
   const { data, isLoading, error } = useQuery({
-    queryKey: ["contracts"],
+    queryKey: ["contracts", refresh],
     queryFn: () => {
       return getMycontract();
     },
@@ -20,7 +21,14 @@ export default function Cartes() {
   });
   const [activeCard, setActiveCard] = useState<number>(1);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const { contractId, setContractId, contractMontant, setContractMontant, referenceContrat, setContractReference } = useContract();
+  const {
+    contractId,
+    setContractId,
+    contractMontant,
+    setContractMontant,
+    referenceContrat,
+    setContractReference,
+  } = useContract();
 
   const { gutters, borders, layout } = useTheme();
   useEffect(() => {
@@ -30,7 +38,6 @@ export default function Cartes() {
       setContractId(data[Math.abs(currentIndex)]?.contratId);
       setContractMontant(data[Math.abs(currentIndex)]?.montantContrat);
       setContractReference(data[Math.abs(currentIndex)]?.referenceContrat);
-
     }
   }, [currentIndex, data]);
   if (error) {
@@ -45,7 +52,6 @@ export default function Cartes() {
     );
 
   if (!data) return <View />;
-
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

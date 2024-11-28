@@ -14,17 +14,16 @@ import { ImageVariant } from "../atoms";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import useContract from "@/contexts/auth/useContract";
-
 import SelectContract from "../molecules/SelectContract";
 import Button from "../atoms/form/Button";
-import WhiteCard from "../atoms/form/WhiteCard";
-import { opacity } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
+import useRefresh from "@/contexts/auth/useRefresh";
 import AppIcon from "../icons/AppIcons";
 export default function HeaderLogo() {
   const { layout, backgrounds, gutters, colors, fonts, borders } = useTheme();
   const navigation = useNavigation();
   const { contractId, referenceContrat } = useContract();
   const [modalVisible, setModalVisible] = React.useState(false);
+  const { refresh, setRefresh } = useRefresh();
   const [height, width] = [
     Dimensions.get("window").height,
     Dimensions.get("window").width,
@@ -51,12 +50,40 @@ export default function HeaderLogo() {
         >
           <Icon name="arrow-left" size={30} color={colors.gray800} />
         </TouchableOpacity>
-
-        <ImageVariant
-          source={logo}
-          style={{ height: 80, width: "60%", aspectRatio: 6 }}
-        />
-
+        <TouchableOpacity
+          onPress={() => {
+            setRefresh(refresh + 1);
+          }}
+          style={{
+            flex: 1,
+            alignItems: "center",
+            maxWidth: "60%",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            borderWidth: 1,
+            paddingHorizontal: 15,
+            height: 50,
+            borderRadius: 10,
+            elevation: 10,
+            backgroundColor: "white",
+          }}
+        >
+          <ImageVariant
+            source={logo}
+            style={{
+              height: 80,
+              width: "100%",
+              resizeMode: "contain",
+            }}
+          />
+          <AppIcon
+            name="cloud-refresh"
+            type="MaterialCommunityIcons"
+            size={30}
+            color={colors.blue100}
+          />
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             setModalVisible(!modalVisible);

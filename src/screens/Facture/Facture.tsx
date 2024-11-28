@@ -26,7 +26,7 @@ import { use } from "i18next";
 import SearchComponent from "@/components/molecules/SearchComponent";
 import { set } from "zod";
 import SelectBuyer from "@/components/molecules/SelectBuyer";
-
+import useRefresh from "@/contexts/auth/useRefresh";
 export default function Facture() {
   const { contractId } = useContract();
   const { fonts, colors, layout, backgrounds, gutters, borders } = useTheme();
@@ -38,8 +38,9 @@ export default function Facture() {
   const [inputState, setInputState] = useState<string>("search");
   const [filtredData, setFiltredData] = useState<any>({});
   const [newIndividuId, setNewIndividuId] = useState<number>(individuId);
+  const { refresh } = useRefresh();
   const { data, isError, isLoading } = useQuery({
-    queryKey: ["facture", newIndividuId],
+    queryKey: ["facture", newIndividuId, refresh],
 
     queryFn: () => {
       return getFactureByAcheteur({ newIndividuId, contractId });
@@ -62,6 +63,7 @@ export default function Facture() {
   });
 
   useEffect(() => {
+    console.log(data);
     setFiltredData(data);
   }, [data]);
   function capitalizeFirstLetter(title: string) {

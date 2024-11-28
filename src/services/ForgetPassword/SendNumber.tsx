@@ -4,7 +4,7 @@ export default async function SendNumber(phoneNumber: String) {
   try {
     //console.log(phoneNumber + "number");
     const res = await instance.post(
-      `http://192.168.100.178:5000/api/Auth/request-password-reset`,
+      `http://10.0.2.2:5000/api/Auth/request-password-reset`,
       { phoneNumber: phoneNumber }
     );
     //console.log(res.data, 'hhhhh');

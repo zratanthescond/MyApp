@@ -17,18 +17,18 @@ import {
 import useContract from "@/contexts/auth/useContract";
 import GrayCard from "@/components/atoms/dashboardAtoms/GrayCard";
 import SearchComponent from "@/components/molecules/SearchComponent";
+import useRefresh from "@/contexts/auth/useRefresh";
 export default function Individu(): React.ReactElement {
   const { fonts, colors, layout, backgrounds, gutters, borders } = useTheme();
   const [modalVisible, setModalVisible] = React.useState(false);
   const { contractId } = useContract();
   const [buyers, setBuyers] = React.useState<number[]>([]);
-  //console.log(contractId);
+  const { refresh } = useRefresh();
 
   const mutation = useMutation({
     mutationKey: ["getAcheteur"],
 
     mutationFn: () => {
-
       return addAcheteur(buyers, contractId);
     },
     onSuccess: async (data) => {
@@ -36,31 +36,27 @@ export default function Individu(): React.ReactElement {
       await individuData.refetch();
       setBuyers([]);
 
-
-
-
-      Alert.alert("success", "Acheteur ajouté", [{
-        text: "OK",
-        onPress: () => setModalVisible(false)
-
-      }]);
+      Alert.alert("success", "Acheteur ajouté", [
+        {
+          text: "OK",
+          onPress: () => setModalVisible(false),
+        },
+      ]);
     },
     onError: (error) => {
       Alert.alert("error", "Une erreur est survenue", [{ text: "Ok" }]);
     },
-  }
-  );
+  });
 
   const individuData = useQuery({
-    queryKey: ["contractId"],
+    queryKey: ["contractId", refresh],
     queryFn: () => {
       return getIndividu(contractId);
     },
   });
   const acheteurs = useQuery({
-    queryKey: ["acheteurs", modalVisible],
+    queryKey: ["acheteurs", modalVisible, refresh],
     queryFn: () => {
-
       //console.log("fetching data")
       return getAcheteur(contractId);
     },
@@ -82,8 +78,6 @@ export default function Individu(): React.ReactElement {
   }, [buyers]);
 
   const [filtredData, setFiltredData] = React.useState(acheteurs.data);
-
-
 
   return (
     <SafeScreen>
@@ -109,7 +103,12 @@ export default function Individu(): React.ReactElement {
             },
           ]}
         >
-          <SearchComponent data={acheteurs.data} setfiltredData={setFiltredData} field="nom" Objectkey="acheteur" />
+          <SearchComponent
+            data={acheteurs.data}
+            setfiltredData={setFiltredData}
+            field="nom"
+            Objectkey="acheteur"
+          />
           <TouchableOpacity
             style={[backgrounds.purple500, borders.rounded_4, { padding: 5 }]}
             onPress={() => setModalVisible(true)}
@@ -121,24 +120,21 @@ export default function Individu(): React.ReactElement {
               size={30}
             />
           </TouchableOpacity>
-
         </View>
         <ScrollView>
-          {filtredData && filtredData.$values && filtredData.$values.map((acheteur: any) => {
-            console.log(acheteur);
-            return (
-              <IndividuComponent
-
-                key={acheteur.acheteur.individuId}
-
-                individu={acheteur.acheteur}
-
-                navigation={true}
-                pendingLimiteCount={acheteur.pendingLimiteCount}
-
-              />
-            );
-          })}
+          {filtredData &&
+            filtredData.$values &&
+            filtredData.$values.map((acheteur: any) => {
+              console.log(acheteur);
+              return (
+                <IndividuComponent
+                  key={acheteur.acheteur.individuId}
+                  individu={acheteur.acheteur}
+                  navigation={true}
+                  pendingLimiteCount={acheteur.pendingLimiteCount}
+                />
+              );
+            })}
         </ScrollView>
         <BottomModal
           title="Liste des individus"
